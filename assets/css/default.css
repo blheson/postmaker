@@ -1,0 +1,21 @@
+/* Theme color: #3b98f7 */
+html,*,body{
+    font-family: poppins;
+}
+h1{
+    padding-bottom: 4rem;
+}
+input:not([type=checkbox]), select{
+    height: 48px!important;
+}
+small.status_input{
+    color:rgb(2, 1, 1);
+}
+.btn{
+    height: 48px;
+    font-size: 12px;
+}
+.btn-submit{
+    background-color: #3b98f7;
+    color: #fff;
+}
