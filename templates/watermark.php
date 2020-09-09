@@ -8,7 +8,7 @@ $design_template = "assets/images/templates/watermark/product-watermark.png";
 
 if (isset($_POST['watermark'])) {
 
-   $image_link =  $watermark->logo_on_product($_POST['pos'], $_FILES['file'],$_FILES['logo']);
+   $image_link =  $watermark->logo_on_product($_FILES['file'],$_FILES['logo'],$_POST['pos']);
 }
 include $dir . "includes/header.php";
 ?>

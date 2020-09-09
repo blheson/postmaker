@@ -1,17 +1,16 @@
 <?php
+
 namespace Controller\Common;
 
-require 'Common.php';
-require (dirname(__DIR__)) . DS . 'Model' . DS . 'Model.php';
-
+require_once 'Common.php';
+require_once (dirname(__DIR__)) . DS . 'Model' . DS . 'Model.php';
+require_once 'Watermark.php';
 
 use Model\Model as Model;
 use Controller\Common\Color as color;
 use Controller\Common\ImageDimension as imagedimension;
 use Controller\Common\CreateImage;
-use Controller\Template\Square\Watermark;
-
-
+// use Controller\Template\Square\Watermark as watermark;
 
 class Image
 {
@@ -43,14 +42,42 @@ class Image
     {
         return $this->create_image;
     }
-    public function water_mark(){
-        $this->watermark = new Watermark();
+    public function water_mark()
+    {
+        $this->watermark = new \Controller\Template\Square\Watermark();
         return $this->watermark;
     }
     /**
      * Add text on image
-     * @param string $base_image_path
-     * @param string $new_image_link
+     * @param string $new_link
+     * @param array $image_array
+     *  keys include
+     * 
+     *  string  'new_image_path' - The final path of the image
+     * 
+     *  array   'background' - [optional] The array of the red, green and blue component of the color Default is [255,255,255]
+     * 
+     *  int     'width' - [optional] The width of the image
+     * 
+     * @param string $footer
+     * 
+     * @param array $font_array 
+     * 
+     *  keys include
+     * 
+     *  int     'file' - The size of the font.
+     * 
+     *  int     'size' - [optional] The size of the font. Default is 60
+     * 
+     *  int     'width' - [optional] The width that the text will occupy on the design. Default is 11
+     * 
+     *  float   'angle' - [optional] The angle of the font. Default is 0
+     * 
+     *  float   'line_height' - [optional] The line_height of the font. Default is 120
+     * 
+     *  float   'px' - The x coordinate of the first character of the font.
+     * 
+     *  float   'py' - [optional] The y coordinate of the first character of the font.
      * @return string $new_image_path
      */
     public function write_to_footer($new_link, $image_array, $footer, $font_array)
@@ -65,35 +92,50 @@ class Image
         $font = $this->model->get_font();
 
         $font_array['file'] = $font['montserrat'];
-        // $new_link = 
-        $im = imagecreatefrompng($new_link);
-        $this->text_to_image($im, $image_array, trim($footer), $font_array);
+
+      
+       return $this->text_to_image($new_link, $image_array, trim($footer), $font_array);
     }
     /**
      * Wrap text into a specified dimesion
-     * @param resource $image
+     * 
+     * @param string $new_link
+     * 
      * @param array $image_array
      *  keys include
+     * 
      *  string  'new_image_path' - The final path of the image
+     * 
      *  array   'background' - [optional] The array of the red, green and blue component of the color Default is [255,255,255]
+     * 
      *  int     'width' - [optional] The width of the image
+     * 
      * @param string $text
+     * 
      * @param array $font_array 
+     * 
      *  keys include
+     * 
      *  int     'file' - The size of the font.
+     * 
      *  int     'size' - [optional] The size of the font. Default is 60
+     * 
      *  int     'width' - [optional] The width that the text will occupy on the design. Default is 11
+     * 
      *  float   'angle' - [optional] The angle of the font. Default is 0
+     * 
      *  float   'line_height' - [optional] The line_height of the font. Default is 120
+     * 
      *  float   'px' - The x coordinate of the first character of the font.
+     * 
      *  float   'py' - [optional] The y coordinate of the first character of the font.
      * 
      * @return string $new_image_path
      */
-    public function text_to_image($image, $image_array, $text, $font_array): string
+    public function text_to_image($new_link, $image_array, $text, $font_array): string
     {
         // SORT IMAGE ARRAY
-
+        $image = imagecreatefrompng($new_link);
         $new_image_path = $image_array['new_image_path'];
         $background = isset($image_array['background']) ? $image_array['background'] : ['255', '255', '255'];
         $image_width =  isset($image_array['width']) ? $image_array['width'] : $this->image_dimension::DEFAULT_IMAGE_WIDTH;
@@ -131,7 +173,7 @@ class Image
 
         foreach ($lines as $line) {
             // $col = $color[$font_color];
-            $_SESSION['debug'] = $font_color;
+            // $_SESSION['debug'] = $font_color;
             imagettftext($image, $font_size, $font_angle, $px, $py, $font_color, $font_array['file'], trim($line));
             $py += $line_height;
         }

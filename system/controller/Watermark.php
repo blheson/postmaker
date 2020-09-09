@@ -20,10 +20,13 @@ class Watermark
     }
     /**
      * Logo on product
+     * @param array $image HTTP upload for image file
+     * @param array $logo HTTP upload for logo file
+     * 
      * @param array $cord
      * @return string link to Water mark image
      */
-    public function logo_on_product($cord, $image, $logo)
+    public function logo_on_product($image, $logo, $cord)
     {
         $link = [];
         $link['short'] = 'render/';
@@ -81,6 +84,16 @@ class Watermark
 
         list($dst_width, $dst_height) = getimagesize($dst);
         list($logo_width, $logo_height) = getimagesize($logo);
+
+        //set image dimension
+        $this->set_image_dimension($dst_width,$dst_height);
+        // $this->image_dimension = ['image_width' => $dst_width, 'image_height' => $dst_height];
+
+
+        //set logo dimension
+        // $this->logo_dimension = ['logo_width' => $logo_width, 'logo_height' => $logo_height];
+        $this->set_logo_dimension($logo_width,$logo_height);
+
         // SET MARGIN
 
         if (is_array($cord)) {
@@ -107,6 +120,18 @@ class Watermark
         imagepng($im, $dst);
         imagedestroy($im);
         return $dst;
+    }
+    public function set_image_dimension($dst_width,$dst_height){
+        $this->image_dimension = ['image_width' => $dst_width, 'image_height' => $dst_height];
+    }
+    public function set_logo_dimension($logo_width,$logo_height){
+        $this->logo_dimension = ['logo_width' => $logo_width, 'logo_height' => $logo_height];
+    }
+    public function get_image_dimension(){
+        return $this->image_dimension;
+    }
+    public function get_logo_dimension(){
+        return $this->logo_dimension;
     }
     /**
      * Get the coordinate of logo

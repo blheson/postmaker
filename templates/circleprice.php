@@ -2,19 +2,24 @@
 $dir = '../';
 include $dir . "system/initiate.php";
 // $square_image = $app->get_factory('SquareImage');
-$array =['class'=>'PriceTag','namespace'=>'Controller\Template\Square\\'];
+$array = ['class' => 'PriceTag', 'namespace' => 'Controller\Template\Square\\'];
 $square_image = $app->get_factory($array);
 $new_image_path = "assets/images/render/";
 $default_image = "assets/images/blank_image.png";
 $design_template = "assets/images/templates/circleprice/circle-price-tag.png";
 
-if (isset($_POST['logo'])){
+if (isset($_POST['contact'])) {
     $post = $_POST;
+    // var_dump($post);
+    // var_dump($_FILES);
+    // die();
     $post['logo_details'] = $_FILES['logo'];
     $post['product_details'] = $_FILES['product'];
 
-    $image_link = $square_image->price_tag($post);}
-    // $image_link = $square_image->add_data_on_blank_image($_POST);
+
+    $image_link = $square_image->price_tag($post);
+}
+// $image_link = $square_image->add_data_on_blank_image($_POST);
 
 
 
@@ -43,7 +48,7 @@ include $dir . "includes/header.php";
                 <h3 class="title">Fill form to edit design</h3>
                 <div class="card">
 
-                    <form method="post" enctype="multipart">
+                    <form method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="">Add logo</label>
 
@@ -71,12 +76,12 @@ include $dir . "includes/header.php";
                         </div>
                         <div class="form-group">
                             <label for="">Price</label>
-                            <input type="text" name="color" class="form-control" value="N5,000" required>
+                            <input type="text" name="price" class="form-control" value="N5,000" required>
 
                         </div>
                         <div class="form-group">
                             <label for="">Contact</label>
-                            <input type="text" name="color" class="form-control" value="Company Contact | 0802 000 0000" required>
+                            <input type="text" name="contact" class="form-control" value="Company Contact | 0802 000 0000" required>
 
                         </div>
 
@@ -107,11 +112,11 @@ include $dir . "includes/header.php";
                 <h3 class="title">Final Render</h3>
                 <!-- render finished image -->
                 <?php
-                if (isset($_POST['text'])) :
+                if (isset($_POST['contact'])) :
                 ?>
                     <div>
                         <div class="render">
-                            <img src="<?= $image_link; ?>" alt="rendered image" value="<?= $_POST['text'] ?>" width="100%">
+                            <img src="<?= $image_link; ?>" alt="rendered image" value="<?= $_POST['price'] ?>" width="100%">
                         </div>
 
                         <div class="form-group">
