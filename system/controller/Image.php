@@ -1,33 +1,32 @@
 <?php
+namespace Controller\Common;
 
-namespace Controller;
-require (dirname(__DIR__)).DS.'Model'.DS.'Model.php';
-require 'Color.php';
-require 'ImageWidth.php';
-require 'CreateBlankImage.php';
+require 'Common.php';
+require (dirname(__DIR__)) . DS . 'Model' . DS . 'Model.php';
 
 
 use Model\Model as Model;
-use Color;
-use ImageWidth;
-use CreateBlankImage;
+use Controller\Common\Color as color;
+use Controller\Common\ImageDimension as imagedimension;
+use Controller\Common\CreateImage;
+use Controller\Template\Square\Watermark;
+
 
 
 class Image
 {
     public $model;
     public $color;
-    public $ImageWidth;
-    public $CreateBlankImage;
+    public $image_dimension;
+    public $create_image;
 
-    
+
     public function __construct()
     {
-        $this->model= new Model;
-        $this->color= new Color;
-        $this->image_width= new ImageWidth;
-        $this->create_image= new CreateBlankImage;
-
+        $this->model = new Model;
+        $this->color = new color;
+        $this->image_dimension = new imagedimension;
+        $this->create_image = new CreateImage;
     }
     /** 
      * Pretty print data
@@ -40,27 +39,35 @@ class Image
         var_dump($data);
         echo "</pre>";
     }
-    
-     /**
+    public function create_image()
+    {
+        return $this->create_image;
+    }
+    public function water_mark(){
+        $this->watermark = new Watermark();
+        return $this->watermark;
+    }
+    /**
      * Add text on image
      * @param string $base_image_path
      * @param string $new_image_link
      * @return string $new_image_path
      */
-    public function write_to_footer($new_link,$image_array,$footer,$font_array){
+    public function write_to_footer($new_link, $image_array, $footer, $font_array)
+    {
         $font_array['size'] = isset($font_array['size']) ? $font_array['size'] : 20;
         $font_array['px'] = isset($font_array['px']) ? $font_array['px'] : 700;
         $font_array['py'] = isset($font_array['py']) ? $font_array['py'] : 850;
         $font_array['width'] = isset($font_array['width']) ? $font_array['width'] : 20;
-        $font_array['line_height']= isset($font_array['line_height']) ? $font_array['line_height'] : 60;
+        $font_array['line_height'] = isset($font_array['line_height']) ? $font_array['line_height'] : 60;
         //Get font from DB
-    
+
         $font = $this->model->get_font();
-        
+
         $font_array['file'] = $font['montserrat'];
         // $new_link = 
-        $im= imagecreatefrompng($new_link);   
-        $this->text_to_image($im,$image_array,trim($footer),$font_array);   
+        $im = imagecreatefrompng($new_link);
+        $this->text_to_image($im, $image_array, trim($footer), $font_array);
     }
     /**
      * Wrap text into a specified dimesion
@@ -89,14 +96,25 @@ class Image
 
         $new_image_path = $image_array['new_image_path'];
         $background = isset($image_array['background']) ? $image_array['background'] : ['255', '255', '255'];
-        $image_width =  isset($image_array['width']) ? $image_array['width'] : $this->image_width::DEFAULT_IMAGE_WIDTH;
+        $image_width =  isset($image_array['width']) ? $image_array['width'] : $this->image_dimension::DEFAULT_IMAGE_WIDTH;
 
         // SORT FONT ARRAY
+        // get_color array
 
-        $font_size = isset($font_array['size'])? $font_array['size'] : 60;
-        $font_angle = isset($font_array['angle'])? $font_array['angle'] : 0;
-        $line_height = isset($font_array['line_height'])? $font_array['line_height'] : 120;
-        $text_width = isset($font_array['width'])? $font_array['width'] : 11;
+
+        if (isset($font_array['color'])) {
+            $font_col = imagecolorallocate($image, $font_array['color'][0], $font_array['color'][1], $font_array['color'][2]);
+        } else {
+            $color = $this->model->get_color($image);
+        }
+
+
+        // set color
+        $font_color = $font_col ?? $color['black'];
+        $font_size = isset($font_array['size']) ? $font_array['size'] : 60;
+        $font_angle = isset($font_array['angle']) ? $font_array['angle'] : 0;
+        $line_height = isset($font_array['line_height']) ? $font_array['line_height'] : 120;
+        $text_width = isset($font_array['width']) ? $font_array['width'] : 11;
         $px = $font_array['px'];
         $py = isset($font_array['py']) ? $font_array['py'] + $font_size : $px + $font_size;
 
@@ -110,10 +128,11 @@ class Image
 
         $text = wordwrap($text, $text_width, "\n", false);
         $lines = explode("\n", $text);
-        $color = $this->model->get_color($image);
+
         foreach ($lines as $line) {
-            $black = $color['black'];
-            imagettftext($image, $font_size, $font_angle, $px, $py, $black, $font_array['file'], trim($line));
+            // $col = $color[$font_color];
+            $_SESSION['debug'] = $font_color;
+            imagettftext($image, $font_size, $font_angle, $px, $py, $font_color, $font_array['file'], trim($line));
             $py += $line_height;
         }
 

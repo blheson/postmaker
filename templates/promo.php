@@ -12,33 +12,6 @@ if(isset($_POST['text'])){
     $image_link = $square_image->add_data_on_blank_image($_POST);
 }   
 
-    // imagepng($im);
-    // imagedestroy($im);
-    // Load the stamp and the photo to apply the watermark to
-
-// First we create our stamp image manually from GD
-
-    $im = imagecreatefrompng($dir.'assets/images/ll.png');
-    $stamp = imagecreatefrompng($dir.'assets/images/logo.png');
-    imagealphablending($stamp,true);
-    imagesavealpha($stamp,true);
-
-// Set the margins for the stamp and get the height/width of the stamp image
-$marge_right = 10;
-$marge_bottom = 10;
-$sx = imagesx($stamp);
-$sy = imagesy($stamp);
-// Merge the stamp onto our photo with an opacity of 50%
-
-// imagecopymerge($im, $stamp, 0, 0, 0, 0, imagesx($stamp), imagesy($stamp), 40);
-imagecopy($im, $stamp, 0, 0, 0, 0, imagesx($stamp), imagesy($stamp));
-
-
-// Save the image to file and free memory
-imagepng($im, $dir.'assets/images/ll.png');
-imagedestroy($im);
-
-
     include $dir."includes/header.php";
 ?>
 <center>
@@ -105,9 +78,6 @@ imagedestroy($im);
                             <div class="col-md-10">
                                 <label for=""  >Check to see advance option</label>
                             </div>
-                             
-                    
-                         
                      </div>
                     <input type="hidden" name="default_image" value="<?=$dir.$default_image?>">
                     <input type="hidden" name="new_image_path" value="<?=$dir.$new_image_path;?>">

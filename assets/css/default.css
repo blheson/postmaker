@@ -2,6 +2,10 @@
 html,*,body{
     font-family: poppins;
 }
+body{
+    background-color: #e5eaeb;
+
+}
 h1{
     padding-bottom: 4rem;
 }
@@ -18,4 +22,33 @@ small.status_input{
 .btn-submit{
     background-color: #3b98f7;
     color: #fff;
+}
+footer{
+    background-color: #fff;
+    min-height: 10rem;
+}
+.alert-error{
+    border:none;
+    padding:2rem 1rem;
+    border-radius:0.5rem;
+    background:#ce1515;
+    box-shadow:3px 4px 11px 5px #c5c5c5;
+}
+.alert-success{
+    border:none;
+    padding:2rem 1rem;
+    border-radius:0.5rem;
+    background:#17ac87;
+    box-shadow:3px 4px 11px 5px #c5c5c5;
+}
+.alert{
+    position: fixed;
+    top: calc(50% - 45px);
+    margin: auto;
+    right: calc(50% - 200px);
+    min-width: 25rem;
+    z-index: 1000;
+}
+.d-none{
+    display: none!important;
 }

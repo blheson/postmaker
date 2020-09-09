@@ -1,28 +1,28 @@
 <?php
 $dir = '../';
 include $dir . "system/initiate.php";
-$watermark = $app->get_factory('Watermark');
-// $app->dnd($watermark->logo_on_product());
+$array =['class'=>'Watermark','namespace'=>'Controller\Template\Square\\'];
+$watermark = $app->get_factory($array);
 $new_image_path = "assets/images/render/";
-// $default_image = "assets/images/blank_image.png";
-$design_template = "assets/images/templates/product-watermark.png";
+$design_template = "assets/images/templates/watermark/product-watermark.png";
 
 if (isset($_POST['watermark'])) {
-   $image_link =  $watermark->logo_on_product($_POST['pos']);
+
+   $image_link =  $watermark->logo_on_product($_POST['pos'], $_FILES['file'],$_FILES['logo']);
 }
 include $dir . "includes/header.php";
 ?>
-<center>
-    <div class="breadcrumbs">
-        <a href="<?= $dir ?>"><i class="fa fa-home"></i></a>
-    </div>
-</center>
+
 <main class="container" style="padding: 2rem;box-shadow: 0 0 10px 1px #ececec;">
 
     <section class="header">
         <h1 class="text-center">Watermark Template</h1>
     </section>
-
+    <center>
+    <div class="breadcrumb">
+        <a href="<?= $dir ?>"><i class="fa fa-home"></i></a>
+    </div>
+</center>
     <!-- show template type -->
     <section class="template">
         <div class="row">
@@ -33,6 +33,8 @@ include $dir . "includes/header.php";
                 </div>
             </div>
             <div class="col-md-4">
+                <?=$app->show_error()?>
+                <?=$app->show_success()?>
                 <h3 class="title">Fill form to edit design</h3>
                 <div class="card">
 
@@ -40,18 +42,13 @@ include $dir . "includes/header.php";
                         <input type="hidden" name="watermark">
 
                         <div class="form-group">
-
-                            <div>
-                                <small class="status_input">
-                                </small>
-                            </div>
                             <label for="">Add logo</label>
 
-                            <input type="file" name="logo" class="form-control">
+                            <input type="file" name="logo" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="">Add file</label>
-                            <input type="file" name="file" class="form-control" value="">
+                            <input type="file" name="file" class="form-control" value="" required>
                         </div>
                         <div class="form-group">
                             <label for="">Logo Position</label>

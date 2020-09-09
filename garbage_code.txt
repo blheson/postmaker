@@ -1,0 +1,52 @@
+text to image method
+
+    // public function text_to_image($image, $new_image_path, $text, $font, $py, $px, $font_size = 60, $angle = 0, $line_height = 120, $background = ['255', '255', '255'], $image_width = (self::DEFAULT_IMAGE_WIDTH)): string
+    // {
+
+    //     $text = wordwrap($text, 11, "\n", false);
+    //     $lines = explode("\n", $text);
+
+    //     // $image = imagecreate($image_width,((count($lines) * $line_height)) + ($px * 2));
+    //     $background = imagecolorallocate($image, $background[0], $background[1], $background[2]);
+    //     imagefill($image, 0, 0, $background);
+
+    //     $py = $px + $font_size;
+    //     $color = $this->get_color($image);
+    //     foreach ($lines as $line) {
+    //         $black = $color['black'];
+    //         imagettftext($image, $font_size, $angle, $px, $py, $black, $font, trim($line));
+    //         $py += $line_height;
+    //     }
+    //     // header("Content-type: image/png");
+    //     imagepng($image, $new_image_path);
+    //     imagedestroy($image);
+    //     return $new_image_path;
+    // }
+
+END OF METHOD
+
+      // public function add_data_on_blank_image($post): string{
+    //     $design_template = $post['design_template'];
+    //     $new_image_path = $this->create_blank_image($design_template, $post['new_image_path']);
+    //     $string = $post['text']; //check
+    //     $default_image = $post['default_image'];
+
+    //     $im     = imagecreatefrompng($default_image);        
+   
+    //     $px    = isset($post['px']) ? (int)$post['px'] : 200;
+
+    //     $py     = isset($post['py']) ? (int)$post['py'] : 200;
+    //     $font_array['file'] = $post['font'];
+    //     $font_array['size'] = isset($post['size']) ? (int)$post['size'] : 200;
+    //     $font_array['angle'] = isset($post['angle']) ? (int)$post['angle'] : 0;
+    //     $font_array['line_height'] = isset($post['line_height']) ? (int)$post['line_height'] : 120;
+     
+    //     //font   
+    //     // $font ="C:/xampp/htdocs/postmaker/assets/fonts/montserrat.ttf";
+    //     $font = $post['font'];
+    //     $new_link = $this->text_to_image($im,$new_image_path,$string,$font,$py, $px);
+    //     return $new_link;
+    // }
+
+
+END OF METHOD

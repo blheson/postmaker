@@ -1,38 +1,160 @@
 <?php
-    class Watermark{
-        public function add_logo_to_image($dst,$source,$cord){
-                extract($cord);
-                $file = pathinfo($dst);
-                
-                switch($file['extension']){
-                    case 'png':
-                        $im = imagecreatefrompng($dst);
-                        break;
-                    case 'jpeg':
-                        $im = imagecreatefromjpeg($dst);
-                        break;  
-                    case 'gif':
-                        $im = imagecreatefromgif($dst);
-                        break;                      
-                }
-            // First we create our stamp image manually from GD
-         
-                $stamp = imagecreatefrompng($source);
 
-            // Set the margins for the stamp and get the height/width of the stamp image
-                $marge_right = $right;
-                $marge_bottom = $bottom;
-                $sx = imagesx($stamp);
-                $sy = imagesy($stamp);
-            // Merge the stamp onto our photo with an opacity of 50%
+namespace Controller\Template\Square;
 
-            // imagecopymerge($im, $stamp, 0, 0, 0, 0, imagesx($stamp), imagesy($stamp), 80);
-                imagecopy($im, $stamp, 0, 0, 0, 0, imagesx($stamp), imagesy($stamp));
+require_once 'Common.php';
 
+use Controller\Common\CreateImage;
 
-            // Save the image to file and free memory
-            imagepng($im, $dir.'assets/images/ll.png');
-            imagedestroy($im);
-        }
+class Watermark
+{
+    public $create_image;
+
+    public function __construct()
+    {
     }
-?>
+    public function create_image()
+    {
+        $this->create_image = new CreateImage;
+        return $this->create_image;
+    }
+    /**
+     * Logo on product
+     * @param array $cord
+     * @return string link to Water mark image
+     */
+    public function logo_on_product($cord, $image, $logo)
+    {
+        $link = [];
+        $link['short'] = 'render/';
+        $link['long'] = '../assets/images/' . $link['short'];
+
+        //Process Product Image
+
+        if (isset($image) && $image['size'] > 0) {
+            if ($image['error'] > 0) {
+                $_SESSION['error'] = 'Upload a valid picture';
+                return false;
+            } else {
+                $product_image = $this->create_image()->upload_image($image, $link);
+                if (!$product_image) {
+                    $_SESSION['error'] = "Image not successfully uploaded";
+                    return false;
+                }
+            }
+        } else {
+            $product_image = 'no image';
+            $_SESSION['error'] = "no image";
+            return false;
+        }
+
+        //Process Logo
+
+        if (isset($logo) && $logo['size'] > 0) {
+            if ($logo['error'] > 0) {
+                $_SESSION['error'] = 'upload a valid logo';
+                return false;
+            } else {
+                $logo_link = $this->create_image()->upload_image($logo, $link, ['width' => 200, 'height' => null]);
+                if (!$logo_link) {
+                    $_SESSION['error'] = "Logo not successfully uploaded";
+                    return false;
+                }
+            }
+        } else {
+            $logo_link = 'Logo certificate not successfully uploaded"';
+            $_SESSION['error'] = "No image";
+            return false;
+        }
+
+        return $this->add_logo_to_image('../assets/images/' . $product_image, '../assets/images/' . $logo_link, $cord);
+    }
+    /**
+     * Add logo to an image
+     * @param string $dst - The picture to watermark
+     * @param string $logo - The stamp or logo used for watermark
+     * @param array|string $cord set the position of logo
+     * @return string $dst
+     */
+    public function add_logo_to_image($dst, $logo, $cord = null, $margin = 30): string
+    {
+
+        list($dst_width, $dst_height) = getimagesize($dst);
+        list($logo_width, $logo_height) = getimagesize($logo);
+        // SET MARGIN
+
+        if (is_array($cord)) {
+            $position = $cord;
+        } else {
+            $position = $this->get_logo_cord($dst_width, $dst_height, $logo_width, $logo_height, $cord, $margin);
+        }
+
+
+        // extract to get x and y variable
+        extract($position);
+
+        $im = $this->create_image()->create_image_resource($dst);
+        // Create stamp image manually from GD
+
+        $stamp = imagecreatefrompng($logo);
+
+        // imagecopymerge($im, $stamp, $x, $y, 0, 0, imagesx($stamp), imagesy($stamp), 80);
+        // imagecopyresized($im, $stamp, $x, $y, 0, 0, $dst_width,$dst_height,imagesx($stamp), imagesy($stamp));
+
+        imagecopy($im, $stamp, $x, $y, 0, 0, $logo_width, $logo_height);
+
+        // Save the image to file and free memory
+        imagepng($im, $dst);
+        imagedestroy($im);
+        return $dst;
+    }
+    /**
+     * Get the coordinate of logo
+     * @param int $dst_width
+     * @param int $dst_height
+     * @param int $logo_width
+     * @param int $logo_height
+     * @param int $margin
+     * @param string $cord
+     * @return array the x and y coordinate of the logo
+     * 
+     * 
+     */
+    public function get_logo_cord($dst_width, $dst_height, $logo_width, $logo_height, $cord, $margin)
+    {
+        $center_x = ($dst_width / 2) - ($logo_width / 2);
+        $m_right_x  = $dst_width - ($logo_height);
+        $m_bottom = $dst_height - ($logo_height);
+        switch ($cord) {
+            case "tl":
+                $x = $margin;
+                $y = $margin;
+                break;
+            case "tc":
+                $x = $center_x;
+                $y = $margin;
+                break;
+            case "tr":
+                $x = $m_right_x;
+                $y = $margin;
+                break;
+            case "bl":
+                $x = $margin;
+                $y = $m_bottom;
+                break;
+            case "bc":
+                $x = $center_x;
+                $y = $m_bottom;
+                break;
+            case "br":
+                $x = $m_right_x;
+                $y = $m_bottom;
+                break;
+            default:
+                $x = $center_x;
+                $y = ($dst_height / 2) - ($logo_height / 2);
+                break;
+        }
+        return ['x' => $x, 'y' => $y];
+    }
+}

@@ -1,4 +1,5 @@
 <?php
+namespace Controller\Common;
 /**
  * Class for setting the width of image
  */

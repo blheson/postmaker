@@ -11,7 +11,7 @@ section.template .default_template > img, section.template .render > img{
 }
 
 section.template .default_template img:hover, section.template .render img:hover{
-    box-shadow:-2px -2px 14px 4px #d2d2d2;
+    box-shadow:-2px -2px 14px 4px #f6f6f6;
 }
 section.template .title{
     /* background: #000000; */
@@ -25,3 +25,29 @@ section.template .title{
     padding: 2rem;
     border-radius: 1rem;
 }
+/* navigation */
+nav {
+    padding-top: 2rem;
+    /* box-shadow: -1px 3px 20px 0px #424242; */
+    padding-bottom: 1rem;
+    box-shadow:0px -7px 16px 5px #a4a4a4;  
+  }
+  nav div.logo {
+    display: initial;
+  }
+  nav div.nav-menu {
+    float: right;
+    padding-top: 1rem
+  }
+  nav div.nav-menu ul li,
+  .footer-menu ul li {
+    text-align: left;
+    vertical-align: middle;
+    padding-left: 0px !important;
+    display: inline-flex;
+  }
+  nav div.nav-menu ul li a.li-link {
+    padding: 0.2rem 1rem;
+    font-weight: 300;
+    color: #333333;
+  }

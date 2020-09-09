@@ -13,6 +13,7 @@ if(mysqli_connect_errno()){
    echo 'Database connection failed with following errors: '. mysqli_connect_error();
    die();
 }
+$dir = $dir ?? '' ;
 
 // include "system/view/view.php";
 include $dir."system/controller/factory.php";
@@ -20,6 +21,3 @@ include $dir."system/controller/factory.php";
 Use Controller\Factory as Factory;
 $app = new Factory;
 $unique_id = $app->get_unique_id();
-
-
-$baseurl = isset($baseurl) ? $baseurl : "";

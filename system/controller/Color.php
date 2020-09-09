@@ -1,4 +1,5 @@
 <?php
+namespace Controller\Common;
 class Color{
     /**
      * Convert Hex code to RGB

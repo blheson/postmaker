@@ -1,24 +1,42 @@
-<?php
-    $dir = isset($dir) ? $dir : '' ;
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width = device-width, initial-scale = 1.0">
-    <title>Post Maker by Udor Blessing</title>
+    <title>Moulda by Udor Blessing</title>
   
     <link rel="stylesheet" href="<?=$dir?>assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?=$dir?>assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="<?=$dir?>assets/css/default.css">
     <link rel="stylesheet" href="<?=$dir?>assets/css/main.css">
+
     <link async href="https://fonts.googleapis.com/css?family=PT+Sans:400,700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-    <nav class="navbar sticky-top navbar-light bg-light" style="background-color:#3b98f7">
-       
-    </nav>
-  
- 
+    <!-- <nav class="navbar sticky-top navbar-light bg-light" style="background-color:#3b98f7">
+            <center><h1 style="color:white">POSTMAKER</h1></center>
+    </nav> -->
+    <nav>
+            <div class="fixed-nav-box">
+            <div class="container">
+                <div class="logo">
+                    <!-- <a href=""><img class="logo-img" src="<?=$base?>assets/img/drugscafe-logo-full.png" alt="Drugs Cafe Pharmacy"
+                            width="150px"></a> -->
+                            <a href=""><span>MOULDA</span></a>
+                            
+                </div>
+                <div class="nav-menu">
+                    <ul>
+                    <li><a class="li-link" href="<?= $dir ?>"><span>Home</span></a>
+
+                    
+                  
+                    </ul>
+                </div>
+            </div>
+            </div>
+           
+        </nav>
     </header>

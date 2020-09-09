@@ -37,8 +37,10 @@ class Model {
         $orange = imagecolorallocate($im, 220, 210, 60);
         $white  = imagecolorallocate($im, 255, 255, 255);
         $black  = imagecolorallocate($im, 0, 0, 0);
+        $array = ['orange' => $orange, 'white' => $white, 'black' => $black];
         if ($color != null) {
+            return [$color =>$array[$color]];
         }
-        return ['orange' => $orange, 'white' => $white, 'black' => $black];
+        return $array;
     }
 }

@@ -3,6 +3,7 @@ class Debug {
     /** 
      * Pretty print data
      * @param mixed $data
+     * @return void
      * 
      */
     public function dnd($data)

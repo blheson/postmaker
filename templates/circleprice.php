@@ -2,14 +2,20 @@
 $dir = '../';
 include $dir . "system/initiate.php";
 // $square_image = $app->get_factory('SquareImage');
-$array =['class'=>'SquareImage','namespace'=>'Controller\Template\Square\\'];
+$array =['class'=>'PriceTag','namespace'=>'Controller\Template\Square\\'];
 $square_image = $app->get_factory($array);
 $new_image_path = "assets/images/render/";
 $default_image = "assets/images/blank_image.png";
-$design_template = "assets/images/templates/plain/plain_template.png";
+$design_template = "assets/images/templates/circleprice/circle-price-tag.png";
 
-if (isset($_POST['text'])) 
-    $image_link = $square_image->add_data_on_blank_image($_POST);
+if (isset($_POST['logo'])){
+    $post = $_POST;
+    $post['logo_details'] = $_FILES['logo'];
+    $post['product_details'] = $_FILES['product'];
+
+    $image_link = $square_image->price_tag($post);}
+    // $image_link = $square_image->add_data_on_blank_image($_POST);
+
 
 
 include $dir . "includes/header.php";
@@ -17,7 +23,7 @@ include $dir . "includes/header.php";
 
 <main class="container" style="padding: 2rem;box-shadow: 0 0 10px 1px #ececec;">
     <section class="header">
-        <h1 class="text-center">Plain Template</h1>
+        <h1 class="text-center">Price Tag Template</h1>
     </section>
     <center>
         <div class="breadcrumb">
@@ -38,7 +44,16 @@ include $dir . "includes/header.php";
                 <div class="card">
 
                     <form method="post" enctype="multipart">
+                        <div class="form-group">
+                            <label for="">Add logo</label>
 
+                            <input type="file" name="logo" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Add Product</label>
+
+                            <input type="file" name="product" class="form-control" required>
+                        </div>
                         <div class="form-group">
                             <label for="">Choose Font</label>
                             <select name="font" class="form-control">
@@ -54,29 +69,23 @@ include $dir . "includes/header.php";
                                 ?>
                             </select>
                         </div>
-
                         <div class="form-group">
+                            <label for="">Price</label>
+                            <input type="text" name="color" class="form-control" value="N5,000" required>
 
-                            <div>
-                                <small class="status_input">
-                                </small>
-                            </div>
-                            <label for="">Edit Main text</label>
-
-                            <input type="text" name="text" class="form-control" value="Always make do with the best of today" required>
                         </div>
                         <div class="form-group">
-                            <label for="">Edit footer</label>
-                            <input type="text" name="footer" class="form-control" value="This is a footer" required>
-                        </div>
+                            <label for="">Contact</label>
+                            <input type="text" name="color" class="form-control" value="Company Contact | 0802 000 0000" required>
 
+                        </div>
 
                         <div class="form-group hidden-settings background_colour" style="display: none;">
                             <label for="">Change font colour</label>
                             <input type="color" name="color" class="form-control" value="#ffffff" required>
-                            <label for="">Change background colour</label>
-                            <input type="color" name="background" class="form-control" value="#ffffff" required>
+
                         </div>
+
                         <div class="row">
                             <div class="col-md-2 col-sm-2 col-xs-1 pull-left">
                                 <input type="checkbox" name="check">
@@ -129,18 +138,18 @@ include $dir . "includes/header.php";
 include $dir . "includes/footer.php";
 ?>
 <script>
-    let text = document.querySelector("input[name=text]");
-    text.addEventListener("input", () => {
-        let submit = document.querySelector("input[type=submit]");
-        if (text.value.length > 60) {
-            let status = document.querySelector(".status_input");
-            status.innerText = 'Character should not be more than 60';
-            submit.disabled = true;
-        } else {
-            submit.disabled = false;
-            status.innerText = '';
-        }
-    })
+    // let text = document.querySelector("input[name=text]");
+    // text.addEventListener("input", () => {
+    //     let submit = document.querySelector("input[type=submit]");
+    //     if (text.value.length > 60) {
+    //         let status = document.querySelector(".status_input");
+    //         status.innerText = 'Character should not be more than 60';
+    //         submit.disabled = true;
+    //     } else {
+    //         submit.disabled = false;
+    //         status.innerText = '';
+    //     }
+    // })
 
     // let check = document.querySelector("input[name=check]");
     // let hidden_settings = document.querySelector(".hidden-settings");
@@ -150,7 +159,7 @@ include $dir . "includes/footer.php";
     //         // hidden_settings.style.display = "block";
     //         hidden_settings.classList.remove("d-none");
     //         // console.log(hidden_settings.style.display)
-     
+
     //     } else {
     //         hidden_settings.classList.add("d-none");
     //         // console.log(hidden_settings.style.display)

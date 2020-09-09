@@ -1,14 +1,14 @@
 <?php
-require_once 'ImageDimension.php';
-
-// use ImageDimension;
+namespace Controller\Common;
+use Controller\Common\ImageDimension;
 
     /**
      * Class for creating image and resource
      */
-    class CreateBlankImage{
+    class CreateImage{
         public function __construct()
         {
+            require_once 'ImageDimension.php';
             $this->image_dimension = new ImageDimension;
         }
           /**
@@ -29,7 +29,9 @@ require_once 'ImageDimension.php';
          $tmp_loc = $data['tmp_name'];
          $file_size = $data['size']; 
          $file_name = md5(rand(1,10)).".".$file_ext;
-         $upload_name = substr($file_name,0,1).'/'.$file_name;
+        //  $upload_name = substr($file_name,0,1).'/'.$file_name;
+         $upload_name = $file_name;
+
          $upload_path = $link['long'].$upload_name;
 
 
@@ -81,7 +83,6 @@ require_once 'ImageDimension.php';
             $_SESSION['error'] = 'The image could not be saved';
             return $db_path;
         }
-        
 
     }
          /**

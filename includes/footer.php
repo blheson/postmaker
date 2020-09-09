@@ -1,5 +1,5 @@
 <footer>
-    <div class="mb-1">Copyright 2020</div>
+    <div class="text-center">Copyright 2020</div>
 </footer>
 </body>
     <script src="<?=$dir?>assets/js/jquery.min.js"></script>
