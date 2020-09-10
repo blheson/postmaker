@@ -2,13 +2,13 @@
 $dir = '../';
 include $dir . "system/initiate.php";
 // $square_image = $app->get_factory('SquareImage');
-$array =['class'=>'SquareImage','namespace'=>'Controller\Template\Square\\'];
+$array = ['class' => 'SquareImage', 'namespace' => 'Controller\Template\Square\\'];
 $square_image = $app->get_factory($array);
 $new_image_path = "assets/images/render/";
 $default_image = "assets/images/blank_image.png";
 $design_template = "assets/images/templates/plain/plain_template.png";
 
-if (isset($_POST['text'])) 
+if (isset($_POST['text']))
     $image_link = $square_image->add_data_on_blank_image($_POST);
 
 
@@ -73,7 +73,7 @@ include $dir . "includes/header.php";
 
                         <div class="form-group hidden-settings background_colour" style="display: none;">
                             <label for="">Change font colour</label>
-                            <input type="color" name="color" class="form-control" value="#ffffff" required>
+                            <input type="color" name="color" class="form-control" value="#000000" required>
                             <label for="">Change background colour</label>
                             <input type="color" name="background" class="form-control" value="#ffffff" required>
                         </div>
@@ -132,13 +132,16 @@ include $dir . "includes/footer.php";
     let text = document.querySelector("input[name=text]");
     text.addEventListener("input", () => {
         let submit = document.querySelector("input[type=submit]");
+        let status = document.querySelector(".status_input");
         if (text.value.length > 60) {
-            let status = document.querySelector(".status_input");
+      
             status.innerText = 'Character should not be more than 60';
+            status.style.color = 'red';
             submit.disabled = true;
         } else {
             submit.disabled = false;
             status.innerText = '';
+            status.innerHTML = '';
         }
     })
 
@@ -150,7 +153,7 @@ include $dir . "includes/footer.php";
     //         // hidden_settings.style.display = "block";
     //         hidden_settings.classList.remove("d-none");
     //         // console.log(hidden_settings.style.display)
-     
+
     //     } else {
     //         hidden_settings.classList.add("d-none");
     //         // console.log(hidden_settings.style.display)

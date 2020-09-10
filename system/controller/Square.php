@@ -1,6 +1,6 @@
 <?php
 
-namespace Controller\Common;
+namespace Controller\Template;
 
 require_once 'Common.php';
 require_once (dirname(__DIR__)) . DS . 'Model' . DS . 'Model.php';
@@ -10,9 +10,9 @@ use Model\Model as Model;
 use Controller\Common\Color as color;
 use Controller\Common\ImageDimension as imagedimension;
 use Controller\Common\CreateImage;
-// use Controller\Template\Square\Watermark as watermark;
+use Controller\Template\Square\Watermark as watermark;
 
-class Image
+class Square
 {
     public $model;
     public $color;
@@ -44,7 +44,7 @@ class Image
     }
     public function water_mark()
     {
-        $this->watermark = new \Controller\Template\Square\Watermark();
+        $this->watermark = new watermark();
         return $this->watermark;
     }
     /**
@@ -142,8 +142,6 @@ class Image
 
         // SORT FONT ARRAY
         // get_color array
-
-
         if (isset($font_array['color'])) {
             $font_col = imagecolorallocate($image, $font_array['color'][0], $font_array['color'][1], $font_array['color'][2]);
         } else {

@@ -1,11 +1,11 @@
 <?php
 namespace Controller\Template\Square;
 
-require 'Image.php';
+require 'Square.php';
 
-use Controller\Common\Image as image;
+use Controller\Template\Square as square;
 
-class SquareImage extends image
+class SquareImage extends square
 {
     /**
      * Get image
@@ -87,8 +87,8 @@ class SquareImage extends image
         $string = $post['text'];
 
         //IMAGE RESOURCE
-        $im     = imagecreatefrompng($default_image);
-        $new_link = $this->text_to_image($im, $image_array, $string, $font_array);
+        // $im     = imagecreatefrompng($default_image);
+        $new_link = $this->text_to_image($default_image, $image_array, $string, $font_array);
         if ($post['footer'] != '') {
             unset($font_array['px']);
             $this->write_to_footer($new_link, $image_array, $post['footer'], $font_array);

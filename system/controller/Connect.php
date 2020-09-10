@@ -2,6 +2,6 @@
 /**
  * Class to connect model to control
  */
-class Connect extends Model{
+// class Connect extends Model{
 
-}
+// }

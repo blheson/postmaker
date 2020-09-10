@@ -1,14 +1,14 @@
 <?php
 $dir = '../';
 include $dir . "system/initiate.php";
-$array =['class'=>'Watermark','namespace'=>'Controller\Template\Square\\'];
+$array = ['class' => 'Watermark', 'namespace' => 'Controller\Template\Square\\'];
 $watermark = $app->get_factory($array);
 $new_image_path = "assets/images/render/";
 $design_template = "assets/images/templates/watermark/product-watermark.png";
 
 if (isset($_POST['watermark'])) {
 
-   $image_link =  $watermark->logo_on_product($_FILES['file'],$_FILES['logo'],$_POST['pos']);
+    $image_link =  $watermark->logo_on_product($_FILES['file'], $_FILES['logo'], $_POST['pos'],100);
 }
 include $dir . "includes/header.php";
 ?>
@@ -19,10 +19,10 @@ include $dir . "includes/header.php";
         <h1 class="text-center">Watermark Template</h1>
     </section>
     <center>
-    <div class="breadcrumb">
-        <a href="<?= $dir ?>"><i class="fa fa-home"></i></a>
-    </div>
-</center>
+        <div class="breadcrumb">
+            <a href="<?= $dir ?>"><i class="fa fa-home"></i></a>
+        </div>
+    </center>
     <!-- show template type -->
     <section class="template">
         <div class="row">
@@ -33,8 +33,8 @@ include $dir . "includes/header.php";
                 </div>
             </div>
             <div class="col-md-4">
-                <?=$app->show_error()?>
-                <?=$app->show_success()?>
+                <?= $app->show_error() ?>
+                <?= $app->show_success() ?>
                 <h3 class="title">Fill form to edit design</h3>
                 <div class="card">
 
@@ -52,7 +52,7 @@ include $dir . "includes/header.php";
                         </div>
                         <div class="form-group">
                             <label for="">Logo Position</label>
-                           <select name="pos" id="" class="form-control">
+                            <select name="pos" id="" class="form-control">
                                 <option value="md">Center</option>
                                 <option value="tl">Top left</option>
                                 <option value="tc">Top center</option>
@@ -60,7 +60,7 @@ include $dir . "includes/header.php";
                                 <option value="bl">Bottom left</option>
                                 <option value="bc">Bottom center</option>
                                 <option value="br">Bottom right</option>
-                           </select>
+                            </select>
                         </div>
                         <input type="submit" class="btn btn-submit">
                     </form>
