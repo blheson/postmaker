@@ -11,8 +11,8 @@ use Controller\Common;
  */
 class ImageDimension
 {
-    const DEFAULT_IMAGE_WIDTH = 500;
-    const DEFAULT_IMAGE_HEIGHT = 500;
+    const DEFAULT_IMAGE_WIDTH = 1000;
+    const DEFAULT_IMAGE_HEIGHT = 1000;
     public $create_image;
 
 
@@ -34,28 +34,35 @@ class ImageDimension
      * @return resource
      * 
      */
-    public function crop($img_path, $height, $width)
+    public function crop($img_path, $default = self::DEFAULT_IMAGE_WIDTH)
     {
+
+        list($width, $height) = getimagesize($img_path);
+        if ($width == $height)
+            return $img_path;
+        // list($logo_width, $logo_height) = getimagesize($logo);
+        // $this->set_logo_dimension($logo_width, $logo_height);
         $create_image = $this->create_image();
         $im = $create_image->create_image_resource($img_path);
         // set scale to height assuming image is square
         $scale = $height;
 
-        // set scale if image is rectangle
-        if ($width > $height) {
-            $scale = $height < 500 ? 500 : null;
-            $im = imagescale($im, $scale);
-        } elseif ($height > $width) {
-            $scale = $width < 500 ? 500 : null;
-            $im = imagescale($im, $scale);
+        // set scale if image is rectangle and width and height i less than $default
+        if(($width < $default || $height < $default) && $width != $height){
+            if ($width > $height) {
+                $scale = $height < $default ? $default : $height;
+                $im = imagescale($im, -1, $scale);
+            } elseif ($height > $width) {
+                $scale = $width < $default ? $default : $width;
+                $im = imagescale($im, $scale);
+            }
         }
 
-        //scale up the image
-        // if ($scale) {
-        //     $im = imagescale($im, $scale);
-        // }
-
-        $resource = imagecrop($im, ['x' => 0, 'y' => 0, 'width' => $scale, 'height' => $scale]);
+        $resource = imagecrop($im, ['x' => 0, 'y' => 0, 'width' => $default, 'height' => $default]);
+        $target_width = $default;
+        $target_height = $default;
+        $target_layer = imagecreatetruecolor($target_width, $target_height);
+        imagecopyresampled($target_layer, $resource, 0, 0, 0, 0, $default, $default, $width, $height);
         imagepng($resource, $img_path);
         imagedestroy($resource);
         return $img_path;
@@ -91,7 +98,6 @@ class ImageDimension
         if ($source_gd_image === false) {
             return false;
         }
-
 
         $source_aspect_ratio = $source_image_width / $source_image_height;
         $thumbnail_aspect_ratio = $width / $height;

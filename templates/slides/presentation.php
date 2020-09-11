@@ -1,5 +1,5 @@
 <?php
-$dir = '../';
+$dir = '../../';
 include $dir . "system/initiate.php";
 // $square_image = $app->get_factory('SquareImage');
 $array = ['class' => 'PriceTag', 'namespace' => 'Controller\Template\Square\\'];
@@ -36,13 +36,13 @@ include $dir . "includes/header.php";
     <!-- show template type -->
     <section class="template">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-12">
                 <h3 class="title template">Template <i class="fa fa-caret-down pull-right"></i></h3>
                 <div class="default_template" style="display: none;">
-                    <img src="<?= $dir . $design_template; ?>" alt="<?= basename($design_template); ?>">
+                    <img src="<?= $dir . $design_template; ?>" alt="<?= basename($design_template); ?>" style="width: 200px;">
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-12">
                 <h3 class="title">Fill form to edit design</h3>
                 <div class="card">
 
@@ -106,7 +106,7 @@ include $dir . "includes/header.php";
                 </div>
             </div>
 
-            <div id="render" class="col-md-4">
+            <div id="render" class="col-md-12">
 
                 <h3 class="title">Final Render</h3>
                 <!-- render finished image -->

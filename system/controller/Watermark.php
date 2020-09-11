@@ -72,7 +72,8 @@ class Watermark
         }
 
         //Process Logo
-        if (isset($logo) && $logo['size'] > 0) {
+      
+          if (isset($logo) && $logo['size'] > 0) {
             if ($logo['error'] > 0) {
                 $_SESSION['error'] = 'upload a valid logo';
                 return false;
@@ -88,7 +89,8 @@ class Watermark
             throw new \Exception("No image was uploaded");
             return false;
         }
-        return $this->add_logo_to_image('../assets/images/' . $product_image, '../assets/images/' . $logo_link,$cord,$margin);
+        // return ['product'=>'../assets/images/' . $product_image,'logo'=> '../assets/images/' . $logo_link];
+        $this->add_logo_to_image('../assets/images/' . $product_image, '../assets/images/' . $logo_link,$cord,$margin);
     }
     /**
      * Add logo to an image
@@ -97,11 +99,12 @@ class Watermark
      * @param array|string $cord set the position of logo
      * @return string $dst
      */
-    public function add_logo_to_image($dst, $logo, $cord = null, $margin = 30): string
+    public function add_logo_to_image($dst, $logo, $cord = null, $margin = 30,$ratio = null): string
     {
 
         list($dst_width, $dst_height) = getimagesize($dst);
         list($logo_width, $logo_height) = getimagesize($logo);
+
         // $dimension_instance = $this->dimension_instance();
 
         //resize image
@@ -127,8 +130,7 @@ class Watermark
         } else {
             $position = $this->get_logo_cord($dst_width, $dst_height, $logo_width, $logo_height, $cord, $margin);
         }
-
-
+     
         // extract to get $x and $y variable
         extract($position);
 
@@ -139,13 +141,13 @@ class Watermark
 
         // imagecopymerge($im, $stamp, $x, $y, 0, 0, imagesx($stamp), imagesy($stamp), 80);
         // imagecopyresized($im, $stamp, $x, $y, 0, 0, $dst_width,$dst_height,imagesx($stamp), imagesy($stamp));
-        var_dump($cord);
-
-        var_dump($x.'___'.$y);
+      
         imagecopy($im, $stamp, $x, $y, 0, 0, $logo_width, $logo_height);
+          
 
         // Save the image to file and free memory
         imagepng($im, $dst);
+
         imagedestroy($im);
         return $dst;
     }

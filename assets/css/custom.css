@@ -1,0 +1,27 @@
+
+section.template .default_template, section.template .render{
+    /* width:20rem; */
+    max-width: 55rem;
+
+}
+section.template .default_template > img, section.template .render > img{
+    width: 100%;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+}
+
+section.template .default_template img:hover, section.template .render img:hover{
+    box-shadow:-2px -2px 14px 4px #162a3e1a;
+}
+section.template .title{
+    /* background: #000000; */
+     /* background: #4cb7b7; */
+     background: #3b98f7;
+     padding: 3rem 2rem;
+    color: #fff;
+}
+.card{
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 1rem;
+}

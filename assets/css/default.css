@@ -4,7 +4,11 @@ html,*,body{
 }
 body{
     background-color: #e5eaeb;
-
+    font-weight: 300;
+    font-size: 16px;
+}
+footer{
+    font-size: 13px;
 }
 h1{
     padding-bottom: 4rem;
@@ -49,6 +53,29 @@ footer{
     min-width: 25rem;
     z-index: 1000;
 }
+.bg-color{
+    background-color:#126bb4;
+    color:#fff;
+}
 .d-none{
     display: none!important;
 }
+
+/* .mb-1{
+    margin-bottom: 1rem;
+}
+.mb-2{
+    margin-bottom: 2rem;
+}
+.mb-3{
+    margin-bottom: 3rem;
+}
+.mt-1{
+    margin-top: 1rem;
+}
+.mt-2{
+    margin-top: 2rem;
+}
+.mt-3{
+    margin-top: 3rem;
+} */

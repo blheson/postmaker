@@ -15,6 +15,59 @@ class CreateImage
         $this->image_dimension = new ImageDimension;
     }
     /**
+     * Logo and product upload
+     * @param array $image HTTP upload for image file
+     * @param array $logo HTTP upload for logo file
+     * @param array $logo_width Default is 200
+     * @param array $cord
+     * @return string link to Water mark image
+     */
+    public function logo_and_product_upload($image, $logo, $logo_height = 120)
+    {
+        $link = [];
+        $link['short'] = 'render/';
+        $link['long'] = '../assets/images/' . $link['short'];
+
+        //Process Product Image
+        if (isset($image) && $image['size'] > 0) {
+            if ($image['error'] > 0) {
+                $_SESSION['error'] = 'Upload a valid picture';
+                return false;
+            } else {
+                $product_image = $this->upload_image($image, $link);
+                if (!$product_image) {
+                    $_SESSION['error'] = "Image not successfully uploaded";
+                    return false;
+                }
+            }
+        } else {
+            $product_image = 'no image';
+            throw new \Exception("No image was uploaded");
+            return false;
+        }
+
+        //Process Logo
+        if (isset($logo) && $logo['size'] > 0) {
+            if ($logo['error'] > 0) {
+                $_SESSION['error'] = 'upload a valid logo';
+                return false;
+            } else {
+                $logo_link = $this->upload_image($logo, $link, ['width' => null, 'height' => $logo_height]);
+                if (!$logo_link) {
+                    $_SESSION['error'] = "Logo not successfully uploaded";
+                    return false;
+                }
+            }
+        } else {
+            $logo_link = 'Logo certificate not successfully uploade';
+            throw new \Exception("No image was uploaded");
+            return false;
+        }
+ 
+        return ['product' => '../assets/images/' . $product_image, 'logo' => '../assets/images/' . $logo_link];
+        
+    }
+    /**
      * Image checker
      * @param mixed $data
      * @param array $root_dir 
@@ -72,6 +125,7 @@ class CreateImage
      */
     public function upload_image($file, $link, $dimension = null)
     {
+      
         $image_data = $this->check_image($file, $link);
         if (is_array($image_data)) {
             $tmp_loc = $image_data['tmp_loc'];
@@ -115,7 +169,6 @@ class CreateImage
      * 
      * @return resource $im
      */
-
     public function create_image_resource(string $file)
     {
 

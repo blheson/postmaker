@@ -47,6 +47,9 @@ class Square
         $this->watermark = new watermark();
         return $this->watermark;
     }
+    public function image_dimension(){
+        return $this->image_dimension;
+    }
     /**
      * Add text on image
      * @param string $new_link
@@ -67,13 +70,13 @@ class Square
      * 
      *  int     'file' - The size of the font.
      * 
-     *  int     'size' - [optional] The size of the font. Default is 60
+     *  int     'size' - [optional] The size of the font. Default is 20
      * 
      *  int     'width' - [optional] The width that the text will occupy on the design. Default is 11
      * 
      *  float   'angle' - [optional] The angle of the font. Default is 0
      * 
-     *  float   'line_height' - [optional] The line_height of the font. Default is 120
+     *  float   'line_height' - [optional] The line_height of the font. Default is 60
      * 
      *  float   'px' - The x coordinate of the first character of the font.
      * 
@@ -117,6 +120,8 @@ class Square
      *  keys include
      * 
      *  int     'file' - The size of the font.
+     * 
+     *  int     'color' - The color of the font. E.g [255,255,255]
      * 
      *  int     'size' - [optional] The size of the font. Default is 60
      * 
