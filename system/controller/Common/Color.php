@@ -9,7 +9,7 @@ class Color
      * @param string $hex
      * @return array $bg
      */
-    public function convert_hex_to_rgb(string $hex): array
+    public static function convert_hex_to_rgb(string $hex): array
     {
         $strlen = strlen($hex);
         // if string lenght is not 6 terminate
@@ -24,12 +24,12 @@ class Color
             if (is_numeric($char[0])) {
                 $first = $char[0];
             } else {
-                $first = $this->convert_alphabet_to_number($char[0]);
+                $first = self::convert_alphabet_to_number($char[0]);
             }
             if (is_numeric($char[1])) {
                 $second = $char[1];
             } else {
-                $second = $this->convert_alphabet_to_number($char[1]);
+                $second = self::convert_alphabet_to_number($char[1]);
             }
             $bg[] = ($first * 16) + $second;
             $i += 2;
@@ -43,7 +43,7 @@ class Color
      * @param $char string
      * @return int $digit
      */
-    public function convert_alphabet_to_number(string $char): int
+    public static function convert_alphabet_to_number(string $char): int
     {
         $num = [
             'a' => 10,
@@ -63,12 +63,13 @@ class Color
      * 
      * @return array
      */
-    public function get_color($im, $color = null)
+    public static function get_color($im, $color = null)
     {
         $orange = imagecolorallocate($im, 220, 210, 60);
         $white  = imagecolorallocate($im, 255, 255, 255);
         $black  = imagecolorallocate($im, 0, 0, 0);
         if ($color != null) {
+            return imagecolorallocate($im, $color[0], $color[1],$color[2]);
         }
         return ['orange' => $orange, 'white' => $white, 'black' => $black];
     }

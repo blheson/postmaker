@@ -4,8 +4,8 @@
 
             <div class="row pt-3">
                 <div class="col-md-6 col-xs-6 col-lg-3">
-                        <h3>Moulda</h3>
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis, dicta esse quo sapiente, quos amet sed mollitia ipsa, corporis molestias ducimus. Eveniet omnis dolorem totam cum soluta. Amet, magnam accusamus.</p>
+                    <h3>Moulda</h3>
+                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis, dicta esse quo sapiente, quos amet sed mollitia ipsa, corporis molestias ducimus. Eveniet omnis dolorem totam cum soluta. Amet, magnam accusamus.</p>
                 </div>
                 <div class="col-md-6 col-xs-3 col-lg-3">
                     <ul>
@@ -30,5 +30,10 @@
 <script src="<?= $dir ?>assets/js/jquery.min.js"></script>
 <script src="<?= $dir ?>assets/js/script.js"></script>
 <script src="<?= $dir ?>assets/js/bootstrap.js"></script>
+
+<!-- 
+<script src="https://unpkg.com/swiper/swiper-bundle.js"></script>-->
+<script src="<?= $dir ?>assets/js/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="<?= $dir ?>assets/js/swiper.js"></script>
 
 </html>

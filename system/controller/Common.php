@@ -1,8 +1,10 @@
 <?php
 namespace Controller;
-require 'Color.php';
-require 'ImageDimension.php';
-require 'CreateImage.php';
+require 'Common/Color.php';
+require 'Common/CreateImage.php';
+require 'Common/ImageDimension.php';
+require 'Common/Assets.php';
+
 
 use Controller\Common\CreateImage;
 

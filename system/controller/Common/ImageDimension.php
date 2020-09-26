@@ -1,11 +1,7 @@
 <?php
 
 namespace Controller\Common;
-
-require_once 'Common.php';
-
 use Controller\Common;
-
 /**
  * Class for setting the width of image
  */
@@ -27,7 +23,7 @@ class ImageDimension
         return $this->create_image;
     }
     /**
-     * Crop image into a square
+     * Crop image into a squarea
      * @param string $img_path 
      * @param int $length 
      * @param int|null $scale
@@ -38,34 +34,57 @@ class ImageDimension
     {
 
         list($width, $height) = getimagesize($img_path);
+        $aspect_ratio = $this->aspect($width,$height);
         if ($width == $height)
             return $img_path;
         // list($logo_width, $logo_height) = getimagesize($logo);
         // $this->set_logo_dimension($logo_width, $logo_height);
         $create_image = $this->create_image();
-        $im = $create_image->create_image_resource($img_path);
+      
+
         // set scale to height assuming image is square
         $scale = $height;
 
-        // set scale if image is rectangle and width and height i less than $default
+        // set scale if image is rectangle
+        //Also check if width and height is less than @var $default
         if(($width < $default || $height < $default) && $width != $height){
+            $im = $create_image->create_image_resource($img_path);
             if ($width > $height) {
+               
                 $scale = $height < $default ? $default : $height;
                 $im = imagescale($im, -1, $scale);
+      
             } elseif ($height > $width) {
+
                 $scale = $width < $default ? $default : $width;
                 $im = imagescale($im, $scale);
             }
         }
 
+
+        if(($width > $default && $height > $default) && $width != $height){
+            if ($width < $height) {
+               $this->resize_image($img_path,$default,1000/$aspect_ratio);
+        
+            } elseif ($height < $width) {
+            
+                $this->resize_image($img_path,1000*$aspect_ratio);
+            }
+            $im = $create_image->create_image_resource($img_path);
+        }
+    
+    
         $resource = imagecrop($im, ['x' => 0, 'y' => 0, 'width' => $default, 'height' => $default]);
-        $target_width = $default;
-        $target_height = $default;
-        $target_layer = imagecreatetruecolor($target_width, $target_height);
-        imagecopyresampled($target_layer, $resource, 0, 0, 0, 0, $default, $default, $width, $height);
+      
+
         imagepng($resource, $img_path);
-        imagedestroy($resource);
+
+        imagedestroy($im);
+        // imagedestroy($target_layer);
         return $img_path;
+    }
+    private function aspect($width,$height){
+        return $width/$height;
     }
     /**
      * Resize image email
@@ -100,6 +119,7 @@ class ImageDimension
         }
 
         $source_aspect_ratio = $source_image_width / $source_image_height;
+        
         $thumbnail_aspect_ratio = $width / $height;
         if ($source_image_width <= $width && $source_image_height <= $height) {
             $thumbnail_image_width = $source_image_width;

@@ -8,10 +8,13 @@
 
     <link rel="stylesheet" href="<?= $dir ?>assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= $dir ?>assets/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"> -->
     <link rel="stylesheet" href="<?= $dir ?>assets/css/default.css">
     <link rel="stylesheet" href="<?= $dir ?>assets/css/style.css">
     <link rel="stylesheet" href="<?= $dir ?>assets/css/custom.css">
 
+    
 
 
     <link async href="https://fonts.googleapis.com/css?family=PT+Sans:400,700&display=swap" rel="stylesheet">
@@ -33,10 +36,7 @@
                     </div>
                     <div class="nav-menu">
                         <ul>
-                            <li><a class="li-link" href="<?= $dir ?>"><span>Home</span></a>
-
-
-
+                            <li><a class="li-link" href="<?= $dir ?>index.php"><span>Home</span></a>
                         </ul>
                     </div>
                 </div>

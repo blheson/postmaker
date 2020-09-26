@@ -1,7 +1,7 @@
 <?php
 $dir = '../';
 include $dir . "system/initiate.php";
-// $square_image = $app->get_factory('SquareImage');
+
 $array = ['class' => 'PriceTag', 'namespace' => 'Controller\Template\Square\\'];
 $square_image = $app->get_factory($array);
 $new_image_path = "assets/images/render/";
@@ -17,9 +17,6 @@ if (isset($_POST['contact'])) {
     $post['product_details'] = $_FILES['product'];
     $image_link = $square_image->price_tag($post, 30);
 }
-// $image_link = $square_image->add_data_on_blank_image($_POST);
-
-
 
 include $dir . "includes/header.php";
 ?>

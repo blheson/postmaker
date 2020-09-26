@@ -14,11 +14,6 @@ class Watermark
     public $logo_dimension;
     public $dimension_instance;
 
-
-    // public function __construct()
-    // {
-    // }
-
     /**
      * Create an instance for CreateImage
      * 
@@ -94,37 +89,33 @@ class Watermark
     }
     /**
      * Add logo to an image
+     * 
      * @param string $dst - The picture to watermark
+     * 
      * @param string $logo - The stamp or logo used for watermark
+     * 
      * @param array|string $cord set the position of logo
+     * 
      * @return string $dst
      */
-    public function add_logo_to_image($dst, $logo, $cord = null, $margin = 30,$ratio = null): string
+    public function add_logo_to_image($dst, $logo, $cord = null, $margin = 30, $ratio = null): string
     {
-
         list($dst_width, $dst_height) = getimagesize($dst);
+
+
         list($logo_width, $logo_height) = getimagesize($logo);
 
-        // $dimension_instance = $this->dimension_instance();
-
-        //resize image
-        // if ($crop) {
-        //     $dst = $dimension_instance->crop($dst, $dst_height, $dst_width);
-        // }
-      
-        // $dimension_instance->resize_image($dst, 800, 800, true);
-
+        
         //set image dimension
         $this->set_image_dimension($dst_width, $dst_height);
-        // $this->image_dimension = ['image_width' => $dst_width, 'image_height' => $dst_height];
-        // imagecrop()
+        
 
         //set logo dimension
         // $this->logo_dimension = ['logo_width' => $logo_width, 'logo_height' => $logo_height];
         $this->set_logo_dimension($logo_width, $logo_height);
 
-        // SET MARGIN
 
+        // SET MARGIN
         if (is_array($cord)) {
             $position = $cord;
         } else {
@@ -135,18 +126,21 @@ class Watermark
         extract($position);
 
         $im = $this->create_image()->create_image_resource($dst);
-        // Create stamp image manually from GD
 
+        // Create stamp image manually from GD
         $stamp = imagecreatefrompng($logo);
 
-        // imagecopymerge($im, $stamp, $x, $y, 0, 0, imagesx($stamp), imagesy($stamp), 80);
-        // imagecopyresized($im, $stamp, $x, $y, 0, 0, $dst_width,$dst_height,imagesx($stamp), imagesy($stamp));
-      
+        unlink($logo);
+
         imagecopy($im, $stamp, $x, $y, 0, 0, $logo_width, $logo_height);
           
+            
+        // imagecopyresampled($im, $stamp, $x, $y, 0, 0,$dst_width, $dst_height, $logo_width, $logo_height);
+
 
         // Save the image to file and free memory
         imagepng($im, $dst);
+
 
         imagedestroy($im);
         return $dst;
@@ -160,10 +154,12 @@ class Watermark
     {
         $this->logo_dimension = ['width' => $logo_width, 'height' => $logo_height];
     }
+    
     public function get_image_dimension()
     {
         return $this->image_dimension;
     }
+
     public function get_logo_dimension()
     {
         return $this->logo_dimension;
@@ -171,14 +167,20 @@ class Watermark
 
     /**
      * Get the coordinate of logo
-     * @param int $dst_width
-     * @param int $dst_height
-     * @param int $logo_width
-     * @param int $logo_height
-     * @param int $margin
-     * @param string $cord
-     * @return array the x and y coordinate of the logo
      * 
+     * @param int $dst_width
+     * 
+     * @param int $dst_height
+     * 
+     * @param int $logo_width
+     * 
+     * @param int $logo_height
+     * 
+     * @param int $margin
+     * 
+     * @param string $cord
+     * 
+     * @return array the x and y coordinate of the logo
      * 
      */
     public function get_logo_cord($dst_width, $dst_height, $logo_width, $logo_height, $cord, $margin)

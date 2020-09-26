@@ -5,18 +5,17 @@ namespace Controller\Template\Square;
 require 'Square.php';
 
 use Controller\Template\Square as Square;
+use Controller\Common\Assets as assets;
 
 class PriceTag extends Square
 {
   /**
    * Controller for price tag design
-   * @param array $post contains 
-   * 
+   * @param array $post contains new_image_path, design_template, pos,logo_details,product_details
+   * @param int $margin
    * design_template
-   * 
-   * 
    */
-  public function price_tag($post, $margin = 40)
+  public function price_tag($post, $margin = 50)
   {
     $default_image = $post['design_template'];
     $new_image_path = $post['new_image_path'];
@@ -29,14 +28,15 @@ class PriceTag extends Square
     $watermark = $this->water_mark();
 
     // upload logo and product
-    $logo_product_link = $this->create_image()->logo_and_product_upload($post['product_details'], $post['logo_details']);
+    $logo_product_link = $this->create_image()->logo_and_product_upload($post['product_details'], $post['logo_details'], 90);
 
     // crop image
     $product_image = $this->image_dimension()->crop($logo_product_link['product']);
+  
 
     //add logo to image
-    $prepped_image1 = $watermark->add_logo_to_image( $product_image, $logo_product_link['logo'], $cord, $margin);
-    // imagescale()
+    $prepped_image1 = $watermark->add_logo_to_image($product_image, $logo_product_link['logo'], $cord, $margin);
+
 
     //get image dimension
     $image_dimension = $watermark->get_image_dimension();
@@ -50,6 +50,19 @@ class PriceTag extends Square
     //set cordinate of asset
     $asset_cord = ['x' => $margin, 'y' => $py];
 
+    //add footer rectangle to design
+    assets::create_rectangle(
+      $prepped_image1,
+      [
+        0,
+        $image_dimension['width'],
+        ($image_dimension['height'] - 80),
+        $image_dimension['height']
+      ],
+      [
+        0, 0, 0
+      ]
+    );
 
     //copy asset into a new path
     $new_asset = $this->create_image()->create_blank_image($asset_link, $new_image_path);
@@ -74,16 +87,16 @@ class PriceTag extends Square
     $font_array = [
       'px' => $margin,
       'py' =>  $image_dimension['height'] - ($margin + $font_size),
-      'size'=> $font_size,
+      'size' => $font_size,
       'file' => $post['font'],
       'width' => 50,
-      'color' => [255,255,255]
+      'color' => [255, 255, 255]
     ];
 
     //set font array for contact
     $footer = $post['contact'];
     $this->write_to_footer($prepped_image2, $image_array, $footer, $font_array);
-    
+
     //set font array for price
     $font_array = [
       'px' => $margin + 50,
@@ -92,7 +105,7 @@ class PriceTag extends Square
       'file' => $post['font'],
       'angle' => 12
     ];
-    
+
     return $this->text_to_image($prepped_image2, $image_array, $post['price'], $font_array);
 
     // SET THE NEW DESIGN TO A NEW PATH

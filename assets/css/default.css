@@ -20,7 +20,8 @@ small.status_input{
     color:rgb(2, 1, 1);
 }
 .btn{
-    height: 48px;
+    /* height: 48px; */
+    padding: 0.5rem;
     font-size: 12px;
 }
 .btn-submit{
@@ -60,7 +61,15 @@ footer{
 .d-none{
     display: none!important;
 }
-
+.indicator-box{
+    background-color: #25c696;
+    padding: 0.5rem;
+    width: 200px;
+    margin: auto;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 12px;
+}
 /* .mb-1{
     margin-bottom: 1rem;
 }

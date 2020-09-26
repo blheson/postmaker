@@ -17,11 +17,13 @@ class Model {
     {
         $link = 'C:/xampp/htdocs/postmaker/assets/fonts/';
         $font = [
-            'montserrat'=>$link.'montserrat.ttf',
-            'montserrat_medium'=>$link.'Montserrat-Medium.ttf',
-            'montserrat_bold'=>$link.'Montserrat-Bold.ttf',
-            'Poppins-Regular.otf'=>$link.'Poppins-Regular.otf',
-            'OpenSans-Bold.ttf'=>$link.'OpenSans-Bold.ttf'            
+            'montserrat' => $link.'montserrat.ttf',
+            'montserrat_medium' => $link.'Montserrat-Medium.ttf',
+            'montserrat_bold' => $link.'Montserrat-Bold.ttf',
+            'Poppins-Regular.otf' => $link.'Poppins-Regular.otf',
+            'OpenSans-Bold.ttf'=> $link.'OpenSans-Bold.ttf',
+            'ProductSans-Regular.ttf' => $link.'ProductSans-Regular.ttf',
+            'ProductSans-Medium.ttf' => $link.'ProductSans-Medium.ttf',
         ];
         return $font;
     }

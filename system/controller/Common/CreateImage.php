@@ -9,24 +9,60 @@ use Controller\Common\ImageDimension;
  */
 class CreateImage
 {
+    const REL_LINK = '../';
     public function __construct()
     {
         require_once 'ImageDimension.php';
         $this->image_dimension = new ImageDimension;
     }
     /**
+     * The relative part of the render link
+     * @param string $rel
+     */
+    public function get_upload_link($rel = self::REL_LINK){
+        $link = [];
+        $link['short'] = 'render/';
+        $link['long'] = $rel. 'assets/images/' . $link['short'];
+        return $link;
+    }
+    /**
+     * Upload Logo
+     * @param array $logo HTTP upload for logo file
+     * @param array $logo_width Default is 200
+     * @param string $rel the relative part of the render link
+     * @return string $logo_link
+     */
+    public function logo_upload($logo, $logo_height = 120, $rel = self::REL_LINK)
+    {
+        $link = $this->get_upload_link($rel);
+        if (isset($logo) && $logo['size'] > 0) {
+            if ($logo['error'] > 0) {
+                $_SESSION['error'] = 'upload a valid logo';
+                return false;
+            } else {
+                $logo_link = $this->upload_image($logo, $link, ['width' => null, 'height' => $logo_height]);
+                if (!$logo_link) {
+                    $_SESSION['error'] = "Logo not successfully uploaded";
+                    return false;
+                }
+            }
+        } else {
+            $logo_link = 'Logo certificate not successfully uploaded';
+            throw new \Exception("No image was uploaded");
+            return false;
+        }
+        return $logo_link;
+    }
+    /**
      * Logo and product upload
      * @param array $image HTTP upload for image file
      * @param array $logo HTTP upload for logo file
      * @param array $logo_width Default is 200
-     * @param array $cord
      * @return string link to Water mark image
      */
     public function logo_and_product_upload($image, $logo, $logo_height = 120)
     {
-        $link = [];
-        $link['short'] = 'render/';
-        $link['long'] = '../assets/images/' . $link['short'];
+        $link = $this->get_upload_link();
 
         //Process Product Image
         if (isset($image) && $image['size'] > 0) {
@@ -45,27 +81,27 @@ class CreateImage
             throw new \Exception("No image was uploaded");
             return false;
         }
-
-        //Process Logo
-        if (isset($logo) && $logo['size'] > 0) {
-            if ($logo['error'] > 0) {
-                $_SESSION['error'] = 'upload a valid logo';
-                return false;
-            } else {
-                $logo_link = $this->upload_image($logo, $link, ['width' => null, 'height' => $logo_height]);
-                if (!$logo_link) {
-                    $_SESSION['error'] = "Logo not successfully uploaded";
-                    return false;
-                }
-            }
-        } else {
-            $logo_link = 'Logo certificate not successfully uploade';
-            throw new \Exception("No image was uploaded");
-            return false;
-        }
+        //upload logo and process logo
+        $logo_link = $this->logo_upload($logo, $logo_height);
+     
+        // if (isset($logo) && $logo['size'] > 0) {
+        //     if ($logo['error'] > 0) {
+        //         $_SESSION['error'] = 'upload a valid logo';
+        //         return false;
+        //     } else {
+        //         $logo_link = $this->upload_image($logo, $link, ['width' => null, 'height' => $logo_height]);
+        //         if (!$logo_link) {
+        //             $_SESSION['error'] = "Logo not successfully uploaded";
+        //             return false;
+        //         }
+        //     }
+        // } else {
+        //     $logo_link = 'Logo certificate not successfully uploaded';
+        //     throw new \Exception("No image was uploaded");
+        //     return false;
+        // }
  
         return ['product' => '../assets/images/' . $product_image, 'logo' => '../assets/images/' . $logo_link];
-        
     }
     /**
      * Image checker
@@ -138,7 +174,7 @@ class CreateImage
         if (move_uploaded_file($tmp_loc, $upload_path)) {
             if ($dimension == null) {
                 $this->image_dimension->resize_image($upload_path, true, true);
-            } else {
+            } else { 
                 $this->image_dimension->resize_image($upload_path, $dimension['width'], $dimension['height']);
             }
             return $db_path;
@@ -150,7 +186,7 @@ class CreateImage
     /**
      * Add text on image
      * @param string $base_image_path
-     * @param string $new_image_link
+     * @param string $new_image_link folder to save new file
      * @param string $ext
      * 
      * @return string $new_image_path

@@ -11,14 +11,13 @@ use Controller\Common\Color as color;
 use Controller\Common\ImageDimension as imagedimension;
 use Controller\Common\CreateImage;
 use Controller\Template\Square\Watermark as watermark;
-
 class Square
 {
+    const ROOT_IMG_PATH = 'assets/images';
     public $model;
     public $color;
     public $image_dimension;
     public $create_image;
-
 
     public function __construct()
     {
@@ -45,6 +44,7 @@ class Square
     public function water_mark()
     {
         $this->watermark = new watermark();
+        
         return $this->watermark;
     }
     public function image_dimension(){
@@ -102,12 +102,12 @@ class Square
     /**
      * Wrap text into a specified dimesion
      * 
-     * @param string $new_link
+     * @param string $new_link (The default image to work with)
      * 
      * @param array $image_array
      *  keys include
      * 
-     *  string  'new_image_path' - The final path of the image
+     *  string  'new_image_path' - The final path of the image  (or The folder to store the image)
      * 
      *  array   'background' - [optional] The array of the red, green and blue component of the color Default is [255,255,255]
      * 
@@ -142,7 +142,7 @@ class Square
         // SORT IMAGE ARRAY
         $image = imagecreatefrompng($new_link);
         $new_image_path = $image_array['new_image_path'];
-        $background = isset($image_array['background']) ? $image_array['background'] : ['255', '255', '255'];
+       
         $image_width =  isset($image_array['width']) ? $image_array['width'] : $this->image_dimension::DEFAULT_IMAGE_WIDTH;
 
         // SORT FONT ARRAY
@@ -150,9 +150,9 @@ class Square
         if (isset($font_array['color'])) {
             $font_col = imagecolorallocate($image, $font_array['color'][0], $font_array['color'][1], $font_array['color'][2]);
         } else {
-            $color = $this->model->get_color($image);
+            // $color = $this->model->get_color($image);
+            $color = color::get_color($image);
         }
-
 
         // set color
         $font_color = $font_col ?? $color['black'];
@@ -165,9 +165,12 @@ class Square
 
         //CREAT IMAGE WITH CUSTOM BACKGROUND COLOR
         // echo $px;
-        $background = imagecolorallocate($image, $background[0], $background[1], $background[2]);
-        imagefill($image, 0, 0, $background);
-
+        if(isset($image_array['background']) ){
+            $background = isset($image_array['background']) ? $image_array['background'] : ['255', '255', '255'];
+            $background = imagecolorallocate($image, $background[0], $background[1], $background[2]);
+            imagefill($image, 0, 0, $background);
+        }
+     
 
         // BREAK TEXT INTO NEW LINE
 
