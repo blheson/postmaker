@@ -1,7 +1,7 @@
 <?php $dir = '../../';
 
 include $dir . "system/initiate.php";
-// $square_image = $app->get_factory('SquareImage');
+
 $array = ['class' => 'FoodSlide', 'namespace' => 'Controller\Template\Square\Slide\\'];
 // unset($_SESSION['saved_logo']);
 $slide = $app->get_factory($array);
