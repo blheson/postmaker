@@ -1,8 +1,6 @@
 <?php
 
-namespace Controller\Template\Square;
-
-require 'Square.php';
+namespace Controller\Template;
 
 use Controller\Template\Square as Square;
 use Controller\Common\Assets as assets;

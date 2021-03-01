@@ -1,8 +1,6 @@
 <?php
 namespace Controller\Template\Square;
 
-require 'Square.php';
-
 use Controller\Template\Square as square;
 
 class SquareImage extends square

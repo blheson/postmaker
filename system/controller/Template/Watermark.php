@@ -1,13 +1,13 @@
 <?php
 
-namespace Controller\Template\Square;
-
-require_once 'Common.php';
+namespace Controller\Template;
 
 use Controller\Common\CreateImage;
+use Controller\Common\assets as assets;
 use Controller\Common\ImageDimension;
+use Exception;
 
-class Watermark
+class Watermark 
 {
     public $create_image;
     public $image_dimension;
@@ -21,8 +21,8 @@ class Watermark
      */
     public function create_image()
     {
-        $this->create_image = new CreateImage;
-        return $this->create_image;
+       
+        return assets::create_image();
     }
     /**
      * Create an instance for CreateImage
@@ -31,8 +31,7 @@ class Watermark
      */
     public function dimension_instance()
     {
-        $this->dimension_instance = new ImageDimension;
-        return $this->dimension_instance;
+        return assets::image_dimension();
     }
     /**
      * Logo on product
@@ -42,30 +41,31 @@ class Watermark
      * @param array $cord
      * @return string link to Water mark image
      */
-    public function logo_on_product($image, $logo, $cord, $logo_width = 200,$margin=30)
+    public function logo_on_product($image, $logo, $cord, $logo_width = 200,$margin=30): ?string
     {
         $link = [];
         $link['short'] = 'render/';
         $link['long'] = '../assets/images/' . $link['short'];
 
         //Process Product Image
-        if (isset($image) && $image['size'] > 0) {
-            if ($image['error'] > 0) {
-                $_SESSION['error'] = 'Upload a valid picture';
-                return false;
-            } else {
-                $product_image = $this->create_image()->upload_image($image, $link);
-                if (!$product_image) {
-                    $_SESSION['error'] = "Image not successfully uploaded";
+        try{
+            if (isset($image) && $image['size'] > 0) {
+                if ($image['error'] > 0) {
+                    $_SESSION['error'] = 'Upload a valid picture';
                     return false;
+                } else {
+                    $product_image = $this->create_image()->upload_image($image, $link);
+                    if (!$product_image) {
+                        $_SESSION['error'] = "Image not successfully uploaded";
+                        return false;
+                    }
                 }
+            } else {
+                $product_image = 'no image';
+                throw new \Exception("No image was uploaded");
+                return false;
             }
-        } else {
-            $product_image = 'no image';
-            throw new \Exception("No image was uploaded");
-            return false;
-        }
-
+            
         //Process Logo
       
           if (isset($logo) && $logo['size'] > 0) {
@@ -84,8 +84,12 @@ class Watermark
             throw new \Exception("No image was uploaded");
             return false;
         }
-        // return ['product'=>'../assets/images/' . $product_image,'logo'=> '../assets/images/' . $logo_link];
-        $this->add_logo_to_image('../assets/images/' . $product_image, '../assets/images/' . $logo_link,$cord,$margin);
+        }catch(Exception $e){
+            $e->getMessage();
+        }
+       
+
+        return $this->add_logo_to_image('../assets/images/' . $product_image, '../assets/images/' . $logo_link,$cord,$margin);
     }
     /**
      * Add logo to an image

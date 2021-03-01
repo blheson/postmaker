@@ -1,8 +1,7 @@
 <?php
 
-namespace Controller\Template\Square\Slide;
+namespace Controller\Template\Slide;
 
-require 'Square.php';
 
 use Controller\Template\Square as Square;
 

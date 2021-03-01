@@ -3,6 +3,7 @@
 namespace Controller\Common;
 
 use Controller\Common\ImageDimension;
+use Controller\Common\Assets as assets;
 
 /**
  * Class for creating image and resource
@@ -10,19 +11,23 @@ use Controller\Common\ImageDimension;
 class CreateImage
 {
     const REL_LINK = '../';
-    public function __construct()
+    // public static $image_dimension;
+    /**
+     * @return ImageDimension
+     */
+    public function get_image_dimension()
     {
-        require_once 'ImageDimension.php';
-        $this->image_dimension = new ImageDimension;
+        return assets::image_dimension();
     }
     /**
      * The relative part of the render link
      * @param string $rel
      */
-    public function get_upload_link($rel = self::REL_LINK){
+    public function get_upload_link($rel = self::REL_LINK)
+    {
         $link = [];
         $link['short'] = 'render/';
-        $link['long'] = $rel. 'assets/images/' . $link['short'];
+        $link['long'] = $rel . 'assets/images/' . $link['short'];
         return $link;
     }
     /**
@@ -83,7 +88,7 @@ class CreateImage
         }
         //upload logo and process logo
         $logo_link = $this->logo_upload($logo, $logo_height);
-     
+
         // if (isset($logo) && $logo['size'] > 0) {
         //     if ($logo['error'] > 0) {
         //         $_SESSION['error'] = 'upload a valid logo';
@@ -100,7 +105,7 @@ class CreateImage
         //     throw new \Exception("No image was uploaded");
         //     return false;
         // }
- 
+
         return ['product' => '../assets/images/' . $product_image, 'logo' => '../assets/images/' . $logo_link];
     }
     /**
@@ -161,7 +166,7 @@ class CreateImage
      */
     public function upload_image($file, $link, $dimension = null)
     {
-      
+
         $image_data = $this->check_image($file, $link);
         if (is_array($image_data)) {
             $tmp_loc = $image_data['tmp_loc'];
@@ -172,11 +177,10 @@ class CreateImage
         }
 
         if (move_uploaded_file($tmp_loc, $upload_path)) {
-            if ($dimension == null) {
-                $this->image_dimension->resize_image($upload_path, true, true);
-            } else { 
-                $this->image_dimension->resize_image($upload_path, $dimension['width'], $dimension['height']);
-            }
+            $check = $dimension == null;
+            $width =  $check ? true : $dimension['width'];
+            $height = $check  ? true : $dimension['height'];
+            $this->get_image_dimension()->resize_image($upload_path, $width, $height);
             return $db_path;
         } else {
             $_SESSION['error'] = 'The image could not be saved';

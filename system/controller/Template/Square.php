@@ -2,15 +2,12 @@
 
 namespace Controller\Template;
 
-require_once 'Common.php';
-require_once (dirname(__DIR__)) . DS . 'Model' . DS . 'Model.php';
-require_once 'Watermark.php';
-
 use Model\Model as Model;
 use Controller\Common\Color as color;
+use Controller\Common\Assets as assets;
 use Controller\Common\ImageDimension as imagedimension;
 use Controller\Common\CreateImage;
-use Controller\Template\Square\Watermark as watermark;
+use Controller\Template\Watermark as watermark;
 class Square
 {
     const ROOT_IMG_PATH = 'assets/images';
@@ -24,7 +21,7 @@ class Square
         $this->model = new Model;
         $this->color = new color;
         $this->image_dimension = new imagedimension;
-        $this->create_image = new CreateImage;
+        $this->create_image = assets::create_image();
     }
     /** 
      * Pretty print data

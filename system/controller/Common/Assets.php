@@ -11,6 +11,20 @@ class Assets
     const DEFAULT_IMAGE_WIDTH = 1000;
     const DEFAULT_IMAGE_HEIGHT = 1000;
     public static $create_image;
+    public static $image_dimension;
+    /**
+     * Create an instance for CreateImage
+     * 
+     * @return CreateImage  
+     */
+    public static function image_dimension()
+    {
+        
+        if (!isset(self::$image_dimension))
+        self::$image_dimension = new ImageDimension;
+
+        return self::$image_dimension;
+    }
     /**
      * Create an instance for CreateImage
      * 
@@ -18,7 +32,11 @@ class Assets
      */
     public static function create_image()
     {
-        return new CreateImage;
+        
+        if (!isset(self::$create_image))
+        self::$create_image = new CreateImage;
+
+        return self::$create_image;
     }
     /**
      * Create a rectangle
