@@ -2,17 +2,15 @@
 $dir = '../';
 include $dir . "system/initiate.php";
 
-$array = ['class' => 'PriceTag', 'namespace' => 'Controller\Template\Square\\'];
-$square_image = $app->get_factory($array);
+use Controller\Template\PriceTag as price;
+$square_image = new price();
 $new_image_path = "assets/images/render/";
 $default_image = "assets/images/blank_image.png";
 $design_template = "assets/images/templates/circleprice/circle-price-tag.png";
 
 if (isset($_POST['contact'])) {
     $post = $_POST;
-    // var_dump($post);
-    // var_dump($_FILES);
-    // die();
+
     $post['logo_details'] = $_FILES['logo'];
     $post['product_details'] = $_FILES['product'];
     $image_link = $square_image->price_tag($post, 30);

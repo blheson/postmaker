@@ -2,8 +2,10 @@
 $dir = '../';
 include $dir . "system/initiate.php";
 // $square_image = $app->get_factory('SquareImage');
-$array = ['class' => 'SquareImage', 'namespace' => 'Controller\Template\Square\\'];
-$square_image = $app->get_factory($array);
+// $array = ['class' => 'SquareImage', 'namespace' => 'Controller\Template\Square\\'];
+// $square_image = $app->get_factory($array);
+use Controller\Template\Square\SquareImage as square;
+$square_image = new square();
 $new_image_path = "assets/images/render/";
 $default_image = "assets/images/blank_image.png";
 $design_template = "assets/images/templates/plain/plain_template.png";

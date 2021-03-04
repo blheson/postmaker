@@ -2,7 +2,7 @@
 
 use Debug;
 
-class Factory extends Debug
+class Factory 
 {
     public function __construct()
     {

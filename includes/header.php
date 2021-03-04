@@ -31,7 +31,7 @@
                     <div class="logo">
                         <!-- <a href=""><img class="logo-img" src="<?= $base ?>assets/img/drugscafe-logo-full.png" alt="Drugs Cafe Pharmacy"
                             width="150px"></a> -->
-                        <a href=""><span>MOULDA</span></a>
+                        <a href="/postmaker"><span>MOULDA</span></a>
 
                     </div>
                     <div class="nav-menu">
@@ -44,7 +44,7 @@
 
         </nav>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">MOULDA</a>
+    <a class="navbar-brand" href="/postmaker">MOULDA</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>

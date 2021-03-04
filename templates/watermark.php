@@ -1,8 +1,10 @@
 <?php
 $dir = '../';
 include $dir . "system/initiate.php";
-$array = ['class' => 'Watermark', 'namespace' => 'Controller\Template\Square\\'];
-$watermark = $app->get_factory($array);
+
+use Controller\Helper as helper;
+use Controller\Template\Watermark as watermark;
+$watermark  = new watermark();
 $new_image_path = "assets/images/render/";
 $design_template = "assets/images/templates/watermark/product-watermark.png";
 
@@ -33,8 +35,8 @@ include $dir . "includes/header.php";
                 </div>
             </div>
             <div class="col-md-4">
-                <?= $app->show_error() ?>
-                <?= $app->show_success() ?>
+                <?= helper::show_error() ?>
+                <?= helper::show_success() ?>
                 <h3 class="title">Fill form to edit design</h3>
                 <div class="card">
 

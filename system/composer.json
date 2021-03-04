@@ -1,10 +1,12 @@
 {
+    "name": "blessing",
+    "description": "",
     "autoload": {
         "psr-4": {
-            "Model\\":"Model/",
-            "Controller\\":"Controller/",
-            "View\\":"View/"
-          }
+            "Model\\": "Model/",
+            "Controller\\": "Controller/",
+            "View\\": "View/"
+        }
     },
     "require": {
         "claviska/simpleimage": "^3.3"

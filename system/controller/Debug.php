@@ -1,4 +1,5 @@
 <?php
+namespace Controller;
 class Debug {
     /** 
      * Pretty print data
@@ -6,7 +7,7 @@ class Debug {
      * @return void
      * 
      */
-    public function dnd($data)
+    public static function dd($data)
     {
         echo "<pre>";
         var_dump($data);
