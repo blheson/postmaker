@@ -26,9 +26,9 @@ class SquareImage extends square
      * Add text on image
      * @param array $post
      * keys include
-     *  string      'default_image' - This is a link to the template image
+     *  string      'defaultImage' - This is a link to the template image
      *  string      'text' - Text for design 
-     *  string      'new_image_path' - (link)
+     *  string      'newImagePath' - (link)
      *  string      'font' - (link)
      *  string      'font_size' - [optional]
      *  string      'font_angle' - [optional]
@@ -42,25 +42,25 @@ class SquareImage extends square
             return false;
         }
 
-        $default_image = $post['default_image'];
+        $defaultImage = $post['defaultImage'];
 
         //SET THE NEW DESIGN TO A NEW PATH
-        $new_image_path = $this->create_image()->create_blank_image($default_image, $post['new_image_path']);
+        $newImagePath = $this->create_image()->createBlankImage($defaultImage, $post['newImagePath']);
 
 
         //SORT IMAGE ARRAY     
 
-        $image_array['new_image_path'] = $new_image_path;
+        $imageArray['newImagePath'] = $newImagePath;
 
         //check if background colour is set
         if (isset($post['background'])) {
-            $image_array['background'] = $this->color->convert_hex_to_rgb(preg_replace('|#|', '', $post['background']));
+            $imageArray['background'] = $this->color->convertHexToRgb(preg_replace('|#|', '', $post['background']));
         }
 
 
         //check if image width is set
         if (isset($post['width']))
-            $image_array['width'] = $image_array['width'];
+            $imageArray['width'] = $imageArray['width'];
 
         //SORT FONT ARRAY
 
@@ -68,7 +68,7 @@ class SquareImage extends square
         if (isset($post['py']))
             $font_array['py']     = $post['py'];
         if (isset($post['color']))
-            $font_array['color']     = $this->color->convert_hex_to_rgb(preg_replace('|#|', '', $post['color']));;
+            $font_array['color']     = $this->color->convertHexToRgb(preg_replace('|#|', '', $post['color']));;
 
         if (isset($post['size']))
             $font_array['size']     = $post['size'];
@@ -85,11 +85,11 @@ class SquareImage extends square
         $string = $post['text'];
 
         //IMAGE RESOURCE
-        // $im     = imagecreatefrompng($default_image);
-        $new_link = $this->text_to_image($default_image, $image_array, $string, $font_array);
+        // $im     = imagecreatefrompng($defaultImage);
+        $new_link = $this->text_to_image($defaultImage, $imageArray, $string, $font_array);
         if ($post['footer'] != '') {
             unset($font_array['px']);
-            $this->write_to_footer($new_link, $image_array, $post['footer'], $font_array);
+            $this->write_to_footer($new_link, $imageArray, $post['footer'], $font_array);
         }
         return $new_link;
     }

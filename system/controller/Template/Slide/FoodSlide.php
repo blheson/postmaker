@@ -4,6 +4,7 @@ namespace Controller\Template\Slide;
 
 
 use Controller\Template\Square as Square;
+use Controller\Constant as constant;
 
 class FoodSlide extends Square
 {
@@ -12,17 +13,20 @@ class FoodSlide extends Square
      * @var REL_LINK
      */
     const REL_LINK = '../../';
+    
     /**
      * 
      */
     public function process($post)
     {
-        if (!isset($_SESSION['saved_logo']))
+ 
+        if (!isset($_SESSION['savedLogo']))
             $this->upload_logo($_FILES['logo']);
 
         switch ($post['section']) {
             case 'front':
-                return $this->front_section($post);
+                $_SESSION['foodSlide']['front']=$this->front_section($post);
+                return $_SESSION['foodSlide']['front'];
                 break;
             case 'content':
                 // return $this->content_section($post);
@@ -37,12 +41,13 @@ class FoodSlide extends Square
     }
     private function upload_logo($data)
     {
-        $_SESSION['saved_logo']  = $this->create_image()->logo_upload($data, 100, self::REL_LINK);
-        return $_SESSION['saved_logo'];
+        $_SESSION['savedLogo']  = $this->create_image()->logo_upload($data, 100, self::REL_LINK);
+        return $_SESSION['savedLogo'];
     }
     private function duplicate($source, $dst, $ext = 'png')
     {
-        return $this->create_image()->create_blank_image($source, $dst, $ext);
+      
+        return $this->create_image()->createBlankImage($source, $dst, $ext);
     }
     /**
      * Design front section
@@ -51,12 +56,16 @@ class FoodSlide extends Square
      */
     private function front_section(array $post)
     {
-        // $logo_link = $this->create_image()->create_blank_image(self::REL_LINK . self::ROOT_IMG_PATH . '/' . $_SESSION['saved_logo'], $post['new_image_path']);
-        $logo_link = $this->duplicate(self::REL_LINK . self::ROOT_IMG_PATH . '/' . $_SESSION['saved_logo'], $post['new_image_path']);
-        //Duplicate front design
-        $front = $this->create_image()->create_blank_image($post['front_image'], $post['new_image_path']);
+        
+        // $logo_link = $this->create_image()->createBlankImage(self::REL_LINK . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $post['newImagePath']);
+        $link = constant::rootDir($_SERVER['SCRIPT_FILENAME']).'/';
+        $logo_link = $this->duplicate($link . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $link .$post['newImagePath']);
 
-        $source = $this->water_mark()->add_logo_to_image($front, self::REL_LINK . self::ROOT_IMG_PATH . '/' . $logo_link, 'bl');
+        //Duplicate front design
+        $front = $this->create_image()->createBlankImage($link .$post['front_image'], $link .$post['newImagePath']);
+          
+        $source = $this->water_mark()->add_logo_to_image($front, $logo_link, 'bl');
+     
 
         $title = mb_strtoupper($post['title']);
 
@@ -69,11 +78,11 @@ class FoodSlide extends Square
             'line_height' => 150
         ];
 
-        $image_array = [
-            'new_image_path' => $front
+        $imageArray = [
+            'newImagePath' => $front
         ];
 
-        return $this->text_to_image($source, $image_array, $title, $font_array);
+        return $this->text_to_image($source, $imageArray, $title, $font_array);
         // return $source;
     }
     /**
@@ -84,8 +93,8 @@ class FoodSlide extends Square
     private function content_section(array $post)
     {
 
-        $content = $this->duplicate($post['default_image'], $post['new_image_path']);
-        $logo_link = $this->duplicate(self::REL_LINK . self::ROOT_IMG_PATH . '/' . $_SESSION['saved_logo'], $post['new_image_path']);
+        $content = $this->duplicate($post['defaultImage'], $post['newImagePath']);
+        $logo_link = $this->duplicate(self::REL_LINK . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $post['newImagePath']);
         $source = $this->water_mark()->add_logo_to_image($content, self::REL_LINK . self::ROOT_IMG_PATH . '/' . $logo_link, 'bl');
         $font_array = [
             'px' => 70,
@@ -96,22 +105,22 @@ class FoodSlide extends Square
             'line_height' => 150
         ];
 
-        $image_array = [
-            'new_image_path' => $content
+        $imageArray = [
+            'newImagePath' => $content
         ];
         $string = mb_strtoupper($post['title']);
 
-        return $this->text_to_image($source, $image_array, $string, $font_array);
+        return $this->text_to_image($source, $imageArray, $string, $font_array);
     }
     /**
      * Add text on image
      * @param array $post
      * keys include
-     *  string      'default_image' - This is a link to the template image
+     *  string      'defaultImage' - This is a link to the template image
      * 
      *  string      'text' - Text for design 
      * 
-     *  string      'new_image_path' - (link)
+     *  string      'newImagePath' - (link)
      * 
      *  string      'font' - (link)
      * 
@@ -129,25 +138,25 @@ class FoodSlide extends Square
             return false;
         }
 
-        $default_image = $post['default_image'];
+        $defaultImage = $post['defaultImage'];
 
         //SET THE NEW DESIGN TO A NEW PATH
-        $new_image_path = $this->create_image()->create_blank_image($default_image, $post['new_image_path']);
+        $newImagePath = $this->create_image()->createBlankImage($defaultImage, $post['newImagePath']);
 
 
         //SORT IMAGE ARRAY     
 
-        $image_array['new_image_path'] = $new_image_path;
+        $imageArray['newImagePath'] = $newImagePath;
 
         //check if background colour is set
         if (isset($post['background'])) {
-            $image_array['background'] = $this->color->convert_hex_to_rgb(preg_replace('|#|', '', $post['background']));
+            $imageArray['background'] = $this->color->convertHexToRgb(preg_replace('|#|', '', $post['background']));
         }
 
 
         //check if image width is set
         if (isset($post['width']))
-            $image_array['width'] = $image_array['width'];
+            $imageArray['width'] = $imageArray['width'];
 
         //SORT FONT ARRAY
 
@@ -155,7 +164,7 @@ class FoodSlide extends Square
         if (isset($post['py']))
             $font_array['py']     = $post['py'];
         if (isset($post['color']))
-            $font_array['color']     = $this->color->convert_hex_to_rgb(preg_replace('|#|', '', $post['color']));;
+            $font_array['color']     = $this->color->convertHexToRgb(preg_replace('|#|', '', $post['color']));;
 
         if (isset($post['size']))
             $font_array['size']     = $post['size'];
@@ -172,11 +181,11 @@ class FoodSlide extends Square
         $string = $post['text'];
 
         //IMAGE RESOURCE
-        // $im     = imagecreatefrompng($default_image);
-        $new_link = $this->text_to_image($default_image, $image_array, $string, $font_array);
+        // $im     = imagecreatefrompng($defaultImage);
+        $new_link = $this->text_to_image($defaultImage, $imageArray, $string, $font_array);
         if ($post['footer'] != '') {
             unset($font_array['px']);
-            $this->write_to_footer($new_link, $image_array, $post['footer'], $font_array);
+            $this->write_to_footer($new_link, $imageArray, $post['footer'], $font_array);
         }
         return $new_link;
     }

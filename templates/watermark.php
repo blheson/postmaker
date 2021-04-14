@@ -5,7 +5,7 @@ include $dir . "system/initiate.php";
 use Controller\Helper as helper;
 use Controller\Template\Watermark as watermark;
 $watermark  = new watermark();
-$new_image_path = "assets/images/render/";
+$newImagePath = "assets/images/render/";
 $design_template = "assets/images/templates/watermark/product-watermark.png";
 
 if (isset($_POST['watermark'])) {
@@ -35,8 +35,8 @@ include $dir . "includes/header.php";
                 </div>
             </div>
             <div class="col-md-4">
-                <?= helper::show_error() ?>
-                <?= helper::show_success() ?>
+                <?= helper::showError() ?>
+                <?= helper::showSuccess() ?>
                 <h3 class="title">Fill form to edit design</h3>
                 <div class="card">
 

@@ -10,7 +10,7 @@ use Exception;
 class Watermark 
 {
     public $create_image;
-    public $image_dimension;
+    public $imageDimension;
     public $logo_dimension;
     public $dimension_instance;
 
@@ -31,7 +31,7 @@ class Watermark
      */
     public function dimension_instance()
     {
-        return assets::image_dimension();
+        return assets::imageDimension();
     }
     /**
      * Logo on product
@@ -80,7 +80,7 @@ class Watermark
                 }
             }
         } else {
-            $logo_link = 'Logo certificate not successfully uploade';
+            $logo_link = 'Logo  not successfully uploaded';
             throw new \Exception("No image was uploaded");
             return false;
         }
@@ -88,8 +88,8 @@ class Watermark
             $e->getMessage();
         }
        
-
-        return $this->add_logo_to_image('../assets/images/' . $product_image, '../assets/images/' . $logo_link,$cord,$margin);
+        $link = dirname(dirname($_SERVER['SCRIPT_FILENAME'])).'/';
+        return $this->add_logo_to_image('assets/images/' . $product_image, '../assets/images/' . $logo_link,$cord,$margin);
     }
     /**
      * Add logo to an image
@@ -104,31 +104,31 @@ class Watermark
      */
     public function add_logo_to_image($dst, $logo, $cord = null, $margin = 30, $ratio = null): string
     {
+        
         list($dst_width, $dst_height) = getimagesize($dst);
 
 
         list($logo_width, $logo_height) = getimagesize($logo);
 
-        
         //set image dimension
-        $this->set_image_dimension($dst_width, $dst_height);
+        $this->setImageDimension($dst_width, $dst_height);
         
 
         //set logo dimension
         // $this->logo_dimension = ['logo_width' => $logo_width, 'logo_height' => $logo_height];
-        $this->set_logo_dimension($logo_width, $logo_height);
+        $this->setLogoDimension($logo_width, $logo_height);
 
 
         // SET MARGIN
         if (is_array($cord)) {
             $position = $cord;
         } else {
-            $position = $this->get_logo_cord($dst_width, $dst_height, $logo_width, $logo_height, $cord, $margin);
+            $position = $this->getLogoCord($dst_width, $dst_height, $logo_width, $logo_height, $cord, $margin);
         }
      
         // extract to get $x and $y variable
         extract($position);
-
+ 
         $im = $this->create_image()->create_image_resource($dst);
 
         // Create stamp image manually from GD
@@ -150,18 +150,18 @@ class Watermark
         return $dst;
     }
     
-    public function set_image_dimension($dst_width, $dst_height)
+    public function setImageDimension($dst_width, $dst_height)
     {
-        $this->image_dimension = ['width' => $dst_width, 'height' => $dst_height];
+        $this->imageDimension = ['width' => $dst_width, 'height' => $dst_height];
     }
-    public function set_logo_dimension($logo_width, $logo_height)
+    public function setLogoDimension($logo_width, $logo_height)
     {
         $this->logo_dimension = ['width' => $logo_width, 'height' => $logo_height];
     }
     
-    public function get_image_dimension()
+    public function getImageDimension()
     {
-        return $this->image_dimension;
+        return $this->imageDimension;
     }
 
     public function get_logo_dimension()
@@ -187,7 +187,7 @@ class Watermark
      * @return array the x and y coordinate of the logo
      * 
      */
-    public function get_logo_cord($dst_width, $dst_height, $logo_width, $logo_height, $cord, $margin)
+    public function getLogoCord($dst_width, $dst_height, $logo_width, $logo_height, $cord, $margin)
     {
         $center_x = ($dst_width / 2) - ($logo_width / 2);
         $m_right_x  = $dst_width - ($logo_height+$margin);

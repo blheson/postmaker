@@ -9,7 +9,7 @@ class Color
      * @param string $hex
      * @return array $bg
      */
-    public static function convert_hex_to_rgb(string $hex): array
+    public static function convertHexToRgb(string $hex): array
     {
         $strlen = strlen($hex);
         // if string lenght is not 6 terminate

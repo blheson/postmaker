@@ -11,13 +11,13 @@ use Controller\Common\Assets as assets;
 class CreateImage
 {
     const REL_LINK = '../';
-    // public static $image_dimension;
+    // public static $imageDimension;
     /**
      * @return ImageDimension
      */
-    public function get_image_dimension()
+    public function getImageDimension()
     {
-        return assets::image_dimension();
+        return assets::imageDimension();
     }
     /**
      * The relative part of the render link
@@ -115,7 +115,7 @@ class CreateImage
      * @param array $link
      * @return array
      */
-    public function check_image($data, $link)
+    public function checkImage($data, $link)
     {
         $allowed = array('png', 'jpg', 'jpeg', 'gif', 'webp');
 
@@ -167,7 +167,7 @@ class CreateImage
     public function upload_image($file, $link, $dimension = null)
     {
 
-        $image_data = $this->check_image($file, $link);
+        $image_data = $this->checkImage($file, $link);
         if (is_array($image_data)) {
             $tmp_loc = $image_data['tmp_loc'];
             $upload_path = $image_data['upload_path'];
@@ -180,7 +180,7 @@ class CreateImage
             $check = $dimension == null;
             $width =  $check ? true : $dimension['width'];
             $height = $check  ? true : $dimension['height'];
-            $this->get_image_dimension()->resize_image($upload_path, $width, $height);
+            $this->getImageDimension()->resize_image($upload_path, $width, $height);
             return $db_path;
         } else {
             $_SESSION['error'] = 'The image could not be saved';
@@ -193,14 +193,14 @@ class CreateImage
      * @param string $new_image_link folder to save new file
      * @param string $ext
      * 
-     * @return string $new_image_path
+     * @return string $newImagePath
      */
-    public function create_blank_image($base_image_path, $new_image_link, $ext = 'png'): string
+    public function createBlankImage($base_image_path, $new_image_link, $ext = 'png'): string
     {
         $new_name = "postmaker_" . md5(rand(1, 10)) . "." . $ext;
-        $new_image_path = $new_image_link . $new_name;
-        copy($base_image_path, $new_image_path);
-        return $new_image_path;
+        $newImagePath = $new_image_link . $new_name;
+        copy($base_image_path, $newImagePath);
+        return $newImagePath;
     }
     /**
      * Create Image Resource
@@ -211,7 +211,7 @@ class CreateImage
      */
     public function create_image_resource(string $file)
     {
-
+ 
         $image_detail = getimagesize($file);
         //CHECK THE IMAGE TYPE
         switch ($image_detail[2]) {

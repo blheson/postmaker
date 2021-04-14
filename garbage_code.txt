@@ -1,6 +1,6 @@
 text to image method
 
-    // public function text_to_image($image, $new_image_path, $text, $font, $py, $px, $font_size = 60, $angle = 0, $line_height = 120, $background = ['255', '255', '255'], $image_width = (self::DEFAULT_IMAGE_WIDTH)): string
+    // public function text_to_image($image, $newImagePath, $text, $font, $py, $px, $font_size = 60, $angle = 0, $line_height = 120, $background = ['255', '255', '255'], $image_width = (self::DEFAULTIMAGE_WIDTH)): string
     // {
 
     //     $text = wordwrap($text, 11, "\n", false);
@@ -18,20 +18,20 @@ text to image method
     //         $py += $line_height;
     //     }
     //     // header("Content-type: image/png");
-    //     imagepng($image, $new_image_path);
+    //     imagepng($image, $newImagePath);
     //     imagedestroy($image);
-    //     return $new_image_path;
+    //     return $newImagePath;
     // }
 
 END OF METHOD
 
       // public function add_data_on_blank_image($post): string{
     //     $design_template = $post['design_template'];
-    //     $new_image_path = $this->create_blank_image($design_template, $post['new_image_path']);
+    //     $newImagePath = $this->createBlankImage($design_template, $post['newImagePath']);
     //     $string = $post['text']; //check
-    //     $default_image = $post['default_image'];
+    //     $defaultImage = $post['defaultImage'];
 
-    //     $im     = imagecreatefrompng($default_image);        
+    //     $im     = imagecreatefrompng($defaultImage);        
    
     //     $px    = isset($post['px']) ? (int)$post['px'] : 200;
 
@@ -44,7 +44,7 @@ END OF METHOD
     //     //font   
     //     // $font ="C:/xampp/htdocs/postmaker/assets/fonts/montserrat.ttf";
     //     $font = $post['font'];
-    //     $new_link = $this->text_to_image($im,$new_image_path,$string,$font,$py, $px);
+    //     $new_link = $this->text_to_image($im,$newImagePath,$string,$font,$py, $px);
     //     return $new_link;
     // }
 

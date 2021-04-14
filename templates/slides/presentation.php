@@ -5,16 +5,13 @@ include $dir . "system/initiate.php";
 use Controller\Template\Slide\FoodSlide as foodslide;
 
 $slide = new foodslide();
-$new_image_path = "assets/images/render/";
+$newImagePath = "assets/images/render/";
 
 $front_image = "assets/images/templates/foodslide/template_front.png";
 $back_image = "assets/images/templates/foodslide/template_back.png";
 $content_image = "assets/images/templates/foodslide/template_content.png";
 
 $design_template = "assets/images/templates/circleprice/circle-price-tag.png";
-
-if (isset($_POST['section']))
-    $image_link = $slide->process($_POST);
 
 
 include $dir . "includes/header.php";
@@ -117,15 +114,15 @@ include $dir . "includes/header.php";
                     <hr>
                     <form method="post" enctype="multipart/form-data" class="edit-form" id='slide-form'>
                         <div class="row">
-                            <?php if (!isset($_SESSION['saved_logo'])) : ?>
+                        <?=$_SESSION['savedLogo']??null?>
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Add logo</label>
 
-                                        <input type="file" name="logo" class="form-control" required>
+                                        <input type="<?=$_SESSION['savedLogo']?'hidden':'file'?>" name="logo" class="form-control" value="<?=$_SESSION['savedLogo']??null?>">
                                     </div>
                                 </div>
-                            <?php endif; ?>
+                          
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Choose section <i class="fa fa-info-circle"></i></label>
@@ -161,9 +158,9 @@ include $dir . "includes/header.php";
 
                         </div>
 
-                        <input type="hidden" name="front_image" value="<?= $dir . $front_image ?>">
-                        <input type="hidden" name="new_image_path" value="<?= $dir . $new_image_path; ?>">
-                        <input type="hidden" name="design_template" value="<?= $dir . $design_template; ?>">
+                        <input type="hidden" name="front_image" value="<?= $front_image ?>">
+                        <input type="hidden" name="newImagePath" value="<?= $newImagePath; ?>">
+                        <input type="hidden" name="design_template" value="<?= $design_template; ?>">
                         <input type="submit" class="btn btn-submit">
 
                     </form>
@@ -173,15 +170,10 @@ include $dir . "includes/header.php";
 
                 <h3 class="title">Final Render</h3>
                 <!-- render finished image -->
-                <?php
-
-
-
-                if (isset($_POST['title'])) :
-                ?>
+              
                     <div>
                         <div class="render">
-                            <img src="<?= $image_link; ?>" alt="rendered image" width="600px">
+                            
                         </div>
 
                         <div class="form-group">
@@ -194,9 +186,7 @@ include $dir . "includes/header.php";
 
                         </div>
                     </div>
-                <?php
-                endif;
-                ?>
+            
 
 
             </div>
@@ -205,112 +195,10 @@ include $dir . "includes/header.php";
 </main>
 
 <?php
+echo "<script>let  dir = '$dir'</script>";
 include $dir . "includes/footer.php";
 ?>
-<script>
-    const uiCtr = {
-        section: document.querySelector("select[name=section]"),
-        next_button: document.querySelector(".next"),
-        page_counter: document.querySelector(".page-box"),
-        form: document.querySelector(".edit-form"),
-        title: document.querySelector("textarea[name=title]"),
-        content: document.querySelector("textarea[name=content]"),
-        textarea: document.querySelector(".textarea"),
-        textarea_label: document.querySelector(".textarea_label"),
-        submit: document.querySelector("input[name=submit]"),
-        indicator: document.querySelector(".indicator")
-    }
+ 
+<script src="<?=$dir?>assets/js/presentation.js">
 
-    var page = 1;
-    uiCtr.next_button.addEventListener('click', () => {
-        page += 1;
-        uiCtr.page_counter.innerText = page;
-        console.log(page)
-    });
-
-    const contentSection = {
-        select: () => {
-            uiCtr.indicator.innerText = `Content section`;
-            uiCtr.title.style.display = "none";
-            uiCtr.content.style.display = "block";
-            uiCtr.textarea_label.innerText = "Content";
-        }
-    }
-    const frontSection = {
-        select: () => {
-            uiCtr.indicator.innerText = `Front cover`;
-            uiCtr.title.style.display = "block";
-            uiCtr.content.style.display = "none";
-            uiCtr.textarea_label.innerText = "Title";
-        }
-    }
-    const backSection = {
-        select: () => {
-            uiCtr.indicator.innerText = `Back cover`;
-            uiCtr.title.style.display = "none";
-            uiCtr.content.style.display = "none";
-
-            uiCtr.textarea_label.innerText = "";
-
-        }
-    }
-    const changeContent = function() {
-
-        switch (this.value) {
-            case 'content':
-                contentSection.select();
-                break;
-            case 'back':
-                backSection.select();
-                break;
-            case 'front':
-                frontSection.select();
-                break;
-        }
-
-    };
-    const helper = {
-        prepareForm: (fd, target) => {
-            let section = target.querySelector('select[name=section]').value;
-            let font = target.querySelector('select[name=font]').value;
-            let title = target.querySelector('textarea[name=title]').value;
-            switch (section) {
-                case 'front':
-                    fd.append('logo', target.querySelector('input[type=file]').files[0])
-                    fd.append('section', section)
-                    fd.append('font', font)
-                    fd.append('title', title)
-                    
-                    break;
-                case 'content':
-
-                    break;
-                case 'back':
-
-                    break;
-                default:
-                    break;
-            }
-            return fd;
-        }
-    }
-    uiCtr.section.addEventListener('change', changeContent);
-    uiCtr.form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        // console.log(e.target.querySelector('input[type=file]').files[0]);
-        let fd = new FormData();
-        fd = helper.prepareForm(fd, e.target)
-
-        let request = new Request('/<?= $base_url ?>api/process_slide.php', {
-            method: 'post',
-            body: fd
-        });
-        fetch(request).then(response => response.json()).then(result => {
-            if (result.status == 200)
-                console.log('yes')
-            else
-                throw new Exception('not acce');
-        }).catch(error => console.log(error))
-
-    })
 </script>

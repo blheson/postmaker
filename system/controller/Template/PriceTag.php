@@ -9,14 +9,14 @@ class PriceTag extends Square
 {
   /**
    * Controller for price tag design
-   * @param array $post contains new_image_path, design_template, pos,logo_details,product_details
+   * @param array $post contains newImagePath, design_template, pos,logo_details,product_details
    * @param int $margin
    * design_template
    */
   public function price_tag($post, $margin = 50)
   {
-    $default_image = $post['design_template'];
-    $new_image_path = $post['new_image_path'];
+    $defaultImage = $post['design_template'];
+    $newImagePath = $post['newImagePath'];
     $asset_link = '../assets/images/templates/circleprice/addon/circle.png';
 
     //set cordinate of logo
@@ -29,7 +29,7 @@ class PriceTag extends Square
     $logo_product_link = $this->create_image()->logo_and_product_upload($post['product_details'], $post['logo_details'], 90);
 
     // crop image
-    $product_image = $this->image_dimension()->crop($logo_product_link['product']);
+    $product_image = $this->imageDimension()->crop($logo_product_link['product']);
   
 
     //add logo to image
@@ -37,12 +37,12 @@ class PriceTag extends Square
 
 
     //get image dimension
-    $image_dimension = $watermark->get_image_dimension();
+    $imageDimension = $watermark->getImageDimension();
 
     /**
      * @var int price tag y coordinate
      */
-    $py = ($image_dimension['height'] / 2) - 70;
+    $py = ($imageDimension['height'] / 2) - 70;
 
 
     //set cordinate of asset
@@ -53,9 +53,9 @@ class PriceTag extends Square
       $prepped_image1,
       [
         0,
-        $image_dimension['width'],
-        ($image_dimension['height'] - 80),
-        $image_dimension['height']
+        $imageDimension['width'],
+        ($imageDimension['height'] - 80),
+        $imageDimension['height']
       ],
       [
         0, 0, 0
@@ -63,7 +63,7 @@ class PriceTag extends Square
     );
 
     //copy asset into a new path
-    $new_asset = $this->create_image()->create_blank_image($asset_link, $new_image_path);
+    $new_asset = $this->create_image()->createBlankImage($asset_link, $newImagePath);
 
 
     //add asset to image
@@ -75,8 +75,8 @@ class PriceTag extends Square
 
 
     //set image details
-    $image_array = [
-      'new_image_path' => $prepped_image2,
+    $imageArray = [
+      'newImagePath' => $prepped_image2,
     ];
 
 
@@ -84,7 +84,7 @@ class PriceTag extends Square
     $font_size = 20;
     $font_array = [
       'px' => $margin,
-      'py' =>  $image_dimension['height'] - ($margin + $font_size),
+      'py' =>  $imageDimension['height'] - ($margin + $font_size),
       'size' => $font_size,
       'file' => $post['font'],
       'width' => 50,
@@ -93,7 +93,7 @@ class PriceTag extends Square
 
     //set font array for contact
     $footer = $post['contact'];
-    $this->write_to_footer($prepped_image2, $image_array, $footer, $font_array);
+    $this->write_to_footer($prepped_image2, $imageArray, $footer, $font_array);
 
     //set font array for price
     $font_array = [
@@ -104,9 +104,9 @@ class PriceTag extends Square
       'angle' => 12
     ];
 
-    return $this->text_to_image($prepped_image2, $image_array, $post['price'], $font_array);
+    return $this->text_to_image($prepped_image2, $imageArray, $post['price'], $font_array);
 
     // SET THE NEW DESIGN TO A NEW PATH
-    // $new_image_path = $this->create_image()->create_blank_image($default_image, $post['new_image_path']);
+    // $newImagePath = $this->create_image()->createBlankImage($defaultImage, $post['newImagePath']);
   }
 }

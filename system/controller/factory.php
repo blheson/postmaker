@@ -31,7 +31,7 @@ class Factory
      * Show success message
      * @return void
      */
-    public function show_success()
+    public function showSuccess()
     {
         if (!isset($_SESSION['success'])) return;
         echo '<div class="alert alert-success" style="color:#fff">

@@ -11,19 +11,19 @@ class Assets
     const DEFAULT_IMAGE_WIDTH = 1000;
     const DEFAULT_IMAGE_HEIGHT = 1000;
     public static $create_image;
-    public static $image_dimension;
+    public static $imageDimension;
     /**
      * Create an instance for CreateImage
      * 
      * @return CreateImage  
      */
-    public static function image_dimension()
+    public static function imageDimension()
     {
         
-        if (!isset(self::$image_dimension))
-        self::$image_dimension = new ImageDimension;
+        if (!isset(self::$imageDimension))
+        self::$imageDimension = new ImageDimension;
 
-        return self::$image_dimension;
+        return self::$imageDimension;
     }
     /**
      * Create an instance for CreateImage

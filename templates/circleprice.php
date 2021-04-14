@@ -4,8 +4,8 @@ include $dir . "system/initiate.php";
 
 use Controller\Template\PriceTag as price;
 $square_image = new price();
-$new_image_path = "assets/images/render/";
-$default_image = "assets/images/blank_image.png";
+$newImagePath = "assets/images/render/";
+$defaultImage = "assets/images/blank_image.png";
 $design_template = "assets/images/templates/circleprice/circle-price-tag.png";
 
 if (isset($_POST['contact'])) {
@@ -93,8 +93,8 @@ include $dir . "includes/header.php";
                                 <label for="">Check to see advance option</label>
                             </div>
                         </div>
-                        <input type="hidden" name="default_image" value="<?= $dir . $default_image ?>">
-                        <input type="hidden" name="new_image_path" value="<?= $dir . $new_image_path; ?>">
+                        <input type="hidden" name="defaultImage" value="<?= $dir . $defaultImage ?>">
+                        <input type="hidden" name="newImagePath" value="<?= $dir . $newImagePath; ?>">
                         <input type="hidden" name="design_template" value="<?= $dir . $design_template; ?>">
                         <input type="submit" class="btn btn-submit">
                     </form>

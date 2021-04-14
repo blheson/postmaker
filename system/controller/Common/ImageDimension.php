@@ -39,7 +39,7 @@ class ImageDimension
         if ($width == $height)
             return $img_path;
         // list($logo_width, $logo_height) = getimagesize($logo);
-        // $this->set_logo_dimension($logo_width, $logo_height);
+        // $this->setLogoDimension($logo_width, $logo_height);
         $create_image = $this->create_image();
 
 
