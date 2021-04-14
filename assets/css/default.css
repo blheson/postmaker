@@ -64,7 +64,7 @@ footer{
 .indicator-box{
     background-color: #25c696;
     padding: 0.5rem;
-    width: 200px;
+    /* width: 200px; */
     margin: auto;
     color: #fff;
     border-radius: 6px;

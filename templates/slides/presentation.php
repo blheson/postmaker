@@ -87,7 +87,7 @@ include $dir . "includes/header.php";
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 col-lg-8 col-sm-12">
+            <div class="col-md-12 col-lg-4 col-sm-12">
                 <h3 class="title">Fill form to edit design </h3>
 
                 <div class="card">
@@ -114,7 +114,7 @@ include $dir . "includes/header.php";
                     <hr>
                     <form method="post" enctype="multipart/form-data" class="edit-form" id='slide-form'>
                         <div class="row">
-                        <?=$_SESSION['savedLogo']??null?>
+                    
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="">Add logo</label>
@@ -166,7 +166,7 @@ include $dir . "includes/header.php";
                     </form>
                 </div>
             </div>
-            <div id="render" class="col-md-12 mt-3">
+            <div id="render" class="col-md-12 mt-3 col-lg-4">
 
                 <h3 class="title">Final Render</h3>
                 <!-- render finished image -->

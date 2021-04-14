@@ -35,7 +35,7 @@ const form = {
         fd.append('title', title)
         switch (section) {
             case 'front':
-               fd = front_section.form_input(fd,target)
+               fd = front_section.form_input(fd,target,default_data.front)
                 break;
             case 'content':
 
@@ -67,9 +67,16 @@ const form = {
         ).then(result => {
         
             if(form_dom.querySelector('select[name=section]').value == 'front'){
+                if(default_data.front){
+                default_data.front =  result.message;
+                    ui_ctrl.render.querySelector('#front_img_render').src =  default_data.front
+                    return 
+                }
                 default_data.front =  result.message;
                 let img = document.createElement('img');
-                img.width = '600px';
+                img.width = 600;
+                img.id = 'front_img_render';
+
                 img.src = dir + default_data.front; 
                 ui_ctrl.render.appendChild(img)
             }
@@ -87,16 +94,17 @@ const default_data = {
 }
 
 ui_ctrl.next_button.addEventListener('click', () => {
-    if(default_data.front)
-    default_data.page += 1
-    ui_ctrl.page_counter.innerText = default_data.page;
-    form.process_form(form.group().body)
+    
+         default_data.page += 1
+         ui_ctrl.page_counter.innerText = default_data.page
+         form.process_form(form.group().body)
+    
     // form.group().submit()
 });
 
 const content_section = {
     select: () => {
-        ui_ctrl.indicator.innerText = `Content section`;
+        ui_ctrl.indicator.innerText = 'Content section';
         ui_ctrl.title.style.display = "none";
         form.group().content.style.display = "block";
         ui_ctrl.textarea_label.innerText = "Content";
@@ -109,10 +117,11 @@ const front_section = {
         ui_ctrl.form.content.style.display = "none";
         ui_ctrl.textarea_label.innerText = "Title";
     },
-    form_input:(fd,form_dom)=>{
+    form_input:(fd,form_dom,frontImg)=>{
         let logo_box = form_dom.querySelector('input[name=logo]')
+    
                 fd.append('logo', logo_box.type == 'file' ? logo_box.files[0] : logo_box.value)
-               
+                fd.append('frontImg', frontImg)
                 fd.append('newImagePath', form.group().newImagePath.value)
                 fd.append('front_image', form.group().front_image.value)
                 fd.append('design_template', form.group().front_image.value)

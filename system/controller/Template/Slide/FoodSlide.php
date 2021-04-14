@@ -13,19 +13,22 @@ class FoodSlide extends Square
      * @var REL_LINK
      */
     const REL_LINK = '../../';
-    
+
     /**
+     * @param array $post
      * 
      */
     public function process($post)
     {
- 
+
         if (!isset($_SESSION['savedLogo']))
             $this->upload_logo($_FILES['logo']);
 
         switch ($post['section']) {
             case 'front':
-                $_SESSION['foodSlide']['front']=$this->front_section($post);
+                if ($post['frontImg'] !== 'null')
+                   unlink(constant::rootDir().'/'. $post['frontImg']);
+                $_SESSION['foodSlide']['front'] = $this->front_section($post);
                 return $_SESSION['foodSlide']['front'];
                 break;
             case 'content':
@@ -46,7 +49,7 @@ class FoodSlide extends Square
     }
     private function duplicate($source, $dst, $ext = 'png')
     {
-      
+
         return $this->create_image()->createBlankImage($source, $dst, $ext);
     }
     /**
@@ -56,16 +59,16 @@ class FoodSlide extends Square
      */
     private function front_section(array $post)
     {
-        
+
         // $logo_link = $this->create_image()->createBlankImage(self::REL_LINK . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $post['newImagePath']);
-        $link = constant::rootDir($_SERVER['SCRIPT_FILENAME']).'/';
-        $logo_link = $this->duplicate($link . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $link .$post['newImagePath']);
+        $link = constant::rootDir() . '/';
+        $logo_link = $this->duplicate($link . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $link . $post['newImagePath']);
 
         //Duplicate front design
-        $front = $this->create_image()->createBlankImage($link .$post['front_image'], $link .$post['newImagePath']);
-          
+        $front = $this->create_image()->createBlankImage($link . $post['front_image'], $link . $post['newImagePath']);
+
         $source = $this->water_mark()->add_logo_to_image($front, $logo_link, 'bl');
-     
+
 
         $title = mb_strtoupper($post['title']);
 
