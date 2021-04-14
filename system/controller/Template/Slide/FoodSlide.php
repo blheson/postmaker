@@ -32,7 +32,7 @@ class FoodSlide extends Square
                 return $_SESSION['foodSlide']['front'];
                 break;
             case 'content':
-                // return $this->content_section($post);
+                return $this->content_section($post);
                 break;
             case 'back':
                 // return $this->back_section($post);
@@ -49,7 +49,6 @@ class FoodSlide extends Square
     }
     private function duplicate($source, $dst, $ext = 'png')
     {
-
         return $this->create_image()->createBlankImage($source, $dst, $ext);
     }
     /**
@@ -65,9 +64,9 @@ class FoodSlide extends Square
         $logo_link = $this->duplicate($link . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $link . $post['newImagePath']);
 
         //Duplicate front design
-        $front = $this->create_image()->createBlankImage($link . $post['front_image'], $link . $post['newImagePath']);
+        $front = $this->create_image()->createBlankImage($link . $post['frontImage'], $link . $post['newImagePath']);
 
-        $source = $this->water_mark()->add_logo_to_image($front, $logo_link, 'bl');
+        $source = $this->water_mark()->addLogoToImage($front, $logo_link, 'bl');
 
 
         $title = mb_strtoupper($post['title']);
@@ -96,9 +95,11 @@ class FoodSlide extends Square
     private function content_section(array $post)
     {
 
-        $content = $this->duplicate($post['defaultImage'], $post['newImagePath']);
-        $logo_link = $this->duplicate(self::REL_LINK . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $post['newImagePath']);
-        $source = $this->water_mark()->add_logo_to_image($content, self::REL_LINK . self::ROOT_IMG_PATH . '/' . $logo_link, 'bl');
+        $content = $this->duplicate($post['contentImage'], $post['newImagePath']);
+        $link = constant::rootDir() . '/';
+        $logo_link = $this->duplicate($link. self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $link.$post['newImagePath']);
+        die();
+        $source = $this->water_mark()->addLogoToImage($content, $link . self::ROOT_IMG_PATH . '/' . $logo_link, 'bl');
         $font_array = [
             'px' => 70,
             'py' => 140,

@@ -89,7 +89,7 @@ class Watermark
         }
        
         $link = dirname(dirname($_SERVER['SCRIPT_FILENAME'])).'/';
-        return $this->add_logo_to_image('assets/images/' . $product_image, '../assets/images/' . $logo_link,$cord,$margin);
+        return $this->addLogoToImage('assets/images/' . $product_image, '../assets/images/' . $logo_link,$cord,$margin);
     }
     /**
      * Add logo to an image
@@ -102,7 +102,7 @@ class Watermark
      * 
      * @return string $dst
      */
-    public function add_logo_to_image($dst, $logo, $cord = null, $margin = 30, $ratio = null): string
+    public function addLogoToImage($dst, $logo, $cord = null, $margin = 30, $ratio = null): string
     {
         
         list($dst_width, $dst_height) = getimagesize($dst);

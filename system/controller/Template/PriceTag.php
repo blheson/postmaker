@@ -33,7 +33,7 @@ class PriceTag extends Square
   
 
     //add logo to image
-    $prepped_image1 = $watermark->add_logo_to_image($product_image, $logo_product_link['logo'], $cord, $margin);
+    $prepped_image1 = $watermark->addLogoToImage($product_image, $logo_product_link['logo'], $cord, $margin);
 
 
     //get image dimension
@@ -67,7 +67,7 @@ class PriceTag extends Square
 
 
     //add asset to image
-    $prepped_image2 = $watermark->add_logo_to_image($prepped_image1, $new_asset, $asset_cord);
+    $prepped_image2 = $watermark->addLogoToImage($prepped_image1, $new_asset, $asset_cord);
 
 
     //get logo dimension

@@ -7,11 +7,11 @@ use Controller\Template\Slide\FoodSlide as foodslide;
 $slide = new foodslide();
 $newImagePath = "assets/images/render/";
 
-$front_image = "assets/images/templates/foodslide/template_front.png";
-$back_image = "assets/images/templates/foodslide/template_back.png";
-$content_image = "assets/images/templates/foodslide/template_content.png";
+$frontImage = "assets/images/templates/foodslide/template_front.png";
+$backImage = "assets/images/templates/foodslide/template_back.png";
+$contentImage = "assets/images/templates/foodslide/template_content.png";
 
-$design_template = "assets/images/templates/circleprice/circle-price-tag.png";
+$designTemplate = "assets/images/templates/circleprice/circle-price-tag.png";
 
 
 include $dir . "includes/header.php";
@@ -158,9 +158,10 @@ include $dir . "includes/header.php";
 
                         </div>
 
-                        <input type="hidden" name="front_image" value="<?= $front_image ?>">
+                        <input type="hidden" name="frontImage" value="<?= $frontImage ?>">
                         <input type="hidden" name="newImagePath" value="<?= $newImagePath; ?>">
-                        <input type="hidden" name="design_template" value="<?= $design_template; ?>">
+                        <input type="hidden" name="designTemplate" value="<?= $designTemplate; ?>">
+                        <input type="hidden" name="contentImage" value="<?= $contentImage; ?>">
                         <input type="submit" class="btn btn-submit">
 
                     </form>
