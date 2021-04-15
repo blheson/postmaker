@@ -19,7 +19,7 @@ class Helper
     }
 
 public static function parseLink ($newImagePath){
-    return substr($newImagePath,strpos($newImagePath,'/assets/images/'));
+    return substr($newImagePath,strpos($newImagePath,'assets/images/'));
 }
 
     /**

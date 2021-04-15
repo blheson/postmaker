@@ -99,8 +99,9 @@ include $dir . "includes/header.php";
                         </div>
                         <div class="col-3">
                             <div class="next">
-                                <div class="btn btn-warning">next design</div>
+                                <div class="btn btn-warning">new +</div>
                             </div>
+                            
                         </div>
                         <div class="col-3">
                             <div class="next">
@@ -173,7 +174,7 @@ include $dir . "includes/header.php";
                 <!-- render finished image -->
               
                     <div>
-                        <div class="render">
+                        <div class="render row3">
                             
                         </div>
 

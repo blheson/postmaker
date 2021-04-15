@@ -25,3 +25,12 @@ section.template .title{
     padding: 1.5rem;
     border-radius: 1rem;
 }
+
+.row3 {
+    grid-auto-columns: 110px;
+    grid-auto-rows: 120px;
+    display: grid;
+    width: 240px;
+    gap: 5px;
+    grid-template-areas: "a a a"
+}

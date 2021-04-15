@@ -174,7 +174,7 @@ class Square
 
         $text = wordwrap($text, $text_width, "\n", false);
         $lines = explode("\n", $text);
-
+   
         foreach ($lines as $line) {
             // $col = $color[$font_color];
             // $_SESSION['debug'] = $font_color;
@@ -184,8 +184,7 @@ class Square
 
         imagepng($image, $newImagePath);
         imagedestroy($image);
-      
-
+     
         return $newImagePath;
     }
 }

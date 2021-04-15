@@ -94,25 +94,26 @@ class FoodSlide extends Square
      */
     private function content_section(array $post)
     {
-
-        $content = $this->duplicate($post['contentImage'], $post['newImagePath']);
         $link = constant::rootDir() . '/';
+        $content = $this->duplicate($link.$post['contentImage'], $link.$post['newImagePath']);
+    
         $logo_link = $this->duplicate($link. self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $link.$post['newImagePath']);
-        die();
-        $source = $this->water_mark()->addLogoToImage($content, $link . self::ROOT_IMG_PATH . '/' . $logo_link, 'bl');
+     
+        $source = $this->water_mark()->addLogoToImage($content, $logo_link, 'bl');
         $font_array = [
             'px' => 70,
             'py' => 140,
             'file' => $post['font'],
-            'color' => [255, 255, 255],
+            'color' => [0, 0, 0],
             'size' => 50,
+            'width' => 22,
             'line_height' => 150
         ];
-
+      
         $imageArray = [
             'newImagePath' => $content
         ];
-        $string = mb_strtoupper($post['title']);
+        $string = $post['content'];
 
         return $this->text_to_image($source, $imageArray, $string, $font_array);
     }
