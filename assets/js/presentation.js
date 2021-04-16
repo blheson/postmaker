@@ -81,13 +81,21 @@ const form = {
             return response.json()
         }
         ).then(result => {
+            
             let img = document.createElement('img');
+            img.dataset.page = default_data.page
+            
             img.setAttribute('width', '100%');
             let img_src = dir + result.message;
             img.src = img_src
             helper.waitFetch(false)
+            default_data.cache[default_data.page] = {
+                img_src,
+                'section':form.group().section.value
+            }
             if (formDom.querySelector('select[name=section]').value == 'front') {
-
+                default_data.cache[default_data.page].front=form.group().title.value
+                
                 if (default_data.front) {//front image set
 
                     default_data.front = result.message;
@@ -102,6 +110,8 @@ const form = {
                 ui_ctrl.render.front.prepend(img)
             }
             if (formDom.querySelector('select[name=section]').value == 'content') {
+                default_data.cache[default_data.page].content=form.group().content.value
+                
                 default_data.content = result.message;
                 // let img = document.createElement('img');
                 // img.width = 600;
@@ -111,7 +121,8 @@ const form = {
                 ui_ctrl.render.content.appendChild(img)
             }
             if (formDom.querySelector('select[name=section]').value == 'back') {
-
+                default_data.cache[default_data.page].back=form.group().back.value
+                
                 if (default_data.back) {//front image set
 
                     default_data.back = result.message;
@@ -142,6 +153,7 @@ const default_data = {
     content: null,
     back: null,
     cachePage: 1,
+    cache:[]
 }
 const helper= {
    waitFetch: (status)=>{
@@ -245,7 +257,7 @@ ui_ctrl.next_button.addEventListener('click', () => {
     
     form.process_form(form.group().body)
  
-if(form.group().section.value == 'back'){
+if(form.group().section.value == 'back' && default_data.back){
  
     // default_data.page = default_data.cachePage
     return
