@@ -2,9 +2,13 @@ const ui_ctrl = {
 
     next_button: document.querySelector(".next"),
     page_counter: document.querySelector(".page-box"),
-    textarea: document.querySelector(".textarea"),
+    textarea: document.querySelector("textarea"),
     textarea_label: document.querySelector(".textarea_label"),
-    render: document.querySelector(".render"),
+    render: {
+        front: document.querySelector(".render .front_render"),
+        content: document.querySelector(".render .content_render"),
+        back: document.querySelector(".render .back_render"),
+    },
 
     indicator: document.querySelector(".indicator")
 }
@@ -16,50 +20,53 @@ const form = {
             body,
             section: body.querySelector("select[name=section]"),
             font: body.querySelector("select[name=font]"),
-            title: body.querySelector("textarea[name=title]"),
+            title: body.querySelector("textarea[name=front]"),
             content: body.querySelector("textarea[name=content]"),
+            back: body.querySelector("textarea[name=back]"),
             frontImage: body.querySelector("input[name=frontImage]"),
             contentImage: body.querySelector("input[name=contentImage]"),
             backImage: body.querySelector("input[name=backImage]"),
             newImagePath: body.querySelector("input[name=newImagePath]"),
             designTemplate: body.querySelector("input[name=designTemplate]"),
             submit: body.querySelector("input[name=submit]")
-
         }
     },
     prepareForm: (fd, target) => {
         let logo_box = target.querySelector('input[name=logo]')
         let section = target.querySelector('select[name=section]').value;
         let font = target.querySelector('select[name=font]').value;
-        let title = target.querySelector('textarea[name=title]').value;
+        // let title = target.querySelector('textarea[name=title]').value;
         fd.append('section', section)
         fd.append('font', font)
-        fd.append('title', title)
+        // fd.append('title', title)
         fd.append('logo', logo_box.type == 'file' ? logo_box.files[0] : logo_box.value)
+        // fd.append('designTemplate', form.group().backImage.value)
+        fd.append('newImagePath', form.group().newImagePath.value)
+
         switch (section) {
             case 'front':
-                fd = front_section.form_input(fd, target, default_data.front)
+                fd = frontSection.formInput(fd, target, default_data.front)
                 break;
             case 'content':
                 if (form.group().content.value.length > 128) {
                     alert('Not allowed')
                     return;
                 }
-                fd = content_section.form_input(fd, target, default_data.content)
+                fd = contentSection.formInput(fd, target, default_data.content)
                 break;
             case 'back':
-
+                fd = backSection.formInput(fd, target, default_data.back)
                 break;
             default:
                 break;
         }
         return fd;
     },
-    process_form: function (form_dom) {
+    process_form: function (formDom) {
 
         let fd = new FormData();
 
-        fd = this.prepareForm(fd, form_dom)
+        fd = this.prepareForm(fd, formDom)
         if (!fd) return
         let request = new Request(`${dir}api/process_slide.php`, {
             method: 'post',
@@ -74,34 +81,58 @@ const form = {
             return response.json()
         }
         ).then(result => {
+            let img = document.createElement('img');
+            img.setAttribute('width', '100%');
+            let img_src = dir + result.message;
+            img.src = img_src
+            helper.waitFetch(false)
+            if (formDom.querySelector('select[name=section]').value == 'front') {
 
-            if (form_dom.querySelector('select[name=section]').value == 'front') {
-                let img_src = dir + result.message;
                 if (default_data.front) {//front image set
 
                     default_data.front = result.message;
-                    ui_ctrl.render.querySelector('#front_img_render').src = img_src
+                    ui_ctrl.render.front.querySelector('img').src = img_src
                     return
                 }
 
                 default_data.front = result.message;
-                let img = document.createElement('img');
-                img.width = 600;
+
                 img.id = 'front_img_render';
-                img.src = img_src;
-                ui_ctrl.render.prepend(img)
+
+                ui_ctrl.render.front.prepend(img)
             }
-            if (form_dom.querySelector('select[name=section]').value == 'content') {
+            if (formDom.querySelector('select[name=section]').value == 'content') {
                 default_data.content = result.message;
-                let img = document.createElement('img');
-                img.width = 600;
+                // let img = document.createElement('img');
+                // img.width = 600;
                 img.classList.add('content_img_render');
 
-                img.src = dir + default_data.content;
-                ui_ctrl.render.appendChild(img)
+                // img.src = dir + default_data.content;
+                ui_ctrl.render.content.appendChild(img)
             }
+            if (formDom.querySelector('select[name=section]').value == 'back') {
 
-        }).catch(error => console.log(error))
+                if (default_data.back) {//front image set
+
+                    default_data.back = result.message;
+                    ui_ctrl.render.back.querySelector('img').src = img_src
+                    console.log(default_data.back)
+                    return
+                }
+                default_data.back = result.message;
+                // let img = document.createElement('img');
+                // img.width = 600;
+                img.classList.add('back_img_render');
+
+                // img.src = dir + default_data.back;
+                ui_ctrl.render.back.appendChild(img)
+            }
+         
+        }).catch(error => {
+            helper.waitFetch(false)
+
+            console.log(error)
+        })
     }
 }
 
@@ -109,66 +140,78 @@ const default_data = {
     page: 1,
     front: null,
     content: null,
+    back: null,
     cachePage: 1,
+}
+const helper= {
+   waitFetch: (status)=>{
+    //    console.log(status)
+        form.group().section.disabled=status
+        ui_ctrl.next_button.disabled=status
+   }
 
 }
-
-const content_section = {
-    select: () => {
-        ui_ctrl.indicator.innerText = 'Content section';
-        form.group().title.style.display = "none";
-        form.group().content.style.display = "block";
-        ui_ctrl.textarea_label.innerText = "Content";
-    },
-    form_input: (fd, form_dom, contentImg) => {
-        let logo_box = form_dom.querySelector('input[name=logo]')
-        let content = form.group().content.value;
-        if (content.length > 110) {
-            alert('not allowed')
-            return
-        }
-        fd.append('logo', logo_box.type == 'file' ? logo_box.files[0] : logo_box.value)
-        fd.append('designedContentImg', contentImg)
-        fd.append('newImagePath', form.group().newImagePath.value)
-        fd.append('content', form.group().content.value)
-        fd.append('contentImage', form.group().contentImage.value)
-        fd.append('designTemplate', form.group().designTemplate.value)
-        return fd;
-    }
-}
-const front_section = {
+const frontSection = {
     select: () => {
         ui_ctrl.indicator.innerText = `Front cover`;
-        form.group().title.style.display = "block";
-        form.group().content.style.display = "none";
+        // form.group().title.style.display = "block";
+        // form.group().content.style.display = "none";
         ui_ctrl.textarea_label.innerText = "Title";
-    },
-    form_input: (fd, form_dom, frontImg) => {
-        let logo_box = form_dom.querySelector('input[name=logo]')
+        ui_ctrl.textarea.name = "front";
+        ui_ctrl.textarea.value = "THIS WILL BE THE TITLE OF THE CAROUSEL";
 
-        fd.append('logo', logo_box.type == 'file' ? logo_box.files[0] : logo_box.value)
+
+    },
+    formInput: (fd, formDom, frontImg) => {
+
+        fd.append('title', form.group().title.value)
         fd.append('frontImg', frontImg)
         fd.append('newImagePath', form.group().newImagePath.value)
         fd.append('frontImage', form.group().frontImage.value)
-        fd.append('designTemplate', form.group().frontImage.value)
+        // fd.append('designTemplate', form.group().frontImage.value)
         return fd;
     }
 }
-const back_section = {
+const contentSection = {
     select: () => {
-        ui_ctrl.indicator.innerText = `Back cover`;
-        ui_ctrl.form.title.style.display = "none";
-        ui_ctrl.form.content.style.display = "none";
+        ui_ctrl.indicator.innerText = 'Content section';
+        // form.group().title.style.display = "none";
+        // form.group().content.style.display = "block";
+        ui_ctrl.textarea_label.innerText = "Content";
+        ui_ctrl.textarea.name = "content";
+        ui_ctrl.textarea.value = "The main content will go here";
 
-        ui_ctrl.textarea_label.innerText = "";
 
     },
-    form_input: (fd, form_dom, backImg) => {
+    formInput: (fd, formDom, contentImg) => {
 
+        let content = form.group().content.value;
+        if (content.length > 110) {
+            alert('not allowed')
+    helper.waitFetch(false)
+
+            return
+        }
+
+        fd.append('designedContentImg', contentImg)
+        fd.append('content', form.group().content.value)
+        fd.append('contentImage', form.group().contentImage.value)
+        return fd;
+    }
+}
+const backSection = {
+    select: () => {
+        ui_ctrl.indicator.innerText = `Back cover`;
+        // form.group().title.style.display = "none";
+        // form.group().content.style.display = "block";
+        ui_ctrl.textarea_label.innerText = "Back Text";
+        ui_ctrl.textarea.value = "Kindly save and share";
+        ui_ctrl.textarea.name = "back";
+    },
+    formInput: (fd, formDom, backImg) => {
         fd.append('backImg', backImg)
-        fd.append('newImagePath', form.group().newImagePath.value)
-        fd.append('frontImage', form.group().frontImage.value)
-        fd.append('designTemplate', form.group().frontImage.value)
+        fd.append('backImage', form.group().backImage.value)
+        fd.append('content', form.group().back.value)
         return fd;
     }
 }
@@ -176,30 +219,40 @@ const change_content = function () {
 
     switch (this.value) {
         case 'content':
-            content_section.select();
+            contentSection.select();
             break;
         case 'back':
-            back_section.select();
+            backSection.select();
             break;
         case 'front':
-            front_section.select();
+            frontSection.select();
             break;
     }
-
 }
-
 ui_ctrl.next_button.addEventListener('click', () => {
-    if(default_data.page == 1 && default_data.cachePage > 1 ){
+    helper.waitFetch(true)
+    if (default_data.page == 1 && default_data.cachePage > 1)
         default_data.page = default_data.cachePage
-      }
-    if(form.group().section.value == 'front' && default_data.front && default_data.page > 1){
+
+    if (form.group().section.value == 'front' && default_data.front && default_data.page > 1) {
         default_data.cachePage = default_data.page
         default_data.page = 0
     }
+    // if(form.group().section.value == 'back' && default_data.back && default_data.page > 1){
+    //     default_data.cachePage = default_data.page
+    //     default_data.page = 0
+    // }    
+    
+    form.process_form(form.group().body)
+ 
+if(form.group().section.value == 'back'){
+ 
+    // default_data.page = default_data.cachePage
+    return
+}
  
     default_data.page += 1
     ui_ctrl.page_counter.innerText = default_data.page
-    form.process_form(form.group().body)
 });
 
 form.group().section.addEventListener('change', change_content);

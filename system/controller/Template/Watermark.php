@@ -33,6 +33,50 @@ class Watermark
     {
         return assets::imageDimension();
     }
+    public function addLogoResourceOnImage($dst,$stamp, $cord = null, $margin = 30, $ratio = null){
+          // Create stamp image manually from GD
+          $stampResource = imagecreatefrompng($stamp);
+        list($dst_width, $dst_height) = getimagesize($dst);
+
+
+        $logo_width = imagesx($stampResource);
+        $logo_height = imagesy($stampResource);
+
+        //set image dimension
+        $this->setImageDimension($dst_width, $dst_height);
+        
+
+        //set logo dimension
+
+        $this->setLogoDimension($logo_width, $logo_height);
+
+
+        // SET MARGIN
+        if (is_array($cord)) {
+            $position = $cord;
+        } else {
+            $position = $this->getLogoCord($dst_width, $dst_height, $logo_width, $logo_height, $cord, $margin);
+        }
+     
+        // extract to get $x and $y variable
+        extract($position);
+ 
+        $im = $this->create_image()->create_image_resource($dst);
+
+        imagecopy($im, $stampResource, $x, $y, 0, 0, $logo_width, $logo_height);
+          
+    
+        // imagecopyresampled($im, $stamp, $x, $y, 0, 0,$dst_width, $dst_height, $logo_width, $logo_height);
+
+      
+
+        // Save the image to file and free memory
+        imagepng($im, $dst);
+
+        imagedestroy($im);
+       
+        return $dst;
+    }
     /**
      * Logo on product
      * @param array $image HTTP upload for image file
@@ -133,20 +177,21 @@ class Watermark
 
         // Create stamp image manually from GD
         $stamp = imagecreatefrompng($logo);
-
+ 
         unlink($logo);
 
         imagecopy($im, $stamp, $x, $y, 0, 0, $logo_width, $logo_height);
           
-            
+    
         // imagecopyresampled($im, $stamp, $x, $y, 0, 0,$dst_width, $dst_height, $logo_width, $logo_height);
 
+      
 
         // Save the image to file and free memory
         imagepng($im, $dst);
 
-
         imagedestroy($im);
+       
         return $dst;
     }
     

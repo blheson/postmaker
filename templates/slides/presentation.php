@@ -23,7 +23,7 @@ include $dir . "includes/header.php";
     }
 </style>
 
-<main class="container" style="padding: 2rem;box-shadow: 0 0 10px 1px #ececec;">
+<main class="container" style="box-shadow: 0 0 10px 1px #ececec;">
     <div class="header">
         <h1 class="text-center">Instagram Carousel</h1>
     </div>
@@ -98,9 +98,9 @@ include $dir . "includes/header.php";
                             </div>
                         </div>
                         <div class="col-3">
-                            <div class="next">
-                                <div class="btn btn-warning">new +</div>
-                            </div>
+                            <!-- <div class="next"> -->
+                                <button class="next btn btn-warning">new +</button>
+                            <!-- </div> -->
                             
                         </div>
                         <div class="col-3">
@@ -120,7 +120,7 @@ include $dir . "includes/header.php";
                                     <div class="form-group">
                                         <label for="">Add logo</label>
 
-                                        <input type="<?=$_SESSION['savedLogo']?'hidden':'file'?>" name="logo" class="form-control" value="<?=$_SESSION['savedLogo']??null?>">
+                                        <input type="<?=isset($_SESSION['savedLogo'])?'hidden':'file'?>" name="logo" class="form-control" value="<?=$_SESSION['savedLogo']??null?>">
                                     </div>
                                 </div>
                           
@@ -154,8 +154,8 @@ include $dir . "includes/header.php";
                         <div class="form-group textarea">
                             <label for="" class="textarea_label">Title</label>
 
-                            <textarea name="title" id="" cols="30" rows="10" class="form-control" value="This will be the title of the carousel">THIS WILL BE THE TITLE OF THE CAROUSEL</textarea>
-                            <textarea name="content" style="display:none" id="" cols="30" rows="10" class="form-control" value="This will be the title of the carousel">The main content will go here</textarea>
+                            <textarea name="front" id="" cols="30" rows="10" class="form-control" value="This will be the title of the carousel">THIS WILL BE THE TITLE OF THE CAROUSEL</textarea>
+                            <!-- <textarea name="content" style="display:none" id="" cols="30" rows="10" class="form-control" value="This will be the title of the carousel">The main content will go here</textarea> -->
 
                         </div>
 
@@ -163,6 +163,9 @@ include $dir . "includes/header.php";
                         <input type="hidden" name="newImagePath" value="<?= $newImagePath; ?>">
                         <input type="hidden" name="designTemplate" value="<?= $designTemplate; ?>">
                         <input type="hidden" name="contentImage" value="<?= $contentImage; ?>">
+                        <input type="hidden" name="backImage" value="<?= $backImage; ?>">
+
+
                         <input type="submit" class="btn btn-submit">
 
                     </form>
@@ -174,8 +177,10 @@ include $dir . "includes/header.php";
                 <!-- render finished image -->
               
                     <div>
-                        <div class="render row3">
-                            
+                        <div class="render">
+                            <div class="front_render  row3"></div>
+                            <div class="content_render  row3"></div>
+                            <div class="back_render  row3"></div>
                         </div>
 
                         <div class="form-group">

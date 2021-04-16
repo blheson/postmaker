@@ -158,8 +158,7 @@ class Square
         $font_angle = isset($font_array['angle']) ? $font_array['angle'] : 0;
         $line_height = isset($font_array['line_height']) ? $font_array['line_height'] : 120;
         $text_width = isset($font_array['width']) ? $font_array['width'] : 11;
-        $px = $font_array['px'];
-        $py = isset($font_array['py']) ? $font_array['py'] + $font_size : $px + $font_size;
+     
 
         //CREAT IMAGE WITH CUSTOM BACKGROUND COLOR
         // echo $px;
@@ -174,8 +173,14 @@ class Square
 
         $text = wordwrap($text, $text_width, "\n", false);
         $lines = explode("\n", $text);
-   
+       $py = null;
         foreach ($lines as $line) {
+          $bbox =  imagettfbbox($font_size, $font_angle, $font_array['file'],trim($line));
+          $px =  isset($imageArray['width']) ?$bbox[0] + (imagesx($image) / 2) - ($bbox[4] / 2):$font_array['px'];
+          if(!$py){
+              $py = isset($font_array['py']) ? $font_array['py'] + $font_size : $px + $font_size;
+          }
+        
             // $col = $color[$font_color];
             // $_SESSION['debug'] = $font_color;
             imagettftext($image, $font_size, $font_angle, $px, $py, $font_color, $font_array['file'], trim($line));

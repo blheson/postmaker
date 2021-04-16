@@ -20,14 +20,14 @@ class FoodSlide extends Square
      */
     public function process($post)
     {
-
+        // unset($_SESSION['savedLogo']);
         if (!isset($_SESSION['savedLogo']))
             $this->upload_logo($_FILES['logo']);
 
         switch ($post['section']) {
             case 'front':
                 if ($post['frontImg'] !== 'null')
-                   unlink(constant::rootDir().'/'. $post['frontImg']);
+                    unlink(constant::rootDir() . '/' . $post['frontImg']);
                 $_SESSION['foodSlide']['front'] = $this->front_section($post);
                 return $_SESSION['foodSlide']['front'];
                 break;
@@ -35,7 +35,12 @@ class FoodSlide extends Square
                 return $this->content_section($post);
                 break;
             case 'back':
-                // return $this->back_section($post);
+                $post['margin'] = 120;
+                if ($post['backImg'] !== 'null')
+                    unlink(constant::rootDir() . '/' . $post['backImg']);
+                $_SESSION['foodSlide']['back'] = $this->back_section($post);
+                return $_SESSION['foodSlide']['back'];
+
                 break;
             default:
                 # code...
@@ -44,7 +49,8 @@ class FoodSlide extends Square
     }
     private function upload_logo($data)
     {
-        $_SESSION['savedLogo']  = $this->create_image()->logo_upload($data, 100, self::REL_LINK);
+        $_SESSION['savedLogo']  = $this->create_image()->logo_upload($data, 100, constant::rootDir() . '/');
+
         return $_SESSION['savedLogo'];
     }
     private function duplicate($source, $dst, $ext = 'png')
@@ -61,14 +67,19 @@ class FoodSlide extends Square
 
         // $logo_link = $this->create_image()->createBlankImage(self::REL_LINK . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $post['newImagePath']);
         $link = constant::rootDir() . '/';
-        $logo_link = $this->duplicate($link . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $link . $post['newImagePath']);
 
+     
         //Duplicate front design
-        $front = $this->create_image()->createBlankImage($link . $post['frontImage'], $link . $post['newImagePath']);
 
-        $source = $this->water_mark()->addLogoToImage($front, $logo_link, 'bl');
+        $front = $this->duplicate($link . $post['frontImage'], $link . $post['newImagePath']);
+        // sleep(1);
+        // $logo_link = $this->duplicate($link . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $link . $post['newImagePath']);
+        $logo_link = $link . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'];
+       
 
-
+ 
+        $source = $this->water_mark()->addLogoResourceOnImage($front, $logo_link, 'bl');
+     
         $title = mb_strtoupper($post['title']);
 
         $font_array = [
@@ -95,11 +106,17 @@ class FoodSlide extends Square
     private function content_section(array $post)
     {
         $link = constant::rootDir() . '/';
-        $content = $this->duplicate($link.$post['contentImage'], $link.$post['newImagePath']);
-    
-        $logo_link = $this->duplicate($link. self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $link.$post['newImagePath']);
-     
-        $source = $this->water_mark()->addLogoToImage($content, $logo_link, 'bl');
+        $content = $this->duplicate($link . $post['contentImage'], $link . $post['newImagePath']);
+ 
+$logo_link = $link . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'];
+        // $logo_link = $this->duplicate($link . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $link . $post['newImagePath']);
+
+        // $source = $this->water_mark()->addLogoToImage($content, $logo_link, 'bl');
+        
+       
+
+ 
+        $source = $this->water_mark()->addLogoResourceOnImage($content, $logo_link, 'bl');
         $font_array = [
             'px' => 70,
             'py' => 140,
@@ -109,11 +126,45 @@ class FoodSlide extends Square
             'width' => 22,
             'line_height' => 150
         ];
-      
+
         $imageArray = [
             'newImagePath' => $content
         ];
         $string = $post['content'];
+
+        return $this->text_to_image($source, $imageArray, $string, $font_array);
+    }
+    /**
+     * Design back section
+     * @param array $post The details from food slide form page
+     * @return string $render_path
+     */
+    private function back_section(array $post)
+    {
+        $link = constant::rootDir() . '/';
+        $newImagePath = $link . $post['newImagePath'];
+        $back = $this->duplicate($link . $post['backImage'], $newImagePath);
+
+      
+        $logo_link = $link . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'];
+ 
+        $source = $this->water_mark()->addLogoResourceOnImage($back, $logo_link, 'tc',$post['margin']);
+
+        $font_array = [
+            'px' => 70,
+            'py' => 400,
+            'file' => $post['font'],
+            'color' => [255, 255, 255],
+            'size' => 80,
+            'width' => 11,
+            'line_height' => 150
+        ];
+
+        $imageArray = [
+            'newImagePath' => $back,
+            'width' => 1000,
+        ];
+        $string = mb_strtoupper($post['content']);
 
         return $this->text_to_image($source, $imageArray, $string, $font_array);
     }

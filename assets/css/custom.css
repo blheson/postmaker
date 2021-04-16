@@ -30,7 +30,10 @@ section.template .title{
     grid-auto-columns: 110px;
     grid-auto-rows: 120px;
     display: grid;
-    width: 240px;
+    width: 330px;
     gap: 5px;
     grid-template-areas: "a a a"
+}
+.container{
+    max-width: 1300px;
 }

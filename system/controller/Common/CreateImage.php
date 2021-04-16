@@ -39,6 +39,7 @@ class CreateImage
      */
     public function logo_upload($logo, $logo_height = 120, $rel = self::REL_LINK)
     {
+         
         $link = $this->get_upload_link($rel);
         if (isset($logo) && $logo['size'] > 0) {
             if ($logo['error'] > 0) {
@@ -197,9 +198,12 @@ class CreateImage
      */
     public function createBlankImage($base_image_path, $new_image_link, $ext = 'png'): string
     {
-        $new_name = "postmaker_" . md5(rand(1, 10)) . "." . $ext;
+       
+        $new_name = "postmaker_" . sha1(time()) . "." . $ext;
+    
         $newImagePath = $new_image_link . $new_name;
         copy($base_image_path, $newImagePath);
+
         return $newImagePath;
     }
     /**
