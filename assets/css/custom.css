@@ -6,7 +6,8 @@ section.template .default_template, section.template .render{
 }
 section.template .default_template > img, section.template .render > img{
     width: 100%;
-    border-radius: 1rem;
+    max-width: 110px;
+    border-radius: 5px;
     margin-bottom: 2rem;
 }
 
@@ -28,12 +29,63 @@ section.template .title{
 
 .row3 {
     grid-auto-columns: 110px;
-    grid-auto-rows: 120px;
+    grid-auto-rows: 110px;
     display: grid;
-    width: 330px;
+    width: 340px;
     gap: 5px;
-    grid-template-areas: "a a a"
+    grid-template-areas: "a a a";
 }
 .container{
     max-width: 1300px;
+}
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+
+    }
+
+    80% {
+        opacity: 1
+    }
+
+    100% {
+        opacity: 0
+    }
+}
+
+.info,
+.collectionInfo {
+    text-align: center;
+  
+    font-weight: 500;
+    /* min-height: 14.5px; */
+}
+.info.error, .info.success{
+    position: fixed;
+    top: 50%;
+    font-size: 15px;
+  font-weight: 300;
+    /* left: calc( 50% - 33px); */
+    /* background: rgb(255 255 255); */
+    padding: 1rem 0.5rem;
+    box-shadow: 3px 3px 8px 3px #17353630;
+    color: #fff;
+}
+.error {
+    background: rgba(214, 12, 12, 0.8);
+ 
+}
+/* .error:after{
+    content: ' x'
+} */
+.success {
+    background: #2e979bcc;
+ 
+}
+
+.fadeOut {
+    animation-name: fadeOut;
+    animation-duration: 3000ms;
+    transition-timing-function: ease-in;
+    animation-fill-mode: both;
 }

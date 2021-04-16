@@ -3,6 +3,7 @@
 include $dir . "system/initiate.php";
 
 use Controller\Template\Slide\FoodSlide as foodslide;
+use Controller\Constant as constant;
 
 $slide = new foodslide();
 $newImagePath = "assets/images/render/";
@@ -37,11 +38,11 @@ include $dir . "includes/header.php";
     <section class="template">
 
         <div class="row">
-            <div class="col-md-12 col-lg-4 col-sm-12">
+            <!-- <div class="col-md-12 col-lg-4 col-sm-12">
                 <h3 class="title template">Template <i class="fa fa-caret-down pull-right"></i></h3>
                 <div class="d-none">
                     <div class="slide-section mb-3" style="overflow: hidden;">
-                        <!-- Swiper -->
+                     Swiper 
                         <div class="swiper-container">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
@@ -65,7 +66,7 @@ include $dir . "includes/header.php";
 
                                 </div>
                             </div>
-                            <!-- Add Pagination -->
+                            Add Pagination --
                             <div class="swiper-pagination"></div>
                         </div>
                     </div>
@@ -86,7 +87,7 @@ include $dir . "includes/header.php";
 
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="col-md-12 col-lg-4 col-sm-12">
                 <h3 class="title">Fill form to edit design </h3>
 
@@ -99,31 +100,43 @@ include $dir . "includes/header.php";
                         </div>
                         <div class="col-3">
                             <!-- <div class="next"> -->
-                                <button class="next btn btn-warning">new +</button>
+                            <button class="next btn btn-warning">new +</button>
                             <!-- </div> -->
-                            
+
                         </div>
-                        <div class="col-3">
+                        <!-- <div class="col-3">
                             <div class="next">
-                                <div class="btn btn-warning">Page <span class="page-box">1</spn>
+                                <div class="btn btn-warning">Page <span class="page-box">1</span>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                     </div>
 
                     <hr>
                     <form method="post" enctype="multipart/form-data" class="edit-form" id='slide-form'>
                         <div class="row">
-                    
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="">Add logo</label>
 
-                                        <input type="<?=isset($_SESSION['savedLogo'])?'hidden':'file'?>" name="logo" class="form-control" value="<?=$_SESSION['savedLogo']??null?>">
-                                    </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">Add logo</label>
+                                    <?php
+
+                                    $logoLink = constant::rootDir() . '/' . constant::rootImgPath() . '/' . ($_SESSION['savedLogo'] ?? null);
+
+                                    $check = function () {
+                                        unset($_SESSION['savedLogo']);
+                                        return 'file';
+                                    };
+
+                                    $logoStatus = isset($_SESSION['savedLogo']) && file_exists($logoLink) ?
+                                        'hidden' : $check()
+
+                                    ?>
+                                    <input type="<?= $logoStatus ?>" name="logo" class="form-control" value="<?= $_SESSION['savedLogo'] ?? null ?>">
                                 </div>
-                          
+                            </div>
+
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Choose section <i class="fa fa-info-circle"></i></label>
@@ -154,7 +167,7 @@ include $dir . "includes/header.php";
                         <div class="form-group textarea">
                             <label for="" class="textarea_label">Title</label>
 
-                            <textarea name="front" id="" cols="30" rows="10" class="form-control" value="This will be the title of the carousel">THIS WILL BE THE TITLE OF THE CAROUSEL</textarea>
+                            <textarea name="front" id="" rows="3" class="form-control" value="This will be the title of the carousel">THIS WILL BE THE TITLE OF THE CAROUSEL</textarea>
                             <!-- <textarea name="content" style="display:none" id="" cols="30" rows="10" class="form-control" value="This will be the title of the carousel">The main content will go here</textarea> -->
 
                         </div>
@@ -166,7 +179,7 @@ include $dir . "includes/header.php";
                         <input type="hidden" name="backImage" value="<?= $backImage; ?>">
 
 
-                        <input type="submit" class="btn btn-submit">
+                        <input type="submit" class="btn btn-submit" value="save">
 
                     </form>
                 </div>
@@ -175,25 +188,33 @@ include $dir . "includes/header.php";
 
                 <h3 class="title">Final Render</h3>
                 <!-- render finished image -->
-              
-                    <div>
-                        <div class="render">
-                            <div class="front_render  row3"></div>
-                            <div class="content_render  row3"></div>
-                            <div class="back_render  row3"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <div>
-                                <a href="<?= $image_link; ?>" download><button class="btn btn-submit">
-                                        Download Image
-                                    </button></a>
-
+                <div class="col-3">
+                            <div class="next">
+                                <div class="btn btn-warning">Page <span class="page-box">1</span>
+                                </div>
                             </div>
+                        </div>
+                <div class="working_img">
+                    <img src="<?= $dir; ?>assets/images/templates/foodslide/front.png" alt="">
+                </div>
+                <div>
+                    <div class="render">
+                        <!-- <div class="front_render  row3"></div>
+                        <div class="content_render  row3"></div>
+                        <div class="back_render  row3"></div> -->
+                    </div>
+
+                    <div class="form-group">
+                        <div>
+                            <a href="<?= $image_link; ?>" download><button class="btn btn-submit">
+                                    Download Image
+                                </button></a>
 
                         </div>
+
                     </div>
-            
+                </div>
+
 
 
             </div>
@@ -205,7 +226,16 @@ include $dir . "includes/header.php";
 echo "<script>let  dir = '$dir'</script>";
 include $dir . "includes/footer.php";
 ?>
- 
-<script src="<?=$dir?>assets/js/presentation.js">
+<script>
+    const img={
+        frontDefault:'assets/images/templates/foodslide/front.png',
+        contentDefault:'assets/images/templates/foodslide/content.png',
+        backDefault:'assets/images/templates/foodslide/back.png',
+    }
+</script>
+<script src="<?= $dir ?>assets/js/helper.js">
+
+</script>
+<script src="<?= $dir ?>assets/js/presentation.js">
 
 </script>

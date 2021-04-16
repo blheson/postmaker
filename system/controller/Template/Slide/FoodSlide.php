@@ -26,8 +26,8 @@ class FoodSlide extends Square
 
         switch ($post['section']) {
             case 'front':
-                if ($post['frontImg'] !== 'null')
-                    unlink(constant::rootDir() . '/' . $post['frontImg']);
+                // if ($post['frontImg'] !== 'null')
+                //     unlink(constant::rootDir() . '/' . $post['frontImg']);
                 $_SESSION['foodSlide']['front'] = $this->front_section($post);
                 return $_SESSION['foodSlide']['front'];
                 break;
@@ -36,8 +36,8 @@ class FoodSlide extends Square
                 break;
             case 'back':
                 $post['margin'] = 120;
-                if ($post['backImg'] !== 'null')
-                    unlink(constant::rootDir() . '/' . $post['backImg']);
+                // if ($post['backImg'] !== 'null')
+                //     unlink(constant::rootDir() . '/' . $post['backImg']);
                 $_SESSION['foodSlide']['back'] = $this->back_section($post);
                 return $_SESSION['foodSlide']['back'];
 

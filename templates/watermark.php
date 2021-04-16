@@ -10,7 +10,8 @@ $design_template = "assets/images/templates/watermark/product-watermark.png";
 
 if (isset($_POST['watermark'])) {
 
-    $image_link =  $watermark->logo_on_product($_FILES['file'], $_FILES['logo'], $_POST['pos'],100);
+    $raw =  $watermark->logo_on_product($_FILES['file'], $_FILES['logo'], $_POST['pos'],100);
+    $image_link = $dir.Helper::parseLink($raw);
 }
 include $dir . "includes/header.php";
 ?>

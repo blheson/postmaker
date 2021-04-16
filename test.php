@@ -23,6 +23,10 @@
 // imagejpeg($canvas);
 // imagedestroy($canvas);
 
-$newImagePath = 'C:/xampp/htdocs/postmaker/assets/images/render/postmaker_1679091c5a880faf6fb5e6087eb1b2dc.png';
+$path = 'C:/xampp/htdocs/postmaker/assets/images/render/postmaker_1679091c5a880faf6fb5e6087eb1b2dc.png';
  
-echo substr($newImagePath,strpos($newImagePath,'/assets/images/'));
+// echo substr($path,strpos($path,'/assets/images/'));
+// echo (int)strlen($path)-(int)strpos($path,'postmaker')+2;
+echo (int)strlen($path).PHP_EOL;
+echo (int)strpos($path,'postmaker');
+echo substr($path,0,(strpos($path,'postmaker')+10));

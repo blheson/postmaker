@@ -111,13 +111,14 @@ class Watermark
             }
             
         //Process Logo
-      
+        $logo_link = null;
           if (isset($logo) && $logo['size'] > 0) {
             if ($logo['error'] > 0) {
                 $_SESSION['error'] = 'upload a valid logo';
                 return false;
             } else {
                 $logo_link = $this->create_image()->upload_image($logo, $link, ['width' => $logo_width, 'height' => null]);
+              
                 if (!$logo_link) {
                     $_SESSION['error'] = "Logo not successfully uploaded";
                     return false;
@@ -131,9 +132,9 @@ class Watermark
         }catch(Exception $e){
             $e->getMessage();
         }
-       
+ 
         $link = dirname(dirname($_SERVER['SCRIPT_FILENAME'])).'/';
-        return $this->addLogoToImage('assets/images/' . $product_image, '../assets/images/' . $logo_link,$cord,$margin);
+        return $this->addLogoToImage($link.'assets/images/' . $product_image, $link.'assets/images/' . $logo_link,$cord,$margin);
     }
     /**
      * Add logo to an image
@@ -159,7 +160,7 @@ class Watermark
         
 
         //set logo dimension
-        // $this->logo_dimension = ['logo_width' => $logo_width, 'logo_height' => $logo_height];
+   
         $this->setLogoDimension($logo_width, $logo_height);
 
 

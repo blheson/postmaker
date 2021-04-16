@@ -1,14 +1,25 @@
+const default_data = {
+    page: 1,
+    front: null,
+    content: null,
+    back: null,
+    cachePage: 1,
+    cache:[]
+}
 const ui_ctrl = {
 
-    next_button: document.querySelector(".next"),
-    page_counter: document.querySelector(".page-box"),
+    nextButton: document.querySelector(".next"),
+    pageCounter: document.querySelector(".page-box"),
     textarea: document.querySelector("textarea"),
     textarea_label: document.querySelector(".textarea_label"),
-    render: {
-        front: document.querySelector(".render .front_render"),
-        content: document.querySelector(".render .content_render"),
-        back: document.querySelector(".render .back_render"),
-    },
+    workingImg: document.querySelector(".working_img img"),
+    currentPageDesign:()=>document.querySelector(`img.renderedpage_${default_data.page}`),
+    // render: {
+    //     front: document.querySelector(".render .front_render"),
+    //     content: document.querySelector(".render .content_render"),
+    //     back: document.querySelector(".render .back_render"),
+    // },
+    render:document.querySelector(".render"),
 
     indicator: document.querySelector(".indicator")
 }
@@ -84,6 +95,7 @@ const form = {
             
             let img = document.createElement('img');
             img.dataset.page = default_data.page
+            img.classList.add(`renderedpage_${default_data.page}`)
             
             img.setAttribute('width', '100%');
             let img_src = dir + result.message;
@@ -93,32 +105,41 @@ const form = {
                 img_src,
                 'section':form.group().section.value
             }
+        
+            if(ui_ctrl.currentPageDesign() !== null && ui_ctrl.currentPageDesign().dataset.page == default_data.page){
+                console.log('here')
+                ui_ctrl.currentPageDesign().src = img_src
+                middleware.info('Page wasnt changed, but design updated','success')
+                    ui_ctrl.workingImg.src =img_src
+                return
+            }
             if (formDom.querySelector('select[name=section]').value == 'front') {
                 default_data.cache[default_data.page].front=form.group().title.value
                 
-                if (default_data.front) {//front image set
+                // if (default_data.front) {//front image set
 
-                    default_data.front = result.message;
-                    ui_ctrl.render.front.querySelector('img').src = img_src
-                    return
-                }
+                //     default_data.front = result.message;
+                //     ui_ctrl.render.front.querySelector('img').src = img_src
+                //     return
+                // }
 
                 default_data.front = result.message;
 
                 img.id = 'front_img_render';
 
-                ui_ctrl.render.front.prepend(img)
+                // ui_ctrl.render.front.prepend(img)
+                ui_ctrl.render.prepend(img)
             }
             if (formDom.querySelector('select[name=section]').value == 'content') {
                 default_data.cache[default_data.page].content=form.group().content.value
                 
                 default_data.content = result.message;
-                // let img = document.createElement('img');
-                // img.width = 600;
+           
                 img.classList.add('content_img_render');
 
                 // img.src = dir + default_data.content;
-                ui_ctrl.render.content.appendChild(img)
+                // ui_ctrl.render.content.appendChild(img)
+            
             }
             if (formDom.querySelector('select[name=section]').value == 'back') {
                 default_data.cache[default_data.page].back=form.group().back.value
@@ -130,44 +151,36 @@ const form = {
                     console.log(default_data.back)
                     return
                 }
-                default_data.back = result.message;
-                // let img = document.createElement('img');
-                // img.width = 600;
+                default_data.back = img_src;
                 img.classList.add('back_img_render');
-
-                // img.src = dir + default_data.back;
-                ui_ctrl.render.back.appendChild(img)
+                // ui_ctrl.render.back.appendChild(img)
+                
             }
-         
+            middleware.info('','success')
+            ui_ctrl.render.appendChild(img)
+            ui_ctrl.workingImg.src =img_src
         }).catch(error => {
             helper.waitFetch(false)
+            middleware.info(error)
 
-            console.log(error)
         })
     }
 }
 
-const default_data = {
-    page: 1,
-    front: null,
-    content: null,
-    back: null,
-    cachePage: 1,
-    cache:[]
-}
+
 const helper= {
    waitFetch: (status)=>{
     //    console.log(status)
         form.group().section.disabled=status
-        ui_ctrl.next_button.disabled=status
+        ui_ctrl.nextButton.disabled=status
    }
 
 }
 const frontSection = {
     select: () => {
         ui_ctrl.indicator.innerText = `Front cover`;
-        // form.group().title.style.display = "block";
-        // form.group().content.style.display = "none";
+        ui_ctrl.workingImg.src = dir+img.frontDefault
+
         ui_ctrl.textarea_label.innerText = "Title";
         ui_ctrl.textarea.name = "front";
         ui_ctrl.textarea.value = "THIS WILL BE THE TITLE OF THE CAROUSEL";
@@ -177,7 +190,7 @@ const frontSection = {
     formInput: (fd, formDom, frontImg) => {
 
         fd.append('title', form.group().title.value)
-        fd.append('frontImg', frontImg)
+        // fd.append('frontImg', frontImg)
         fd.append('newImagePath', form.group().newImagePath.value)
         fd.append('frontImage', form.group().frontImage.value)
         // fd.append('designTemplate', form.group().frontImage.value)
@@ -187,11 +200,12 @@ const frontSection = {
 const contentSection = {
     select: () => {
         ui_ctrl.indicator.innerText = 'Content section';
-        // form.group().title.style.display = "none";
-        // form.group().content.style.display = "block";
+ 
+        ui_ctrl.workingImg.src = dir+img.contentDefault
+
         ui_ctrl.textarea_label.innerText = "Content";
         ui_ctrl.textarea.name = "content";
-        ui_ctrl.textarea.value = "The main content will go here";
+        ui_ctrl.textarea.value = "This will be where the content will go. You can structure your content per page";
 
 
     },
@@ -205,7 +219,7 @@ const contentSection = {
             return
         }
 
-        fd.append('designedContentImg', contentImg)
+        // fd.append('designedContentImg', contentImg)
         fd.append('content', form.group().content.value)
         fd.append('contentImage', form.group().contentImage.value)
         return fd;
@@ -216,12 +230,13 @@ const backSection = {
         ui_ctrl.indicator.innerText = `Back cover`;
         // form.group().title.style.display = "none";
         // form.group().content.style.display = "block";
+        ui_ctrl.workingImg.src = dir+img.backDefault
         ui_ctrl.textarea_label.innerText = "Back Text";
         ui_ctrl.textarea.value = "Kindly save and share";
         ui_ctrl.textarea.name = "back";
     },
     formInput: (fd, formDom, backImg) => {
-        fd.append('backImg', backImg)
+        // fd.append('backImg', backImg)
         fd.append('backImage', form.group().backImage.value)
         fd.append('content', form.group().back.value)
         return fd;
@@ -241,34 +256,50 @@ const change_content = function () {
             break;
     }
 }
-ui_ctrl.next_button.addEventListener('click', () => {
-    helper.waitFetch(true)
-    if (default_data.page == 1 && default_data.cachePage > 1)
-        default_data.page = default_data.cachePage
+ui_ctrl.nextButton.addEventListener('click', () => {
 
-    if (form.group().section.value == 'front' && default_data.front && default_data.page > 1) {
-        default_data.cachePage = default_data.page
-        default_data.page = 0
+  
+    if(!ui_ctrl.render.querySelector('img')){
+        middleware.info('Kindly save your first design before creating a new page')
+        return
     }
+    if(!ui_ctrl.render.querySelector(`img.renderedpage_${default_data.page}`)){
+        middleware.info('Kindly save your design before creating a new page')
+        return
+    }
+    // helper.waitFetch(true)
+    // if (default_data.page == 1 && default_data.cachePage > 1)
+    //     default_data.page = default_data.cachePage
+
+    // if (form.group().section.value == 'front' && default_data.front && default_data.page > 1) {
+    //     default_data.cachePage = default_data.page
+    //     default_data.page = 0
+    // }
+
     // if(form.group().section.value == 'back' && default_data.back && default_data.page > 1){
     //     default_data.cachePage = default_data.page
     //     default_data.page = 0
     // }    
     
-    form.process_form(form.group().body)
+    // form.process_form(form.group().body)
  
-if(form.group().section.value == 'back' && default_data.back){
+// if(form.group().section.value == 'back' && default_data.back){
  
-    // default_data.page = default_data.cachePage
-    return
-}
+//     // default_data.page = default_data.cachePage
+//     return
+// }
  
     default_data.page += 1
-    ui_ctrl.page_counter.innerText = default_data.page
+    ui_ctrl.pageCounter.innerText = default_data.page
+    if(form.group().section.value == 'front' &&  default_data.page == 2){
+        contentSection.select();
+        form.group().section.value = 'content'
+    }
 });
 
 form.group().section.addEventListener('change', change_content);
 form.group().body.addEventListener('submit', (e) => {
+    helper.waitFetch(true)
     e.preventDefault();
     form.process_form(e.target)
 })
