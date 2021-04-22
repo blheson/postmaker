@@ -21,8 +21,12 @@ class FoodSlide extends Square
     public function process($post)
     {
         // unset($_SESSION['savedLogo']);
-        if (!isset($_SESSION['savedLogo']))
-            $this->upload_logo($_FILES['logo']);
+        if (!isset($_SESSION['savedLogo'])){
+            if(!isset($_FILES['logo'])){
+                $_SESSION['postmakerError'] = 'No logo uploaded';
+                return null;
+            }
+            $this->upload_logo($_FILES['logo']);}
 
         switch ($post['section']) {
             case 'front':
@@ -190,7 +194,7 @@ $logo_link = $link . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'];
     public function add_data_on_blank_image($post): string
     {
         if (strlen($post['text']) < 1) {
-            $_SESSION['error'] = "Please put in a text";
+            $_SESSION['postmakerError'] = "Please put in a text";
             return false;
         }
 

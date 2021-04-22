@@ -43,12 +43,12 @@ class CreateImage
         $link = $this->get_upload_link($rel);
         if (isset($logo) && $logo['size'] > 0) {
             if ($logo['error'] > 0) {
-                $_SESSION['error'] = 'upload a valid logo';
+                $_SESSION['postmakerError'] = 'upload a valid logo';
                 return false;
             } else {
                 $logo_link = $this->upload_image($logo, $link, ['width' => null, 'height' => $logo_height]);
                 if (!$logo_link) {
-                    $_SESSION['error'] = "Logo not successfully uploaded";
+                    $_SESSION['postmakerError'] = "Logo not successfully uploaded";
                     return false;
                 }
             }
@@ -73,12 +73,12 @@ class CreateImage
         //Process Product Image
         if (isset($image) && $image['size'] > 0) {
             if ($image['error'] > 0) {
-                $_SESSION['error'] = 'Upload a valid picture';
+                $_SESSION['postmakerError'] = 'Upload a valid picture';
                 return false;
             } else {
                 $product_image = $this->upload_image($image, $link);
                 if (!$product_image) {
-                    $_SESSION['error'] = "Image not successfully uploaded";
+                    $_SESSION['postmakerError'] = "Image not successfully uploaded";
                     return false;
                 }
             }
@@ -92,12 +92,12 @@ class CreateImage
 
         // if (isset($logo) && $logo['size'] > 0) {
         //     if ($logo['error'] > 0) {
-        //         $_SESSION['error'] = 'upload a valid logo';
+        //         $_SESSION['postmakerError'] = 'upload a valid logo';
         //         return false;
         //     } else {
         //         $logo_link = $this->upload_image($logo, $link, ['width' => null, 'height' => $logo_height]);
         //         if (!$logo_link) {
-        //             $_SESSION['error'] = "Logo not successfully uploaded";
+        //             $_SESSION['postmakerError'] = "Logo not successfully uploaded";
         //             return false;
         //         }
         //     }
@@ -121,7 +121,7 @@ class CreateImage
         $allowed = array('png', 'jpg', 'jpeg', 'gif', 'webp');
 
         $paths = pathinfo($data["name"]);
-        $file_ext = $paths['extension'];
+        $file_ext = strtolower($paths['extension']);
         $mime = explode('/', $data['type']);
         $mime_type = $mime[0];
         $mime_ext = $mime[1];
@@ -139,20 +139,24 @@ class CreateImage
 
 
         if ($mime_type != 'image') {
-            $_SESSION['error'] = 'The file must be an image';
-            return 'The file must be an image';
+            $_SESSION['postmakerError'] = 'The file must be an image';
+            return false;
         }
+        // strtolower
         if (!in_array($file_ext, $allowed)) {
-            $_SESSION['error'] = 'The file extension must be a png, jpg, jpeg, gif';
-            return 'The file extension must be a png, jpg, jpeg, gif';
+            $_SESSION['postmakerError'] = 'The file extension must be a png, jpg, jpeg, gif';
+          
+            
+            return false;
         }
+ 
         if ($file_size > 10000000) {
-            $_SESSION['error'] = 'The file size must be under 10MB';
-            return 'The file size must be under 15MB';
+            $_SESSION['postmakerError'] = 'The file size must be under 10MB';
+            return false;
         }
         if ($file_ext != $mime_ext && ($mime_ext == 'jpeg' && $file_ext != 'jpg')) {
-            $_SESSION['error'] = 'The file extension does not match the original file';
-            return 'The file extension does not match the original file';
+            $_SESSION['postmakerError'] = 'The file extension does not match the original file';
+            return false;
         }
 
         return ['tmp_loc' => $tmp_loc, 'upload_path' => $upload_path, 'db_path' => $db_path];
@@ -169,14 +173,15 @@ class CreateImage
     {
 
         $image_data = $this->checkImage($file, $link);
-        if (is_array($image_data)) {
-            $tmp_loc = $image_data['tmp_loc'];
-            $upload_path = $image_data['upload_path'];
-            $db_path = $image_data['db_path'];
-        } else {
-            return $image_data;
+   
+        if (!is_array($image_data)) {
+         
+            return false;
         }
 
+        $tmp_loc = $image_data['tmp_loc'];
+        $upload_path = $image_data['upload_path'];
+        $db_path = $image_data['db_path'];
         if (move_uploaded_file($tmp_loc, $upload_path)) {
             $check = $dimension == null;
             $width =  $check ? true : $dimension['width'];
@@ -184,8 +189,8 @@ class CreateImage
             $this->getImageDimension()->resize_image($upload_path, $width, $height);
             return $db_path;
         } else {
-            $_SESSION['error'] = 'The image could not be saved';
-            return $db_path;
+            $_SESSION['postmakerError'] = 'The image could not be saved';
+            return false;
         }
     }
     /**

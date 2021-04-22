@@ -73,6 +73,9 @@ footer{
 .working_img > img{
     width: 100%;
 }
+.render{
+    cursor:pointer
+}
 /* .mb-1{
     margin-bottom: 1rem;
 }

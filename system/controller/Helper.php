@@ -28,10 +28,10 @@ public static function parseLink ($newImagePath){
      */
     public static function showError(): void
     {
-        if (!isset($_SESSION['error'])) return;
+        if (!isset($_SESSION['postmakerError'])) return;
         echo '<div class="alert alert-error" style="color:#fff">
         <button type="button" style="color:#fff" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <p>' . $_SESSION['error'] . '</p></div>';
-        unset($_SESSION['error']);
+        <p>' . $_SESSION['postmakerError'] . '</p></div>';
+        unset($_SESSION['postmakerError']);
     }
 }

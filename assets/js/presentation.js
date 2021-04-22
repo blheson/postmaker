@@ -1,25 +1,28 @@
-const default_data = {
-    page: 1,
+const defaultData = {
+    page: 0,
+    getPage: function () {
+        return this.page
+    },
     front: null,
     content: null,
     back: null,
     cachePage: 1,
-    cache:[]
+    cache: []
 }
-const ui_ctrl = {
+const uiCtrl = {
 
     nextButton: document.querySelector(".next"),
     pageCounter: document.querySelector(".page-box"),
     textarea: document.querySelector("textarea"),
     textarea_label: document.querySelector(".textarea_label"),
     workingImg: document.querySelector(".working_img img"),
-    currentPageDesign:()=>document.querySelector(`img.renderedpage_${default_data.page}`),
+    currentPageDesign: () => document.querySelector(`img.renderedpage_${defaultData.page}`),
     // render: {
     //     front: document.querySelector(".render .front_render"),
     //     content: document.querySelector(".render .content_render"),
     //     back: document.querySelector(".render .back_render"),
     // },
-    render:document.querySelector(".render"),
+    render: document.querySelector(".render"),
 
     indicator: document.querySelector(".indicator")
 }
@@ -56,17 +59,17 @@ const form = {
 
         switch (section) {
             case 'front':
-                fd = frontSection.formInput(fd, target, default_data.front)
+                fd = frontSection.formInput(fd, target, defaultData.front)
                 break;
             case 'content':
                 if (form.group().content.value.length > 128) {
                     alert('Not allowed')
                     return;
                 }
-                fd = contentSection.formInput(fd, target, default_data.content)
+                fd = contentSection.formInput(fd, target, defaultData.content)
                 break;
             case 'back':
-                fd = backSection.formInput(fd, target, default_data.back)
+                fd = backSection.formInput(fd, target, defaultData.back)
                 break;
             default:
                 break;
@@ -92,120 +95,107 @@ const form = {
             return response.json()
         }
         ).then(result => {
-            
-            let img = document.createElement('img');
-            img.dataset.page = default_data.page
-            img.classList.add(`renderedpage_${default_data.page}`)
-            
-            img.setAttribute('width', '100%');
-            let img_src = dir + result.message;
-            img.src = img_src
-            helper.waitFetch(false)
-            default_data.cache[default_data.page] = {
-                img_src,
-                'section':form.group().section.value
+
+            if (result.error) {
+                middleware.info(result.message)
+                return
             }
-        
-            if(ui_ctrl.currentPageDesign() !== null && ui_ctrl.currentPageDesign().dataset.page == default_data.page){
-                console.log('here')
-                ui_ctrl.currentPageDesign().src = img_src
-                middleware.info('Page wasnt changed, but design updated','success')
-                    ui_ctrl.workingImg.src =img_src
+            let img = document.createElement('img');
+            let dPage = defaultData.page + 1
+            img.dataset.page = dPage
+            img.classList.add('renderedImg', `renderedpage_${dPage}`)
+
+            img.setAttribute('width', '100%');
+            let imgSrc = dir + result.message;
+            img.src = imgSrc
+            helper.waitFetch(false)
+            defaultData.cache[dPage] = {
+                imgSrc,
+                'section': form.group().section.value
+            }
+
+            if (uiCtrl.currentPageDesign() !== null && uiCtrl.currentPageDesign().dataset.page == dPage) {
+                uiCtrl.currentPageDesign().src = imgSrc
+                middleware.info('Page wasnt changed, but design updated', 'success')
+                uiCtrl.workingImg.src = imgSrc
                 return
             }
             if (formDom.querySelector('select[name=section]').value == 'front') {
-                default_data.cache[default_data.page].front=form.group().title.value
-                
-                // if (default_data.front) {//front image set
 
-                //     default_data.front = result.message;
-                //     ui_ctrl.render.front.querySelector('img').src = img_src
-                //     return
-                // }
-
-                default_data.front = result.message;
-
-                img.id = 'front_img_render';
-
-                // ui_ctrl.render.front.prepend(img)
-                ui_ctrl.render.prepend(img)
+                defaultData.cache[dPage].front = form.group().title.value
+                uiCtrl.workingImg.src = dir + imageDefault.front()
+                // defaultData.front = result.message;
+                uiCtrl.render.prepend(img)
             }
             if (formDom.querySelector('select[name=section]').value == 'content') {
-                default_data.cache[default_data.page].content=form.group().content.value
-                
-                default_data.content = result.message;
-           
+                defaultData.cache[dPage].content = form.group().content.value;
+                // defaultData.content = result.message;
                 img.classList.add('content_img_render');
-
-                // img.src = dir + default_data.content;
-                // ui_ctrl.render.content.appendChild(img)
-            
+                uiCtrl.workingImg.src = dir + imageDefault.content();
             }
             if (formDom.querySelector('select[name=section]').value == 'back') {
-                default_data.cache[default_data.page].back=form.group().back.value
-                
-                if (default_data.back) {//front image set
+                defaultData.cache[dPage].back = form.group().back.value
 
-                    default_data.back = result.message;
-                    ui_ctrl.render.back.querySelector('img').src = img_src
-                    console.log(default_data.back)
-                    return
-                }
-                default_data.back = img_src;
+                // if (defaultData.back) {//front image set
+
+                //     defaultData.back = result.message;
+                //     uiCtrl.render.back.querySelector('img').src = imgSrc
+                //     return
+                // }
+                uiCtrl.workingImg.src = dir + imageDefault.back()
+
+
+                defaultData.back = imgSrc;
                 img.classList.add('back_img_render');
-                // ui_ctrl.render.back.appendChild(img)
-                
             }
-            middleware.info('','success')
-            ui_ctrl.render.appendChild(img)
-            ui_ctrl.workingImg.src =img_src
+
+            uiCtrl.render.appendChild(img)
+            defaultData.page += 1
+            uiCtrl.pageCounter.innerText = defaultData.getPage()
+            middleware.info(`Design ${defaultData.page} Successfuly saved`, 'success')
         }).catch(error => {
             helper.waitFetch(false)
             middleware.info(error)
 
         })
+        helper.waitFetch(false)
+
     }
 }
 
 
-const helper= {
-   waitFetch: (status)=>{
-    //    console.log(status)
-        form.group().section.disabled=status
-        ui_ctrl.nextButton.disabled=status
-   }
+const helper = {
+    waitFetch: (status) => {
+        //    console.log(status)
+        form.group().section.disabled = status
+        uiCtrl.nextButton.disabled = status
+    }
 
 }
 const frontSection = {
     select: () => {
-        ui_ctrl.indicator.innerText = `Front cover`;
-        ui_ctrl.workingImg.src = dir+img.frontDefault
-
-        ui_ctrl.textarea_label.innerText = "Title";
-        ui_ctrl.textarea.name = "front";
-        ui_ctrl.textarea.value = "THIS WILL BE THE TITLE OF THE CAROUSEL";
-
-
+        uiCtrl.indicator.innerText = `Front cover`;
+        uiCtrl.workingImg.src = dir + imageDefault.front()
+        uiCtrl.textarea_label.innerText = "Title";
+        uiCtrl.textarea.name = "front";
+        uiCtrl.textarea.value = "THIS WILL BE THE TITLE OF THE CAROUSEL";
     },
     formInput: (fd, formDom, frontImg) => {
-
         fd.append('title', form.group().title.value)
-        // fd.append('frontImg', frontImg)
         fd.append('newImagePath', form.group().newImagePath.value)
         fd.append('frontImage', form.group().frontImage.value)
-        // fd.append('designTemplate', form.group().frontImage.value)
         return fd;
     }
 }
 const contentSection = {
     select: () => {
-        ui_ctrl.indicator.innerText = 'Content section';
- 
-        ui_ctrl.workingImg.src = dir+img.contentDefault
+        uiCtrl.indicator.innerText = 'Content section';
 
-        ui_ctrl.textarea_label.innerText = "Content";
-        ui_ctrl.textarea.name = "content";
-        ui_ctrl.textarea.value = "This will be where the content will go. You can structure your content per page";
+        uiCtrl.workingImg.src = dir + imageDefault.content()
+
+        uiCtrl.textarea_label.innerText = "Content";
+        uiCtrl.textarea.name = "content";
+        uiCtrl.textarea.value = "This will be where the content will go. You can structure your content per page";
 
 
     },
@@ -213,9 +203,8 @@ const contentSection = {
 
         let content = form.group().content.value;
         if (content.length > 110) {
-            alert('not allowed')
-    helper.waitFetch(false)
-
+            middleware.info('Error: kindly, reduce the number of words')
+            helper.waitFetch(false)
             return
         }
 
@@ -227,13 +216,14 @@ const contentSection = {
 }
 const backSection = {
     select: () => {
-        ui_ctrl.indicator.innerText = `Back cover`;
+        uiCtrl.indicator.innerText = `Back cover`;
         // form.group().title.style.display = "none";
         // form.group().content.style.display = "block";
-        ui_ctrl.workingImg.src = dir+img.backDefault
-        ui_ctrl.textarea_label.innerText = "Back Text";
-        ui_ctrl.textarea.value = "Kindly save and share";
-        ui_ctrl.textarea.name = "back";
+        uiCtrl.workingImg.src = dir + imageDefault.back()
+
+        uiCtrl.textarea_label.innerText = "Back Text";
+        uiCtrl.textarea.value = "Kindly save and share";
+        uiCtrl.textarea.name = "back";
     },
     formInput: (fd, formDom, backImg) => {
         // fd.append('backImg', backImg)
@@ -256,42 +246,12 @@ const change_content = function () {
             break;
     }
 }
-ui_ctrl.nextButton.addEventListener('click', () => {
+uiCtrl.nextButton.addEventListener('click', (e) => {
+    helper.waitFetch(true)
+    form.process_form(form.group().body);
+   
 
-  
-    if(!ui_ctrl.render.querySelector('img')){
-        middleware.info('Kindly save your first design before creating a new page')
-        return
-    }
-    if(!ui_ctrl.render.querySelector(`img.renderedpage_${default_data.page}`)){
-        middleware.info('Kindly save your design before creating a new page')
-        return
-    }
-    // helper.waitFetch(true)
-    // if (default_data.page == 1 && default_data.cachePage > 1)
-    //     default_data.page = default_data.cachePage
-
-    // if (form.group().section.value == 'front' && default_data.front && default_data.page > 1) {
-    //     default_data.cachePage = default_data.page
-    //     default_data.page = 0
-    // }
-
-    // if(form.group().section.value == 'back' && default_data.back && default_data.page > 1){
-    //     default_data.cachePage = default_data.page
-    //     default_data.page = 0
-    // }    
-    
-    // form.process_form(form.group().body)
- 
-// if(form.group().section.value == 'back' && default_data.back){
- 
-//     // default_data.page = default_data.cachePage
-//     return
-// }
- 
-    default_data.page += 1
-    ui_ctrl.pageCounter.innerText = default_data.page
-    if(form.group().section.value == 'front' &&  default_data.page == 2){
+    if (form.group().section.value == 'front' && defaultData.getPage() == 2) {
         contentSection.select();
         form.group().section.value = 'content'
     }
@@ -307,3 +267,20 @@ form.group().body.addEventListener('submit', (e) => {
 //if start page 1 should be page 2 **
 //if page 2 and front, change to page 1
 //if page 1 and other pages available, get other page next
+document.querySelector('.render').addEventListener('click', (e) => {
+    console.log(e.target)
+    console.log(e.target.dataset.page)
+    console.log(defaultData.cache)
+    e.path
+    e.target
+    e.srcElement
+    e.attributes
+    e.classList
+    e.currentSrc
+    e.dataset
+    e.offsetParent
+    e.nextSibling
+})
+document.querySelectorAll('img.renderedImg').forEach((e) => {
+    console.log(e)
+})

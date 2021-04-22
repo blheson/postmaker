@@ -38,7 +38,7 @@ class SquareImage extends square
     public function add_data_on_blank_image($post): string
     {
         if (strlen($post['text']) < 1) {
-            $_SESSION['error'] = "Please put in a text";
+            $_SESSION['postmakerError'] = "Please put in a text";
             return false;
         }
 

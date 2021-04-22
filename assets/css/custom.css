@@ -6,7 +6,7 @@ section.template .default_template, section.template .render{
 }
 section.template .default_template > img, section.template .render > img{
     width: 100%;
-    max-width: 110px;
+    /* max-width: 110px; */
     border-radius: 5px;
     margin-bottom: 2rem;
 }

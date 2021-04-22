@@ -27,6 +27,12 @@ $path = 'C:/xampp/htdocs/postmaker/assets/images/render/postmaker_1679091c5a880f
  
 // echo substr($path,strpos($path,'/assets/images/'));
 // echo (int)strlen($path)-(int)strpos($path,'postmaker')+2;
-echo (int)strlen($path).PHP_EOL;
-echo (int)strpos($path,'postmaker');
-echo substr($path,0,(strpos($path,'postmaker')+10));
+// echo (int)strlen($path).PHP_EOL;
+// echo (int)strpos($path,'postmaker');
+// echo substr($path,0,(strpos($path,'postmaker')+10));
+// $r = system('ping 127.0.0.1',$here);
+//     echo $r;
+
+echo passthru('ping google.com',$hee);
+// echo $here.PHP_EOL;
+echo $hee.PHP_EOL;

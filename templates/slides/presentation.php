@@ -190,7 +190,7 @@ include $dir . "includes/header.php";
                 <!-- render finished image -->
                 <div class="col-3">
                             <div class="next">
-                                <div class="btn btn-warning">Page <span class="page-box">1</span>
+                                <div class="btn btn-warning"> <span class="page-box">0</span> Design(s) saved
                                 </div>
                             </div>
                         </div>
@@ -227,10 +227,10 @@ echo "<script>let  dir = '$dir'</script>";
 include $dir . "includes/footer.php";
 ?>
 <script>
-    const img={
-        frontDefault:'assets/images/templates/foodslide/front.png',
-        contentDefault:'assets/images/templates/foodslide/content.png',
-        backDefault:'assets/images/templates/foodslide/back.png',
+    const imageDefault={
+        front:()=>'assets/images/templates/foodslide/front.png',
+        content:()=>'assets/images/templates/foodslide/content.png',
+        back:()=>'assets/images/templates/foodslide/back.png',
     }
 </script>
 <script src="<?= $dir ?>assets/js/helper.js">

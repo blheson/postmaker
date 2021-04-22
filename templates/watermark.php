@@ -4,20 +4,19 @@ include $dir . "system/initiate.php";
 
 use Controller\Helper as helper;
 use Controller\Template\Watermark as watermark;
+
 $watermark  = new watermark();
 $newImagePath = "assets/images/render/";
 $design_template = "assets/images/templates/watermark/product-watermark.png";
 
 if (isset($_POST['watermark'])) {
-
-    $raw =  $watermark->logo_on_product($_FILES['file'], $_FILES['logo'], $_POST['pos'],100);
-    $image_link = $dir.Helper::parseLink($raw);
+    $raw =  $watermark->logo_on_product($_FILES['file'], $_FILES['logo'], $_POST['pos'], 100);
+    $image_link = $dir . helper::parseLink($raw);
 }
 include $dir . "includes/header.php";
 ?>
 
 <main class="container" style="padding: 2rem;box-shadow: 0 0 10px 1px #ececec;">
-
     <section class="header">
         <h1 class="text-center">Watermark Template</h1>
     </section>
@@ -29,19 +28,19 @@ include $dir . "includes/header.php";
     <!-- show template type -->
     <section class="template">
         <div class="row">
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
                 <h3 class="title template">Template <i class="fa fa-caret-down pull-right"></i></h3>
                 <div class="default_template" style="display: none;">
                     <img src="<?= $dir . $design_template; ?>" alt="<?= basename($design_template); ?>">
                 </div>
-            </div>
-            <div class="col-md-4">
+            </div>-->
+            <div class="col-md-5">
                 <?= helper::showError() ?>
                 <?= helper::showSuccess() ?>
                 <h3 class="title">Fill form to edit design</h3>
                 <div class="card">
 
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post" enctype="multipart/form-data" class="edit-form">
                         <input type="hidden" name="watermark">
 
                         <div class="form-group">
@@ -70,21 +69,19 @@ include $dir . "includes/header.php";
                 </div>
             </div>
 
-            <div id="render" class="col-md-4">
+            <div id="render" class="col-md-7">
 
                 <h3 class="title">Final Render</h3>
                 <!-- render finished image -->
-                <?php
-                if (isset($_POST['watermark'])) :
-                ?>
+         
                     <div>
                         <div class="render">
-                            <img src="<?= $image_link; ?>" alt="rendered image" value="" width="100%">
+                        <img src="<?= $dir . $design_template; ?>" alt="<?= basename($design_template); ?>">
                         </div>
 
                         <div class="form-group">
                             <div>
-                                <a href="<?= $image_link; ?>" download><button class="btn btn-submit">
+                                <a href="" download><button class="btn btn-submit">
                                         Download Image
                                     </button></a>
 
@@ -92,14 +89,20 @@ include $dir . "includes/header.php";
 
                         </div>
                     </div>
-                <?php
-                endif;
-                ?>
+            
             </div>
         </div>
     </section>
 </main>
+<?php
+echo "<script>let  dir = '$dir'</script>";
+?>
+<script src="<?= $dir ?>assets/js/helper.js">
 
+</script>
+<script src="<?= $dir ?>assets/js/price-tag.js">
+
+</script>
 <?php
 include $dir . "includes/footer.php";
 ?>

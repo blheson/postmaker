@@ -5,9 +5,10 @@ namespace Controller\Template;
 use Controller\Common\CreateImage;
 use Controller\Common\assets as assets;
 use Controller\Common\ImageDimension;
+use Controller\Constant as constant;
 use Exception;
 
-class Watermark 
+class Watermark
 {
     public $create_image;
     public $imageDimension;
@@ -21,7 +22,7 @@ class Watermark
      */
     public function create_image()
     {
-       
+
         return assets::create_image();
     }
     /**
@@ -33,9 +34,10 @@ class Watermark
     {
         return assets::imageDimension();
     }
-    public function addLogoResourceOnImage($dst,$stamp, $cord = null, $margin = 30, $ratio = null){
-          // Create stamp image manually from GD
-          $stampResource = imagecreatefrompng($stamp);
+    public function addLogoResourceOnImage($dst, $stamp, $cord = null, $margin = 30, $ratio = null)
+    {
+        // Create stamp image manually from GD
+        $stampResource = imagecreatefrompng($stamp);
         list($dst_width, $dst_height) = getimagesize($dst);
 
 
@@ -44,7 +46,7 @@ class Watermark
 
         //set image dimension
         $this->setImageDimension($dst_width, $dst_height);
-        
+
 
         //set logo dimension
 
@@ -57,24 +59,24 @@ class Watermark
         } else {
             $position = $this->getLogoCord($dst_width, $dst_height, $logo_width, $logo_height, $cord, $margin);
         }
-     
+
         // extract to get $x and $y variable
         extract($position);
- 
+
         $im = $this->create_image()->create_image_resource($dst);
 
         imagecopy($im, $stampResource, $x, $y, 0, 0, $logo_width, $logo_height);
-          
-    
+
+
         // imagecopyresampled($im, $stamp, $x, $y, 0, 0,$dst_width, $dst_height, $logo_width, $logo_height);
 
-      
+
 
         // Save the image to file and free memory
         imagepng($im, $dst);
 
         imagedestroy($im);
-       
+
         return $dst;
     }
     /**
@@ -85,56 +87,46 @@ class Watermark
      * @param array $cord
      * @return string link to Water mark image
      */
-    public function logo_on_product($image, $logo, $cord, $logo_width = 200,$margin=30): ?string
+    public function logo_on_product($image, $logo, $cord, $logo_width = 200, $margin = 30): ?string
     {
-        $link = [];
-        $link['short'] = 'render/';
-        $link['long'] = '../assets/images/' . $link['short'];
-
+        // $link = [];
+        // $link['short'] = 'render/';
+        // $link['long'] = '../assets/images/' . $link['short'];
+        $link = constant::renderLink();
         //Process Product Image
-        try{
-            if (isset($image) && $image['size'] > 0) {
-                if ($image['error'] > 0) {
-                    $_SESSION['error'] = 'Upload a valid picture';
-                    return false;
-                } else {
-                    $product_image = $this->create_image()->upload_image($image, $link);
-                    if (!$product_image) {
-                        $_SESSION['error'] = "Image not successfully uploaded";
-                        return false;
-                    }
-                }
-            } else {
-                $product_image = 'no image';
-                throw new \Exception("No image was uploaded");
-                return false;
+        try {
+            if (!isset($image) || $image['size'] < 1 || $image['error'] > 0) {
+                $_SESSION['postmakerError'] = 'Upload a valid image';
+                return null;
             }
-            
-        //Process Logo
-        $logo_link = null;
-          if (isset($logo) && $logo['size'] > 0) {
-            if ($logo['error'] > 0) {
-                $_SESSION['error'] = 'upload a valid logo';
-                return false;
-            } else {
-                $logo_link = $this->create_image()->upload_image($logo, $link, ['width' => $logo_width, 'height' => null]);
-              
-                if (!$logo_link) {
-                    $_SESSION['error'] = "Logo not successfully uploaded";
-                    return false;
-                }
+            if (!isset($logo) || $logo['size'] < 1 || $logo['error'] > 0) {
+                $_SESSION['postmakerError'] = 'Upload a valid logo';
+                return null;
             }
-        } else {
-            $logo_link = 'Logo  not successfully uploaded';
-            throw new \Exception("No image was uploaded");
-            return false;
-        }
-        }catch(Exception $e){
+
+            $product_image = $this->create_image()->upload_image($image, $link);
+
+            if (!$product_image) {
+
+                return null;
+            }
+
+            //Process Logo
+  
+
+            $logo_link = $this->create_image()->upload_image($logo, $link, ['width' => $logo_width, 'height' => null]);
+
+            if (!$logo_link) {
+                return null;
+            }
+        } catch (Exception $e) {
             $e->getMessage();
         }
+
+        // $link = dirname(dirname($_SERVER['SCRIPT_FILENAME'])) . '/';
+        $link= constant::rootDir();
  
-        $link = dirname(dirname($_SERVER['SCRIPT_FILENAME'])).'/';
-        return $this->addLogoToImage($link.'assets/images/' . $product_image, $link.'assets/images/' . $logo_link,$cord,$margin);
+        return $this->addLogoToImage($link . '/assets/images/' . $product_image, $link . '/assets/images/' . $logo_link, $cord, $margin);
     }
     /**
      * Add logo to an image
@@ -149,7 +141,8 @@ class Watermark
      */
     public function addLogoToImage($dst, $logo, $cord = null, $margin = 30, $ratio = null): string
     {
-        
+  
+
         list($dst_width, $dst_height) = getimagesize($dst);
 
 
@@ -157,10 +150,10 @@ class Watermark
 
         //set image dimension
         $this->setImageDimension($dst_width, $dst_height);
-        
+
 
         //set logo dimension
-   
+
         $this->setLogoDimension($logo_width, $logo_height);
 
 
@@ -170,7 +163,7 @@ class Watermark
         } else {
             $position = $this->getLogoCord($dst_width, $dst_height, $logo_width, $logo_height, $cord, $margin);
         }
-     
+
         // extract to get $x and $y variable
         extract($position);
  
@@ -178,24 +171,24 @@ class Watermark
 
         // Create stamp image manually from GD
         $stamp = imagecreatefrompng($logo);
- 
+
         unlink($logo);
 
         imagecopy($im, $stamp, $x, $y, 0, 0, $logo_width, $logo_height);
-          
-    
+
+
         // imagecopyresampled($im, $stamp, $x, $y, 0, 0,$dst_width, $dst_height, $logo_width, $logo_height);
 
-      
+
 
         // Save the image to file and free memory
         imagepng($im, $dst);
-
-        imagedestroy($im);
        
+        imagedestroy($im);
+
         return $dst;
     }
-    
+
     public function setImageDimension($dst_width, $dst_height)
     {
         $this->imageDimension = ['width' => $dst_width, 'height' => $dst_height];
@@ -204,7 +197,7 @@ class Watermark
     {
         $this->logo_dimension = ['width' => $logo_width, 'height' => $logo_height];
     }
-    
+
     public function getImageDimension()
     {
         return $this->imageDimension;
@@ -236,8 +229,8 @@ class Watermark
     public function getLogoCord($dst_width, $dst_height, $logo_width, $logo_height, $cord, $margin)
     {
         $center_x = ($dst_width / 2) - ($logo_width / 2);
-        $m_right_x  = $dst_width - ($logo_height+$margin);
-        $m_bottom = $dst_height - ($logo_height+$margin);
+        $m_right_x  = $dst_width - ($logo_height + $margin);
+        $m_bottom = $dst_height - ($logo_height + $margin);
         switch ($cord) {
             case "tl":
                 $x = $margin;

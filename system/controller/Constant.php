@@ -2,7 +2,7 @@
 
 namespace Controller;
 
-class Constant
+final class Constant
 {
     const APP_NAME = 'postmaker';
     public static function rootDir($path=null)
@@ -16,5 +16,11 @@ class Constant
     public static function rootImgPath()
     {
         return 'assets/images';
+    }
+    public static function renderLink(){
+        $link = [];
+        $link['short'] = 'render/';
+        $link['long'] = '../assets/images/' . $link['short'];
+        return $link;
     }
 }
