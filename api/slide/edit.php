@@ -1,27 +1,25 @@
 <?php
 
 header('Content-Type: application/json');
-
-$dir = '../';
-include $dir . "system/initiate.php";
+$dir = dirname(dirname(__DIR__));
  
-use Controller\Template\Watermark as watermark;
+include $dir . "system/initiate.php";
+
+use Controller\Template\Slide\FoodSlide as foodslide;
 use Controller\Helper as helper;
 
-$watermark = new watermark();
-
- 
-if (!isset($_REQUEST['type'])) {
+$slide = new foodslide();
+if (!isset($_REQUEST['section'])) {
     http_response_code('401');
     echo json_encode(['error' => true, 'message' => 'Bad Request']);
-    exit();
+    die();
 }
-$image_link = $watermark->logo_on_product($_FILES['file'], $_FILES['logo'], $_REQUEST['logoPosition'], 100);
- 
+
+$image_link = $slide->process($_REQUEST);
 if (is_null($image_link)) {
     echo json_encode(['error' => true, 'message' => $_SESSION['postmakerError']]);
     unset($_SESSION['postmakerError']);
-    exit();
+    die();
 }
 $image_link = helper::parseLink($image_link);
 

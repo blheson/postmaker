@@ -27,7 +27,7 @@ class FoodSlide extends Square
                 return null;
             }
             $this->upload_logo($_FILES['logo']);}
-
+           
         switch ($post['section']) {
             case 'front':
                 // if ($post['frontImg'] !== 'null')
@@ -89,7 +89,7 @@ class FoodSlide extends Square
         $font_array = [
             'px' => 70,
             'py' => 140,
-            'file' => $post['font'],
+            'file' => constant::rootDir().$post['font'],
             'color' => [255, 255, 255],
             'size' => 80,
             'line_height' => 150
@@ -124,7 +124,7 @@ $logo_link = $link . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'];
         $font_array = [
             'px' => 70,
             'py' => 140,
-            'file' => $post['font'],
+            'file' => constant::rootDir().$post['font'],
             'color' => [0, 0, 0],
             'size' => 50,
             'width' => 22,
@@ -157,7 +157,7 @@ $logo_link = $link . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'];
         $font_array = [
             'px' => 70,
             'py' => 400,
-            'file' => $post['font'],
+            'file' => constant::rootDir().$post['font'],
             'color' => [255, 255, 255],
             'size' => 80,
             'width' => 11,
@@ -235,7 +235,7 @@ $logo_link = $link . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'];
         if (isset($post['line_height']))
             $font_array['line_height']     = $post['line_height'];
 
-        $font_array['file'] = $post['font'];
+        $font_array['file'] = constant::rootDir().$post['font'];
 
         //STRING  
         $string = $post['text'];

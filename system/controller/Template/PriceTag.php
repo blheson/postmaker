@@ -4,6 +4,7 @@ namespace Controller\Template;
 
 use Controller\Template\Square as Square;
 use Controller\Common\Assets as assets;
+use Controller\Constant as constant;
 
 class PriceTag extends Square
 {
@@ -86,7 +87,7 @@ class PriceTag extends Square
       'px' => $margin,
       'py' =>  $imageDimension['height'] - ($margin + $font_size),
       'size' => $font_size,
-      'file' => $post['font'],
+      'file' => constant::rootDir().$post['font'],
       'width' => 50,
       'color' => [255, 255, 255]
     ];
@@ -100,7 +101,7 @@ class PriceTag extends Square
       'px' => $margin + 50,
       'py' => $py + ($asset_dimension['height'] / 2),
       'size' => 40,
-      'file' => $post['font'],
+      'file' => constant::rootDir().$post['font'],
       'angle' => 12
     ];
 

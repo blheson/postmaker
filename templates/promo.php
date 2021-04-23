@@ -29,7 +29,7 @@ if(isset($_POST['text'])){
             <div class="col-md-4">
                 <h3 class="title template">Template <i class="fa fa-caret-down pull-right"></i></h3>
                 <div class="default_template">
-                    <img src="<?=$dir.$design_template;?>" alt="<?=basename($design_template);?>">
+                    <img src="<?=$dir.$design_template;?>" alt="<?=basename($design_template);?>" loading="lazy">
                 </div>
             </div>
             <div class="col-md-4"> <h3 class="title">Fill form to edit design</h3>
@@ -41,7 +41,7 @@ if(isset($_POST['text'])){
                         <label for="">Choose Font</label>
                         <select name="font" class="form-control"> 
                              <?php
-                                $fonts = $square_image->model->get_font();
+                                $fonts = $square_image->font->get_font();
                      
                                 foreach($fonts as $key => $font):
                                 
@@ -96,7 +96,7 @@ if(isset($_POST['text'])){
                 ?>
                 <div>
                     <div class="render">
-                         <img src="<?=$image_link;?>" alt="rendered image" value="<?=$_POST['text']?>" width="100%">
+                         <img src="<?=$image_link;?>" alt="rendered image" value="<?=$_POST['text']?>" width="100%" loading="lazy">
                     </div>
                    
                     <div class="form-group">

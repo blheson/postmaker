@@ -2,7 +2,7 @@
 
 namespace Controller\Template;
 
-use Model\Model as Model;
+use Model\Font as font;
 use Controller\Common\Color as color;
 use Controller\Constant as constant;
 use Controller\Common\Assets as assets;
@@ -19,7 +19,7 @@ class Square
 
     public function __construct()
     {
-        $this->model = new Model;
+        $this->font = new font;
         $this->color = new color;
         $this->imageDimension = new imageDimension;
         $this->create_image = assets::create_image();
@@ -90,9 +90,9 @@ class Square
         $font_array['line_height'] = isset($font_array['line_height']) ? $font_array['line_height'] : 60;
         //Get font from DB
 
-        $font = $this->model->get_font();
+        $font = $this->font->get_font();
 
-        $font_array['file'] = $font['montserrat'];
+        $font_array['file'] =  constant::rootDir().$font['montserrat'];
 
       
        return $this->text_to_image($new_link, $imageArray, trim($footer), $font_array);
@@ -148,7 +148,7 @@ class Square
         if (isset($font_array['color'])) {
             $font_col = imagecolorallocate($image, $font_array['color'][0], $font_array['color'][1], $font_array['color'][2]);
         } else {
-            // $color = $this->model->get_color($image);
+            // $color = $this->font->get_color($image);
             $color = color::get_color($image);
         }
 

@@ -3,7 +3,7 @@
 namespace Controller\Template;
 
 use Controller\Common\CreateImage;
-use Controller\Common\assets as assets;
+use Controller\Common\Assets as assets;
 use Controller\Common\ImageDimension;
 use Controller\Constant as constant;
 use Exception;

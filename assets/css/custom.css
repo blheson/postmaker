@@ -6,15 +6,17 @@ section.template .default_template, section.template .render{
 }
 section.template .default_template > img, section.template .render > img{
     width: 100%;
-    /* max-width: 110px; */
+    
     border-radius: 5px;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
 }
-
+img.foodslide_rendered_img{
+max-width: 110px;
+}
 section.template .default_template img:hover, section.template .render img:hover{
     box-shadow:-2px -2px 14px 4px #162a3e1a;
 }
-section.template .title{
+section.template .title_box{
     /* background: #000000; */
      /* background: #4cb7b7; */
      background: #3b98f7;

@@ -34,7 +34,7 @@ include $dir . "includes/header.php";
             <div class="col-md-4">
                 <h3 class="title template">Template <i class="fa fa-caret-down pull-right"></i></h3>
                 <div class="default_template" style="display: none;">
-                    <img src="<?= $dir . $design_template; ?>" alt="<?= basename($design_template); ?>">
+                    <img src="<?= $dir . $design_template; ?>" alt="<?= basename($design_template); ?>" loading="lazy">
                 </div>
             </div>
             <div class="col-md-4">
@@ -57,7 +57,7 @@ include $dir . "includes/header.php";
                             <label for="">Choose Font</label>
                             <select name="font" class="form-control">
                                 <?php
-                                $fonts = $square_image->model->get_font();
+                                $fonts = $square_image->font->get_font();
 
                                 foreach ($fonts as $key => $font) :
 
@@ -110,7 +110,7 @@ include $dir . "includes/header.php";
                 ?>
                     <div>
                         <div class="render">
-                            <img src="<?= $image_link; ?>" alt="rendered image" value="<?= $_POST['price'] ?>" width="100%">
+                            <img src="<?= $image_link; ?>" alt="rendered image" value="<?= $_POST['price'] ?>" width="100%" loading="lazy">
                         </div>
 
                         <div class="form-group">

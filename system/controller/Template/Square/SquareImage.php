@@ -2,6 +2,7 @@
 namespace Controller\Template\Square;
 
 use Controller\Template\Square as square;
+use Controller\Constant as constant;
 
 class SquareImage extends square
 {
@@ -79,7 +80,7 @@ class SquareImage extends square
         if (isset($post['line_height']))
             $font_array['line_height']     = $post['line_height'];
 
-        $font_array['file'] = $post['font'];
+        $font_array['file'] = constant::rootDir().$post['font'];
 
         //STRING  
         $string = $post['text'];

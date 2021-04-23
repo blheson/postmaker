@@ -1,7 +1,7 @@
 <?php
 namespace Model;
-
-class Model {
+use Controller\Constant as constant;
+class Font {
     public $db;
 
     public function __construct()
@@ -15,7 +15,8 @@ class Model {
      */
     public function get_font()
     {
-        $link = 'C:/xampp/htdocs/postmaker/assets/fonts/';
+        // $link = 'C:/xampp/htdocs/postmaker/assets/fonts/';
+        $link = '/assets/fonts/';
         $font = [
             'montserrat' => $link.'montserrat.ttf',
             'montserrat_medium' => $link.'Montserrat-Medium.ttf',

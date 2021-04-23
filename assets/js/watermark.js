@@ -1,5 +1,12 @@
-const UiCtrl = {
-    'render': document.querySelector('.render')
+const UiCtrl = function () {
+    let render = document.querySelector('.render');
+    let downloadBox = document.querySelector('.downloadBox')
+    return {
+        render,
+        downloadBox,
+        'renderBox': render.querySelector('img'),
+        'downloadBtn': downloadBox.querySelector('a')
+    }
 }
 const form = {
     group: () => {
@@ -29,7 +36,7 @@ const form = {
 
         fetch(request).then(response => {
             let res = response.json()
-             
+
             if (response.status != '200') {
                 throw new Error(response.error)
             }
@@ -37,15 +44,24 @@ const form = {
         }).then(result => {
             if (result.error)
                 throw new Error(result.message)
-                let renderBox = UiCtrl.render.querySelector('img')
-            if (!renderBox) {
+
+
+            if (!UiCtrl().downloadBtn ) {
                 let img = document.createElement('img')
-               
-                UiCtrl.render.appendChild(img)
-                renderBox = UiCtrl.render.querySelector('img')
+                UiCtrl().render.appendChild(img)
+ 
+                let a = document.createElement('a');
+              
+                a.innerText = 'download'
+                a.classList.add('btn', 'btn-primary')
+                UiCtrl().downloadBox.appendChild(a)
+                UiCtrl().renderBox = UiCtrl().render.querySelector('img')
+                UiCtrl().downloadBtn = UiCtrl().downloadBox.querySelector('a')
             }
-            renderBox.src = dir+result.message
-          
+            UiCtrl().downloadBtn.setAttribute('download', `blim-watermark_${(new Date()).getTime()}`)
+            UiCtrl().renderBox.src = dir + result.message
+            UiCtrl().downloadBtn.href = dir + result.message
+
         }).catch(error => {
             middleware.info(error)
         })
@@ -53,7 +69,5 @@ const form = {
 }
 form.group().body.addEventListener('submit', (e) => {
     e.preventDefault();
-   
     form.fetch()
-
 })

@@ -30,7 +30,7 @@
                 <div class="container">
                     <div class="logo">
                         <!-- <a href=""><img class="logo-img" src="<?= $base ?>assets/img/drugscafe-logo-full.png" alt="Drugs Cafe Pharmacy"
-                            width="150px"></a> -->
+                            width="150px" loading="lazy"></a> -->
                         <a href="/postmaker"><span>MOULDA</span></a>
 
                     </div>
@@ -51,23 +51,23 @@
   
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
+        </li> -->
+        <!-- <li class="nav-item">
           <a class="nav-link" href="/about">Pricing</a>
-        </li>
+        </li> 
         <li class="nav-item">
           <a class="nav-link" href="/services" tabindex="-1" aria-disabled="true">Services</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/posts" tabindex="-1" aria-disabled="true">Blog</a>
-        </li>
+        </li>-->
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li>
+        <!-- <li>
           <a href="">Login</a>
-        </li>
+        </li> -->
       </ul>
      
     </div>

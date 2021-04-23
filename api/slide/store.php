@@ -1,7 +1,9 @@
 <?php
 
 header('Content-Type: application/json');
-$dir = '../';
+$dir = '../../';
+ 
+ 
 include $dir . "system/initiate.php";
 
 use Controller\Template\Slide\FoodSlide as foodslide;

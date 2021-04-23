@@ -19,7 +19,7 @@ include $dir . "includes/header.php";
 ?>
 <style>
     .swiper-container {
-        width: 600px;
+        /* width: 600px; */
         height: 300px;
     }
 </style>
@@ -38,59 +38,14 @@ include $dir . "includes/header.php";
     <section class="template">
 
         <div class="row">
-            <!-- <div class="col-md-12 col-lg-4 col-sm-12">
-                <h3 class="title template">Template <i class="fa fa-caret-down pull-right"></i></h3>
-                <div class="d-none">
-                    <div class="slide-section mb-3" style="overflow: hidden;">
-                     Swiper 
-                        <div class="swiper-container">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div class="col-md-12 col-lg-12 col-sm-12">
-                                        <img src="<?= $dir; ?>assets/images/templates/foodslide/front.png" loading="lazy" class="blur-up lazyload" alt="" width="100%">
-                                    </div>
 
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="col-md-12 col-lg-12 col-sm-12">
-                                        <img src="<?= $dir; ?>assets/images/templates/foodslide/content.png" loading="lazy" class="blur-up lazyload" alt="" width="100%">
-                                    </div>
+            <div class="col-md-6 col-lg-4 col-sm-6">
+                <div class="title_box">
 
 
-                                </div>
-                                <div class="swiper-slide">
+                    <h3 class="title form_title">Fill form to create design </h3>
 
-                                    <div class="col-md-12 col-lg-12 col-sm-12">
-                                        <img src="<?= $dir; ?>assets/images/templates/foodslide/back.png" loading="lazy" class="blur-up lazyloaded" alt="" width="100%">
-                                    </div>
-
-                                </div>
-                            </div>
-                            Add Pagination --
-                            <div class="swiper-pagination"></div>
-                        </div>
-                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6 col-lg-6 col-sm-6">
-                        <img src="<?= $dir; ?>assets/images/templates/foodslide/front.png" loading="lazy" class="blur-up lazyload" alt="" width="100%">
-                        <small>Front section</small>
-                    </div>
-                    <div class="col-md-6 col-lg-6 col-sm-6">
-                        <img src="<?= $dir; ?>assets/images/templates/foodslide/content.png" loading="lazy" class="blur-up lazyload" alt="" width="100%">
-                        <small>Content section</small>
-
-                    </div>
-                    <div class="col-md-6 col-lg-6 col-sm-6">
-                        <img src="<?= $dir; ?>assets/images/templates/foodslide/back.png" loading="lazy" class="blur-up lazyload" alt="" width="100%">
-                        <small>Back section</small>
-
-                    </div>
-                </div>
-            </div> -->
-            <div class="col-md-12 col-lg-4 col-sm-12">
-                <h3 class="title">Fill form to edit design </h3>
-
                 <div class="card">
                     <div class="row">
                         <div class="col-6">
@@ -100,13 +55,13 @@ include $dir . "includes/header.php";
                         </div>
                         <div class="col-3">
                             <!-- <div class="next"> -->
-                            <button class="next btn btn-warning">new +</button>
+                            <button class="next btn btn-warning">add new +</button>
                             <!-- </div> -->
 
                         </div>
                         <!-- <div class="col-3">
                             <div class="next">
-                                <div class="btn btn-warning">Page <span class="page-box">1</span>
+                                <div class="btn btn-warning">Page <span class="page_box">1</span>
                                 </div>
                             </div>
                         </div> -->
@@ -153,7 +108,7 @@ include $dir . "includes/header.php";
                             <label for="">Choose Font</label>
                             <select name="font" class="form-control">
                                 <?php
-                                $fonts = $slide->model->get_font();
+                                $fonts = $slide->font->get_font();
                                 foreach ($fonts as $key => $font) :
 
                                 ?>
@@ -179,36 +134,51 @@ include $dir . "includes/header.php";
                         <input type="hidden" name="backImage" value="<?= $backImage; ?>">
 
 
-                        <input type="submit" class="btn btn-submit" value="save">
+                        <!-- <input type="submit" class="btn btn-submit" value="save"> -->
 
                     </form>
                 </div>
             </div>
-            <div id="render" class="col-md-12 mt-3 col-lg-4">
+            <div class="col-md-6 col-lg-4 col-sm-6">
+                <div class="render row3">
 
-                <h3 class="title">Final Render</h3>
-                <!-- render finished image -->
-                <div class="col-3">
-                            <div class="next">
-                                <div class="btn btn-warning"> <span class="page-box">0</span> Design(s) saved
-                                </div>
-                            </div>
-                        </div>
-                <div class="working_img">
-                    <img src="<?= $dir; ?>assets/images/templates/foodslide/front.png" alt="">
                 </div>
+            </div>
+            <div id="render" class="col-md-6 col-sm-6 col-lg-4">
+
+                <div class="title_box">
+                    <h3 class="title">Template view</h3>
+                    <small class="next">
+                        <span class="page_box">0</span> Design(s) saved
+
+                    </small>
+                </div>
+
+                <!-- render finished image -->
+
+
+
+                <div class="working_img">
+                    <span style="    position: absolute; color: #ffc107;
+    font-size: 12px;
+    text-rendering: optimizespeed;">work in progress</span>
+                    <img src="<?= $dir; ?>assets/images/templates/foodslide/front.png" alt="" loading="lazy">
+                    <!-- <small>Currently working on Design <span class="page_counter">1</span></small> -->
+                </div>
+
                 <div>
-                    <div class="render">
-                        <!-- <div class="front_render  row3"></div>
-                        <div class="content_render  row3"></div>
-                        <div class="back_render  row3"></div> -->
+                    <!--  <div class="swiper-container">
+                    <div class="swiper-wrapper render">
+                      <div class="swiper-slide">Slide 1</div>
+                        <div class="swiper-slide">Slide 2</div>
+                        <div class="swiper-slide">Slide 3</div> 
                     </div>
+                </div>-->
+
 
                     <div class="form-group">
-                        <div>
-                            <a href="<?= $image_link; ?>" download><button class="btn btn-submit">
-                                    Download Image
-                                </button></a>
+                        <div class="download_box">
+
 
                         </div>
 
@@ -227,10 +197,10 @@ echo "<script>let  dir = '$dir'</script>";
 include $dir . "includes/footer.php";
 ?>
 <script>
-    const imageDefault={
-        front:()=>'assets/images/templates/foodslide/front.png',
-        content:()=>'assets/images/templates/foodslide/content.png',
-        back:()=>'assets/images/templates/foodslide/back.png',
+    const imageDefault = {
+        front: () => 'assets/images/templates/foodslide/front.png',
+        content: () => 'assets/images/templates/foodslide/content.png',
+        back: () => 'assets/images/templates/foodslide/back.png',
     }
 </script>
 <script src="<?= $dir ?>assets/js/helper.js">
@@ -239,3 +209,25 @@ include $dir . "includes/footer.php";
 <script src="<?= $dir ?>assets/js/presentation.js">
 
 </script>
+<!-- <script>
+const swiper = new Swiper('.swiper-container', {
+  // Optional parameters
+  direction: 'vertical',
+  loop: true,
+
+  // If we need pagination
+  pagination: {
+    el: '.swiper-pagination',
+  },
+
+  // Navigation arrows
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+
+  // And if we need scrollbar
+  scrollbar: {
+    el: '.swiper-scrollbar',
+  },
+});</script> -->

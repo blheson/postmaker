@@ -6,4 +6,5 @@ assets/fonts
 assets/css/bootstrap.min.css
 assets/css/font-awesome.min.css
 vendor
+*.deact
 composer.json

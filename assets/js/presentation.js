@@ -1,4 +1,4 @@
-const defaultData = {
+let defaultData = {
     page: 0,
     getPage: function () {
         return this.page
@@ -7,16 +7,28 @@ const defaultData = {
     content: null,
     back: null,
     cachePage: 1,
-    cache: []
+    cache: [],
+    formStatus: 'add',
+    getSection: (section) => {
+        section = section.toLowerCase()
+        return {
+            section,
+            'imgSrc': section == 'front' ? imageDefault.front() : (section == 'content' ? imageDefault.content() : imageDefault.back()),
+            'text': section == 'front' ? 'THIS WILL BE THE TITLE OF THE CAROUSEL' : (section == 'content' ? 'This will be where the content will go. You can structure your content per page' : 'Kindly save and share')
+        }
+    }
 }
+
 const uiCtrl = {
 
     nextButton: document.querySelector(".next"),
-    pageCounter: document.querySelector(".page-box"),
+    formTitle: document.querySelector(".form_title"),
+    pageCounter: document.querySelector(".page_box"),
     textarea: document.querySelector("textarea"),
     textarea_label: document.querySelector(".textarea_label"),
     workingImg: document.querySelector(".working_img img"),
-    currentPageDesign: () => document.querySelector(`img.renderedpage_${defaultData.page}`),
+    downloadBox: document.querySelector(".download_box"),
+    currentPageDesign: () => document.querySelector(`img.rendered_page_${defaultData.page}`),
     // render: {
     //     front: document.querySelector(".render .front_render"),
     //     content: document.querySelector(".render .content_render"),
@@ -34,6 +46,7 @@ const form = {
             body,
             section: body.querySelector("select[name=section]"),
             font: body.querySelector("select[name=font]"),
+            text: body.querySelector("textarea"),
             title: body.querySelector("textarea[name=front]"),
             content: body.querySelector("textarea[name=content]"),
             back: body.querySelector("textarea[name=back]"),
@@ -59,11 +72,18 @@ const form = {
 
         switch (section) {
             case 'front':
+                if (form.group().text.value.length > 50) {
+                    middleware.info('Too many characters')
+                    helper.waitFetch(false)
+                    return;
+                }
                 fd = frontSection.formInput(fd, target, defaultData.front)
                 break;
             case 'content':
-                if (form.group().content.value.length > 128) {
-                    alert('Not allowed')
+                if (form.group().text.value.length > 128) {
+                    middleware.info('Too many characters')
+                    helper.waitFetch(false)
+
                     return;
                 }
                 fd = contentSection.formInput(fd, target, defaultData.content)
@@ -82,7 +102,7 @@ const form = {
 
         fd = this.prepareForm(fd, formDom)
         if (!fd) return
-        let request = new Request(`${dir}api/process_slide.php`, {
+        let request = new Request(`${dir}api/slide/store.php`, {
             method: 'post',
             body: fd
         });
@@ -97,90 +117,93 @@ const form = {
         ).then(result => {
 
             if (result.error) {
-                middleware.info(result.message)
-                return
+                throw new Error(result.message);
             }
             let img = document.createElement('img');
-            let dPage = defaultData.page + 1
+            let dPage = defaultData.page
+            // let dPage = defaultData.page + 1
             img.dataset.page = dPage
-            img.classList.add('renderedImg', `renderedpage_${dPage}`)
+            img.classList.add('foodslide_rendered_img', `rendered_page_${dPage}`)
 
             img.setAttribute('width', '100%');
             let imgSrc = dir + result.message;
             img.src = imgSrc
-            helper.waitFetch(false)
+
             defaultData.cache[dPage] = {
                 imgSrc,
-                'section': form.group().section.value
+                'section': form.group().section.value,
+                'text': form.group().text.value
             }
 
-            if (uiCtrl.currentPageDesign() !== null && uiCtrl.currentPageDesign().dataset.page == dPage) {
-                uiCtrl.currentPageDesign().src = imgSrc
-                middleware.info('Page wasnt changed, but design updated', 'success')
-                uiCtrl.workingImg.src = imgSrc
-                return
-            }
+
+            // defaultData.cache[dPage].text = form.group().title.value
+
             if (formDom.querySelector('select[name=section]').value == 'front') {
 
-                defaultData.cache[dPage].front = form.group().title.value
+
                 uiCtrl.workingImg.src = dir + imageDefault.front()
                 // defaultData.front = result.message;
-                uiCtrl.render.prepend(img)
+                // uiCtrl.render.prepend(img)
             }
             if (formDom.querySelector('select[name=section]').value == 'content') {
-                defaultData.cache[dPage].content = form.group().content.value;
+
                 // defaultData.content = result.message;
                 img.classList.add('content_img_render');
                 uiCtrl.workingImg.src = dir + imageDefault.content();
             }
             if (formDom.querySelector('select[name=section]').value == 'back') {
-                defaultData.cache[dPage].back = form.group().back.value
-
-                // if (defaultData.back) {//front image set
-
-                //     defaultData.back = result.message;
-                //     uiCtrl.render.back.querySelector('img').src = imgSrc
-                //     return
-                // }
                 uiCtrl.workingImg.src = dir + imageDefault.back()
-
-
-                defaultData.back = imgSrc;
                 img.classList.add('back_img_render');
             }
 
             uiCtrl.render.appendChild(img)
-            defaultData.page += 1
+
             uiCtrl.pageCounter.innerText = defaultData.getPage()
             middleware.info(`Design ${defaultData.page} Successfuly saved`, 'success')
+            helper.waitFetch(false)
+            if (document.querySelector('#download_btn')) return
+            let a = document.createElement('a');
+            a.innerText = 'download'
+            a.id = 'download_btn'
+            a.classList.add('download_btn', 'btn', 'btn-primary')
+            uiCtrl.downloadBox.appendChild(a)
         }).catch(error => {
+            defaultData.page -= 1
+
             helper.waitFetch(false)
             middleware.info(error)
-
         })
-        helper.waitFetch(false)
-
     }
 }
-
+const section = {
+    select: (page, createStatus = false, section = 'front') => {
+        console.log(defaultData.cache)
+        let sectionText = createStatus ? section : defaultData.cache[page].section
+        uiCtrl.indicator.innerText = `${sectionText} cover`;
+        uiCtrl.workingImg.src = createStatus ? dir + defaultData.getSection(section).imgSrc : dir + defaultData.cache[page].imgSrc
+        uiCtrl.textarea_label.innerText = sectionText;
+        uiCtrl.textarea.value = createStatus ? defaultData.getSection(section).text : defaultData.cache[page].text
+        form.group().section.value = sectionText
+        let status = createStatus ? 'add' : 'edit'
+        uiCtrl.formTitle.innerText = `Fill form to ${status} design`
+    }
+}
 
 const helper = {
     waitFetch: (status) => {
-        //    console.log(status)
         form.group().section.disabled = status
         uiCtrl.nextButton.disabled = status
     }
-
 }
 const frontSection = {
-    select: () => {
-        uiCtrl.indicator.innerText = `Front cover`;
-        uiCtrl.workingImg.src = dir + imageDefault.front()
-        uiCtrl.textarea_label.innerText = "Title";
-        uiCtrl.textarea.name = "front";
-        uiCtrl.textarea.value = "THIS WILL BE THE TITLE OF THE CAROUSEL";
-    },
-    formInput: (fd, formDom, frontImg) => {
+    // select: (title = null) => {
+    //     uiCtrl.indicator.innerText = 'Front cover';
+    //     uiCtrl.workingImg.src = dir + imageDefault.front()
+    //     uiCtrl.textarea_label.innerText = "Front";
+    //     uiCtrl.textarea.name = "front";
+    //     uiCtrl.textarea.value = title ? title : "THIS WILL BE THE TITLE OF THE CAROUSEL";
+    // },
+    formInput: (fd) => {
         fd.append('title', form.group().title.value)
         fd.append('newImagePath', form.group().newImagePath.value)
         fd.append('frontImage', form.group().frontImage.value)
@@ -188,20 +211,20 @@ const frontSection = {
     }
 }
 const contentSection = {
-    select: () => {
-        uiCtrl.indicator.innerText = 'Content section';
+    // select: () => {
+    //     uiCtrl.indicator.innerText = 'Content section';
 
-        uiCtrl.workingImg.src = dir + imageDefault.content()
+    //     uiCtrl.workingImg.src = dir + imageDefault.content()
 
-        uiCtrl.textarea_label.innerText = "Content";
-        uiCtrl.textarea.name = "content";
-        uiCtrl.textarea.value = "This will be where the content will go. You can structure your content per page";
+    //     uiCtrl.textarea_label.innerText = "Content";
+    //     uiCtrl.textarea.name = "content";
+    //     uiCtrl.textarea.value = "This will be where the content will go. You can structure your content per page";
 
 
-    },
+    // },
     formInput: (fd, formDom, contentImg) => {
 
-        let content = form.group().content.value;
+        let content = form.group().text.value;
         if (content.length > 110) {
             middleware.info('Error: kindly, reduce the number of words')
             helper.waitFetch(false)
@@ -209,55 +232,52 @@ const contentSection = {
         }
 
         // fd.append('designedContentImg', contentImg)
-        fd.append('content', form.group().content.value)
+        fd.append('content', form.group().text.value)
         fd.append('contentImage', form.group().contentImage.value)
         return fd;
     }
 }
 const backSection = {
-    select: () => {
-        uiCtrl.indicator.innerText = `Back cover`;
-        // form.group().title.style.display = "none";
-        // form.group().content.style.display = "block";
-        uiCtrl.workingImg.src = dir + imageDefault.back()
+    // select: () => {
+    //     uiCtrl.indicator.innerText = `Back cover`;
+    //     // form.group().title.style.display = "none";
+    //     // form.group().content.style.display = "block";
+    //     uiCtrl.workingImg.src = dir + imageDefault.back()
 
-        uiCtrl.textarea_label.innerText = "Back Text";
-        uiCtrl.textarea.value = "Kindly save and share";
-        uiCtrl.textarea.name = "back";
-    },
+    //     uiCtrl.textarea_label.innerText = "Back";
+    //     uiCtrl.textarea.value = "Kindly save and share";
+    //     uiCtrl.textarea.name = "back";
+    // },
     formInput: (fd, formDom, backImg) => {
         // fd.append('backImg', backImg)
         fd.append('backImage', form.group().backImage.value)
-        fd.append('content', form.group().back.value)
+        fd.append('content', form.group().text.value)
         return fd;
     }
 }
-const change_content = function () {
-
-    switch (this.value) {
-        case 'content':
-            contentSection.select();
-            break;
-        case 'back':
-            backSection.select();
-            break;
-        case 'front':
-            frontSection.select();
-            break;
-    }
+const change_content = function (e) {
+    section.select(null, true, e.value)
+}
+const edit = function (page) {
+    defaultData.formStatus = 'edit'
+    section.select(page)
 }
 uiCtrl.nextButton.addEventListener('click', (e) => {
-    helper.waitFetch(true)
-    form.process_form(form.group().body);
-   
 
-    if (form.group().section.value == 'front' && defaultData.getPage() == 2) {
-        contentSection.select();
-        form.group().section.value = 'content'
-    }
+    helper.waitFetch(true)
+    defaultData.page += 1
+    form.process_form(form.group().body);
+
+
+    // if (form.group().section.value == 'front' && defaultData.getPage() == 2) {
+    //     contentSection.select();
+    //     form.group().section.value = 'content'
+    // }
 });
 
-form.group().section.addEventListener('change', change_content);
+form.group().section.addEventListener('change', (e) => {
+    change_content(e.target)
+});
 form.group().body.addEventListener('submit', (e) => {
     helper.waitFetch(true)
     e.preventDefault();
@@ -268,19 +288,18 @@ form.group().body.addEventListener('submit', (e) => {
 //if page 2 and front, change to page 1
 //if page 1 and other pages available, get other page next
 document.querySelector('.render').addEventListener('click', (e) => {
-    console.log(e.target)
-    console.log(e.target.dataset.page)
-    console.log(defaultData.cache)
-    e.path
-    e.target
-    e.srcElement
-    e.attributes
-    e.classList
-    e.currentSrc
-    e.dataset
-    e.offsetParent
-    e.nextSibling
+    section.select(e.target.dataset.page)
+    // console.log(e.target)
+    // console.log(e.target.dataset.page)
+    // console.log(defaultData.cache)
+    // e.path
+    // e.target
+    // e.srcElement
+    // e.attributes
+    // e.classList
+    // e.currentSrc
+    // e.dataset
+    // e.offsetParent
+    // e.nextSibling
 })
-document.querySelectorAll('img.renderedImg').forEach((e) => {
-    console.log(e)
-})
+ 

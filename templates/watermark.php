@@ -31,10 +31,10 @@ include $dir . "includes/header.php";
             <!-- <div class="col-md-4">
                 <h3 class="title template">Template <i class="fa fa-caret-down pull-right"></i></h3>
                 <div class="default_template" style="display: none;">
-                    <img src="<?= $dir . $design_template; ?>" alt="<?= basename($design_template); ?>">
+                    <img src="<?= $dir . $design_template; ?>" alt="<?= basename($design_template); ?>" loading="lazy">
                 </div>
             </div>-->
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <?= helper::showError() ?>
                 <?= helper::showSuccess() ?>
                 <h3 class="title">Fill form to edit design</h3>
@@ -69,21 +69,19 @@ include $dir . "includes/header.php";
                 </div>
             </div>
 
-            <div id="render" class="col-md-7">
+            <div id="render" class="col-md-6">
 
                 <h3 class="title">Final Render</h3>
                 <!-- render finished image -->
          
                     <div>
                         <div class="render">
-                        <img src="<?= $dir . $design_template; ?>" alt="<?= basename($design_template); ?>">
+                        <img src="<?= $dir . $design_template; ?>" alt="<?= basename($design_template); ?>" loading="lazy">
                         </div>
 
                         <div class="form-group">
-                            <div>
-                                <a href="" download><button class="btn btn-submit">
-                                        Download Image
-                                    </button></a>
+                            <div class="downloadBox">
+                                 
 
                             </div>
 
@@ -100,7 +98,7 @@ echo "<script>let  dir = '$dir'</script>";
 <script src="<?= $dir ?>assets/js/helper.js">
 
 </script>
-<script src="<?= $dir ?>assets/js/price-tag.js">
+<script src="<?= $dir ?>assets/js/watermark.js">
 
 </script>
 <?php
