@@ -16,7 +16,8 @@ let defaultData = {
             'imgSrc': section == 'front' ? imageDefault.front() : (section == 'content' ? imageDefault.content() : imageDefault.back()),
             'text': section == 'front' ? 'THIS WILL BE THE TITLE OF THE CAROUSEL' : (section == 'content' ? 'This will be where the content will go. You can structure your content per page' : 'Kindly save and share')
         }
-    }
+    },
+    rootDir:dir
 }
 
 const uiCtrl = {
@@ -116,60 +117,30 @@ const form = {
         }
         ).then(result => {
 
-            if (result.error) {
+            if (result.error) 
                 throw new Error(result.message);
-            }
-            let img = document.createElement('img');
+            
             let dPage = defaultData.page
-            // let dPage = defaultData.page + 1
-            img.dataset.page = dPage
-            img.classList.add('foodslide_rendered_img', `rendered_page_${dPage}`)
-
-            img.setAttribute('width', '100%');
-            let imgSrc = dir + result.message;
-            img.src = imgSrc
-
+            
             defaultData.cache[dPage] = {
-                imgSrc,
+                'imgSrc':defaultData.rootDir + result.message,
                 'section': form.group().section.value,
                 'text': form.group().text.value
             }
 
+            uiCtrl.workingImg.src = formDom.querySelector('select[name=section]').value == 'front' ? dir + imageDefault.front():(formDom.querySelector('select[name=section]').value == 'content' ? dir + imageDefault.content(): dir + imageDefault.back())
 
-            // defaultData.cache[dPage].text = form.group().title.value
+            let img = helper.renderImg.imageTag(dPage,result.message)
+            uiCtrl.render.appendChild(helper.renderImg.imageBox(img))
 
-            if (formDom.querySelector('select[name=section]').value == 'front') {
+            uiCtrl.pageCounter.innerText = defaultData.getPage();
 
-
-                uiCtrl.workingImg.src = dir + imageDefault.front()
-                // defaultData.front = result.message;
-                // uiCtrl.render.prepend(img)
-            }
-            if (formDom.querySelector('select[name=section]').value == 'content') {
-
-                // defaultData.content = result.message;
-                img.classList.add('content_img_render');
-                uiCtrl.workingImg.src = dir + imageDefault.content();
-            }
-            if (formDom.querySelector('select[name=section]').value == 'back') {
-                uiCtrl.workingImg.src = dir + imageDefault.back()
-                img.classList.add('back_img_render');
-            }
-
-            uiCtrl.render.appendChild(img)
-
-            uiCtrl.pageCounter.innerText = defaultData.getPage()
             middleware.info(`Design ${defaultData.page} Successfuly saved`, 'success')
+
             helper.waitFetch(false)
-            if (document.querySelector('#download_btn')) return
-            let a = document.createElement('a');
-            a.innerText = 'download'
-            a.id = 'download_btn'
-            a.classList.add('download_btn', 'btn', 'btn-primary')
-            uiCtrl.downloadBox.appendChild(a)
+
         }).catch(error => {
             defaultData.page -= 1
-
             helper.waitFetch(false)
             middleware.info(error)
         })
@@ -186,6 +157,9 @@ const section = {
         form.group().section.value = sectionText
         let status = createStatus ? 'add' : 'edit'
         uiCtrl.formTitle.innerText = `Fill form to ${status} design`
+    },
+    changeContent : function (e) {
+        this.select(null, true, e.value)
     }
 }
 
@@ -193,7 +167,38 @@ const helper = {
     waitFetch: (status) => {
         form.group().section.disabled = status
         uiCtrl.nextButton.disabled = status
-    }
+    },
+    renderImg:{
+        createEditTool:(src)=>{
+            let div= document.createElement('div')
+            div.setAttribute('class','edit_tool')
+            let span= document.createElement('span')
+            span.innerText = 'del'
+            let a= document.createElement('a')
+            a.innerText = 'dwnl'
+            a.href=src
+            a.setAttribute('download','image')
+            div.appendChild(span)
+            div.appendChild(a)
+            return div
+        },
+        imageBox:function(img){
+            let div = document.createElement('div');
+            div.setAttribute('class','foodslide_rendered_block')
+            div.appendChild(img)
+            div.appendChild(this.createEditTool(img.src))
+            return div
+        },
+        imageTag:function (page,src) {
+            let img = document.createElement('img');          
+            img.dataset.page = page
+            img.classList.add('foodslide_rendered_img', `rendered_page_${page}`)
+            img.setAttribute('width', '100%');
+            let imgSrc = defaultData.rootDir + src;
+            img.src = imgSrc
+            return img
+        }   
+    }    
 }
 const frontSection = {
     // select: (title = null) => {
@@ -255,9 +260,7 @@ const backSection = {
         return fd;
     }
 }
-const change_content = function (e) {
-    section.select(null, true, e.value)
-}
+ 
 const edit = function (page) {
     defaultData.formStatus = 'edit'
     section.select(page)
@@ -276,7 +279,7 @@ uiCtrl.nextButton.addEventListener('click', (e) => {
 });
 
 form.group().section.addEventListener('change', (e) => {
-    change_content(e.target)
+    section.changeContent(e.target)
 });
 form.group().body.addEventListener('submit', (e) => {
     helper.waitFetch(true)
@@ -302,4 +305,16 @@ document.querySelector('.render').addEventListener('click', (e) => {
     // e.offsetParent
     // e.nextSibling
 })
- 
+             // if (formDom.querySelector('select[name=section]').value == 'front') {
+            //     uiCtrl.workingImg.src = dir + imageDefault.front()
+            // }else if (formDom.querySelector('select[name=section]').value == 'content') {
+            //     uiCtrl.workingImg.src = dir + imageDefault.content();
+            // }else {
+            //     uiCtrl.workingImg.src = dir + imageDefault.back()
+            // }
+                        // if (document.querySelector('#download_btn')) return
+            // let a = document.createElement('a');
+            // a.innerText = 'download'
+            // a.id = 'download_btn'
+            // a.classList.add('download_btn', 'btn', 'btn-primary')
+            // uiCtrl.downloadBox.appendChild(a)

@@ -206,7 +206,7 @@ include $dir . "includes/footer.php";
 <script src="<?= $dir ?>assets/js/helper.js">
 
 </script>
-<script src="<?= $dir ?>assets/js/presentation.js">
+<script src="<?= $dir ?>assets/js/presentation.js?v=1.0.0">
 
 </script>
 <!-- <script>

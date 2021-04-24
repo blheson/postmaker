@@ -11,7 +11,10 @@ section.template .default_template > img, section.template .render > img{
     margin-bottom: 0.5rem;
 }
 img.foodslide_rendered_img{
-max-width: 110px;
+max-width: 140px;
+}
+.foodslide_rendered_block:hover .edit_tool{
+    display: block
 }
 section.template .default_template img:hover, section.template .render img:hover{
     box-shadow:-2px -2px 14px 4px #162a3e1a;
@@ -30,8 +33,8 @@ section.template .title_box{
 }
 
 .row3 {
-    grid-auto-columns: 110px;
-    grid-auto-rows: 110px;
+    grid-auto-columns: 140px;
+    grid-auto-rows: 140px;
     display: grid;
     width: 340px;
     gap: 5px;
@@ -39,6 +42,18 @@ section.template .title_box{
 }
 .container{
     max-width: 1300px;
+}
+.edit_tool{
+    display: none;
+    width: 80px;
+    position: relative;
+    left: calc(50% - 40px);
+    color: #fff;
+    top: -2rem;
+    background: #0000009e;
+    padding: 0.5rem;
+    border-radius: 5px;
+    font-size: 10px;
 }
 @keyframes fadeOut {
     0% {
