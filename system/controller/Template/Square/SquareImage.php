@@ -46,7 +46,7 @@ class SquareImage extends square
         $defaultImage = $post['defaultImage'];
 
         //SET THE NEW DESIGN TO A NEW PATH
-        $newImagePath = $this->create_image()->createBlankImage($defaultImage, $post['newImagePath']);
+        $newImagePath = $this->createImage()->createBlankImage($defaultImage, $post['newImagePath']);
 
 
         //SORT IMAGE ARRAY     

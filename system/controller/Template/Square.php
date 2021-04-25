@@ -15,14 +15,14 @@ class Square
     public $model;
     public $color;
     public $imageDimension;
-    public $create_image;
+    public $createImage;
 
     public function __construct()
     {
         $this->font = new font;
         $this->color = new color;
         $this->imageDimension = new imageDimension;
-        $this->create_image = assets::create_image();
+        $this->createImage = assets::createImage();
     }
     /** 
      * Pretty print data
@@ -35,9 +35,9 @@ class Square
         var_dump($data);
         echo "</pre>";
     }
-    public function create_image()
+    public function createImage()
     {
-        return $this->create_image;
+        return $this->createImage;
     }
     public function water_mark()
     {

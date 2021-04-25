@@ -46,7 +46,7 @@ class CreateImage
                 $_SESSION['postmakerError'] = 'upload a valid logo';
                 return false;
             } else {
-                $logo_link = $this->upload_image($logo, $link, ['width' => null, 'height' => $logo_height]);
+                $logo_link = $this->uploadImage($logo, $link, ['width' => null, 'height' => $logo_height]);
                 if (!$logo_link) {
                     $_SESSION['postmakerError'] = "Logo not successfully uploaded";
                     return false;
@@ -76,7 +76,7 @@ class CreateImage
                 $_SESSION['postmakerError'] = 'Upload a valid picture';
                 return false;
             } else {
-                $product_image = $this->upload_image($image, $link);
+                $product_image = $this->uploadImage($image, $link);
                 if (!$product_image) {
                     $_SESSION['postmakerError'] = "Image not successfully uploaded";
                     return false;
@@ -95,7 +95,7 @@ class CreateImage
         //         $_SESSION['postmakerError'] = 'upload a valid logo';
         //         return false;
         //     } else {
-        //         $logo_link = $this->upload_image($logo, $link, ['width' => null, 'height' => $logo_height]);
+        //         $logo_link = $this->uploadImage($logo, $link, ['width' => null, 'height' => $logo_height]);
         //         if (!$logo_link) {
         //             $_SESSION['postmakerError'] = "Logo not successfully uploaded";
         //             return false;
@@ -169,7 +169,7 @@ class CreateImage
      *  indexes /n are width and height
      * @return string Path to the uploaded image
      */
-    public function upload_image($file, $link, $dimension = null)
+    public function uploadImage($file, $link, $dimension = null)
     {
 
         $image_data = $this->checkImage($file, $link);
@@ -218,7 +218,7 @@ class CreateImage
      * 
      * @return resource $im
      */
-    public function create_image_resource(string $file)
+    public function createImageResource(string $file)
     {
  
         $image_detail = getimagesize($file);

@@ -10,7 +10,7 @@ use Exception;
 
 class Watermark
 {
-    public $create_image;
+    public $createImage;
     public $imageDimension;
     public $logo_dimension;
     public $dimension_instance;
@@ -20,10 +20,10 @@ class Watermark
      * 
      * @return CreateImage  
      */
-    public function create_image()
+    public function createImage()
     {
 
-        return assets::create_image();
+        return assets::createImage();
     }
     /**
      * Create an instance for CreateImage
@@ -63,7 +63,7 @@ class Watermark
         // extract to get $x and $y variable
         extract($position);
 
-        $im = $this->create_image()->create_image_resource($dst);
+        $im = $this->createImage()->createImageResource($dst);
 
         imagecopy($im, $stampResource, $x, $y, 0, 0, $logo_width, $logo_height);
 
@@ -87,7 +87,7 @@ class Watermark
      * @param array $cord
      * @return string link to Water mark image
      */
-    public function logo_on_product($image, $logo, $cord, $logo_width = 200, $margin = 30): ?string
+    public function logoOnProduct($image, $logo, $cord, $logo_width = 200, $margin = 30): ?string
     {
         // $link = [];
         // $link['short'] = 'render/';
@@ -104,7 +104,7 @@ class Watermark
                 return null;
             }
 
-            $product_image = $this->create_image()->upload_image($image, $link);
+            $product_image = $this->createImage()->uploadImage($image, $link);
 
             if (!$product_image) {
 
@@ -114,7 +114,7 @@ class Watermark
             //Process Logo
   
 
-            $logo_link = $this->create_image()->upload_image($logo, $link, ['width' => $logo_width, 'height' => null]);
+            $logo_link = $this->createImage()->uploadImage($logo, $link, ['width' => $logo_width, 'height' => null]);
 
             if (!$logo_link) {
                 return null;
@@ -167,7 +167,7 @@ class Watermark
         // extract to get $x and $y variable
         extract($position);
  
-        $im = $this->create_image()->create_image_resource($dst);
+        $im = $this->createImage()->createImageResource($dst);
 
         // Create stamp image manually from GD
         $stamp = imagecreatefrompng($logo);

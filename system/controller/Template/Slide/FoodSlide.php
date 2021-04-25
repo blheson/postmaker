@@ -53,13 +53,13 @@ class FoodSlide extends Square
     }
     private function upload_logo($data)
     {
-        $_SESSION['savedLogo']  = $this->create_image()->logo_upload($data, 100, constant::rootDir() . '/');
+        $_SESSION['savedLogo']  = $this->createImage()->logo_upload($data, 100, constant::rootDir() . '/');
 
         return $_SESSION['savedLogo'];
     }
     private function duplicate($source, $dst, $ext = 'png')
     {
-        return $this->create_image()->createBlankImage($source, $dst, $ext);
+        return $this->createImage()->createBlankImage($source, $dst, $ext);
     }
     /**
      * Design front section
@@ -69,7 +69,7 @@ class FoodSlide extends Square
     private function front_section(array $post)
     {
 
-        // $logo_link = $this->create_image()->createBlankImage(self::REL_LINK . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $post['newImagePath']);
+        // $logo_link = $this->createImage()->createBlankImage(self::REL_LINK . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'], $post['newImagePath']);
         $link = constant::rootDir() . '/';
 
      
@@ -201,7 +201,7 @@ $logo_link = $link . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'];
         $defaultImage = $post['defaultImage'];
 
         //SET THE NEW DESIGN TO A NEW PATH
-        $newImagePath = $this->create_image()->createBlankImage($defaultImage, $post['newImagePath']);
+        $newImagePath = $this->createImage()->createBlankImage($defaultImage, $post['newImagePath']);
 
 
         //SORT IMAGE ARRAY     

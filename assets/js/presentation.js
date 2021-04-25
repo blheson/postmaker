@@ -17,7 +17,7 @@ let defaultData = {
             'text': section == 'front' ? 'THIS WILL BE THE TITLE OF THE CAROUSEL' : (section == 'content' ? 'This will be where the content will go. You can structure your content per page' : 'Kindly save and share')
         }
     },
-    rootDir:dir
+    rootDir: dir
 }
 
 const uiCtrl = {
@@ -117,20 +117,20 @@ const form = {
         }
         ).then(result => {
 
-            if (result.error) 
+            if (result.error)
                 throw new Error(result.message);
-            
+
             let dPage = defaultData.page
-            
+
             defaultData.cache[dPage] = {
-                'imgSrc':defaultData.rootDir + result.message,
+                'imgSrc': defaultData.rootDir + result.message,
                 'section': form.group().section.value,
                 'text': form.group().text.value
             }
 
-            uiCtrl.workingImg.src = formDom.querySelector('select[name=section]').value == 'front' ? dir + imageDefault.front():(formDom.querySelector('select[name=section]').value == 'content' ? dir + imageDefault.content(): dir + imageDefault.back())
+            uiCtrl.workingImg.src = formDom.querySelector('select[name=section]').value == 'front' ? dir + imageDefault.front() : (formDom.querySelector('select[name=section]').value == 'content' ? dir + imageDefault.content() : dir + imageDefault.back())
 
-            let img = helper.renderImg.imageTag(dPage,result.message)
+            let img = helper.renderImg.imageTag(dPage, result.message)
             uiCtrl.render.appendChild(helper.renderImg.imageBox(img))
 
             uiCtrl.pageCounter.innerText = defaultData.getPage();
@@ -148,7 +148,7 @@ const form = {
 }
 const section = {
     select: (page, createStatus = false, section = 'front') => {
-        console.log(defaultData.cache)
+
         let sectionText = createStatus ? section : defaultData.cache[page].section
         uiCtrl.indicator.innerText = `${sectionText} cover`;
         uiCtrl.workingImg.src = createStatus ? dir + defaultData.getSection(section).imgSrc : dir + defaultData.cache[page].imgSrc
@@ -158,7 +158,7 @@ const section = {
         let status = createStatus ? 'add' : 'edit'
         uiCtrl.formTitle.innerText = `Fill form to ${status} design`
     },
-    changeContent : function (e) {
+    changeContent: function (e) {
         this.select(null, true, e.value)
     }
 }
@@ -168,37 +168,39 @@ const helper = {
         form.group().section.disabled = status
         uiCtrl.nextButton.disabled = status
     },
-    renderImg:{
-        createEditTool:(src)=>{
-            let div= document.createElement('div')
-            div.setAttribute('class','edit_tool')
-            let span= document.createElement('span')
+    renderImg: {
+        createEditTool: (src) => {
+            let div = document.createElement('div')
+            div.setAttribute('class', 'edit_tool')
+            let span = document.createElement('span')
             span.innerText = 'del'
-            let a= document.createElement('a')
+            span.setAttribute('style', 'padding-right:5px')
+            span.setAttribute('class', 'delete_image')
+            let a = document.createElement('a')
             a.innerText = 'dwnl'
-            a.href=src
-            a.setAttribute('download','image')
+            a.href = src
+            a.setAttribute('download', 'image')
             div.appendChild(span)
             div.appendChild(a)
             return div
         },
-        imageBox:function(img){
+        imageBox: function (img) {
             let div = document.createElement('div');
-            div.setAttribute('class','foodslide_rendered_block')
+            div.setAttribute('class', 'foodslide_rendered_block')
             div.appendChild(img)
             div.appendChild(this.createEditTool(img.src))
             return div
         },
-        imageTag:function (page,src) {
-            let img = document.createElement('img');          
+        imageTag: function (page, src) {
+            let img = document.createElement('img');
             img.dataset.page = page
             img.classList.add('foodslide_rendered_img', `rendered_page_${page}`)
             img.setAttribute('width', '100%');
             let imgSrc = defaultData.rootDir + src;
             img.src = imgSrc
             return img
-        }   
-    }    
+        }
+    }
 }
 const frontSection = {
     // select: (title = null) => {
@@ -260,11 +262,8 @@ const backSection = {
         return fd;
     }
 }
- 
-const edit = function (page) {
-    defaultData.formStatus = 'edit'
-    section.select(page)
-}
+
+
 uiCtrl.nextButton.addEventListener('click', (e) => {
 
     helper.waitFetch(true)
@@ -287,11 +286,37 @@ form.group().body.addEventListener('submit', (e) => {
     form.process_form(e.target)
 })
 
-//if start page 1 should be page 2 **
+const crud = {
+    edit: function (page) {
+        defaultData.formStatus = 'edit'
+        section.select(page)
+    },
+    delete: async function (src) {
+        // fetch().then().then().catch()
+        let as = await fetch(`${dir}api/slide/delete.php?src=${src}`);
+        let res = await as
+
+        let result = res.json();
+        return result;
+    }
+}
+
+
+//if start, page 1 should be page 2 **
 //if page 2 and front, change to page 1
 //if page 1 and other pages available, get other page next
 document.querySelector('.render').addEventListener('click', (e) => {
-    section.select(e.target.dataset.page)
+    if (e.target.classList.contains('foodslide_rendered_img'))
+        section.select(e.target.dataset.page)
+
+    if (e.target.classList.contains('delete_image')) {
+
+        crud.delete(e.target.parentElement.querySelector('a').href).then(result => {
+            if (result.error) return
+            if (confirm('This action is not undoable'))
+                e.target.parentElement.parentElement.remove(e.target)
+        })
+    }
     // console.log(e.target)
     // console.log(e.target.dataset.page)
     // console.log(defaultData.cache)

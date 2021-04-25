@@ -10,7 +10,7 @@ class Assets
 {
     const DEFAULT_IMAGE_WIDTH = 1000;
     const DEFAULT_IMAGE_HEIGHT = 1000;
-    public static $create_image;
+    public static $createImage;
     public static $imageDimension;
     /**
      * Create an instance for CreateImage
@@ -30,13 +30,13 @@ class Assets
      * 
      * @return CreateImage  
      */
-    public static function create_image()
+    public static function createImage()
     {
         
-        if (!isset(self::$create_image))
-        self::$create_image = new CreateImage;
+        if (!isset(self::$createImage))
+        self::$createImage = new CreateImage;
 
-        return self::$create_image;
+        return self::$createImage;
     }
     /**
      * Create a rectangle
@@ -49,13 +49,14 @@ class Assets
     public static function create_rectangle($path, $dimension, $color)
     {
         list($x1, $x2, $y1, $y2) = $dimension;
-        $create_image = self::create_image();
-        $im = $create_image->create_image_resource($path);
+        $createImage = self::createImage();
+        $im = $createImage->createImageResource($path);
         $col = Color::get_color($im, $color);
         imagefilledrectangle($im, $x1, $y1, $x2, $y2, $col);
         imagepng($im, $path);
         imagedestroy($im);
-        unset($create_image);
+        unset($createImage);
         return $path;
     }
+    
 }

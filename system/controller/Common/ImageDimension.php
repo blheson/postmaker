@@ -11,7 +11,7 @@ class ImageDimension
 {
     const DEFAULT_IMAGE_WIDTH = 1000;
     const DEFAULT_IMAGE_HEIGHT = 1000;
-    public $create_image;
+    public $createImage;
 
 
     /**
@@ -19,9 +19,9 @@ class ImageDimension
      * 
      * @return CreateImage  
      */
-    public function create_image()
+    public function createImage()
     {
-        return assets::create_image();
+        return assets::createImage();
     }
     /**
      * Crop image into a squarea
@@ -40,7 +40,7 @@ class ImageDimension
             return $img_path;
         // list($logo_width, $logo_height) = getimagesize($logo);
         // $this->setLogoDimension($logo_width, $logo_height);
-        $create_image = $this->create_image();
+        $createImage = $this->createImage();
 
 
         // set scale to height assuming image is square
@@ -49,7 +49,7 @@ class ImageDimension
         // set scale if image is rectangle
         //Also check if width and height is less than @var $default
         if (($width < $default || $height < $default) && $width != $height) {
-            $im = $create_image->create_image_resource($img_path);
+            $im = $createImage->createImageResource($img_path);
             if ($width > $height) {
 
                 $scale = $height < $default ? $default : $height;
@@ -69,7 +69,7 @@ class ImageDimension
 
                 $this->resize_image($img_path, 1000 * $aspect_ratio);
             }
-            $im = $create_image->create_image_resource($img_path);
+            $im = $createImage->createImageResource($img_path);
         }
 
 

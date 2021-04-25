@@ -27,7 +27,7 @@ class PriceTag extends Square
     $watermark = $this->water_mark();
 
     // upload logo and product
-    $logo_product_link = $this->create_image()->logo_and_product_upload($post['product_details'], $post['logo_details'], 90);
+    $logo_product_link = $this->createImage()->logo_and_product_upload($post['product_details'], $post['logo_details'], 90);
 
     // crop image
     $product_image = $this->imageDimension()->crop($logo_product_link['product']);
@@ -64,7 +64,7 @@ class PriceTag extends Square
     );
 
     //copy asset into a new path
-    $new_asset = $this->create_image()->createBlankImage($asset_link, $newImagePath);
+    $new_asset = $this->createImage()->createBlankImage($asset_link, $newImagePath);
 
 
     //add asset to image
@@ -108,6 +108,6 @@ class PriceTag extends Square
     return $this->text_to_image($prepped_image2, $imageArray, $post['price'], $font_array);
 
     // SET THE NEW DESIGN TO A NEW PATH
-    // $newImagePath = $this->create_image()->createBlankImage($defaultImage, $post['newImagePath']);
+    // $newImagePath = $this->createImage()->createBlankImage($defaultImage, $post['newImagePath']);
   }
 }

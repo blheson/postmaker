@@ -10,7 +10,7 @@ $newImagePath = "assets/images/render/";
 $design_template = "assets/images/templates/watermark/product-watermark.png";
 
 if (isset($_POST['watermark'])) {
-    $raw =  $watermark->logo_on_product($_FILES['file'], $_FILES['logo'], $_POST['pos'], 100);
+    $raw =  $watermark->logoOnProduct($_FILES['file'], $_FILES['logo'], $_POST['pos'], 100);
     $image_link = $dir . helper::parseLink($raw);
 }
 include $dir . "includes/header.php";
