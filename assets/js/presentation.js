@@ -1,5 +1,7 @@
 let defaultData = {
     page: 0,
+    editIndex: 0,
+    imageDataIndex: 0,
     getPage: function () {
         return this.page
     },
@@ -29,15 +31,11 @@ const uiCtrl = {
     textarea_label: document.querySelector(".textarea_label"),
     workingImg: document.querySelector(".working_img img"),
     downloadBox: document.querySelector(".download_box"),
-    currentPageDesign: () => document.querySelector(`img.rendered_page_${defaultData.page}`),
-    // render: {
-    //     front: document.querySelector(".render .front_render"),
-    //     content: document.querySelector(".render .content_render"),
-    //     back: document.querySelector(".render .back_render"),
-    // },
+
     render: document.querySelector(".render"),
 
-    indicator: document.querySelector(".indicator")
+    indicator: document.querySelector(".indicator"),
+    currentPageDesign: () => document.querySelector(`img.rendered_page_${defaultData.imageDataIndex}`),
 }
 
 const form = {
@@ -97,7 +95,7 @@ const form = {
         }
         return fd;
     },
-    process_form: function (formDom) {
+    processForm: function (formDom) {
 
         let fd = new FormData();
 
@@ -107,43 +105,73 @@ const form = {
             method: 'post',
             body: fd
         });
-
-        fetch(request).then(response => {
-
-            if (response.status !== 200)
-                throw new Error(result.message);
-
-            return response.json()
-        }
-        ).then(result => {
-
+        crud.store(request).then(result => {
             if (result.error)
                 throw new Error(result.message);
 
-            let dPage = defaultData.page
+            let imageIndex = defaultData.formStatus == 'edit' ? defaultData.editIndex : defaultData.imageDataIndex
+            if (defaultData.formStatus == 'edit') {
 
-            defaultData.cache[dPage] = {
+                helper.renderImg.editImageTag(uiCtrl.currentPageDesign(), result.message)
+            } else {
+                let img = helper.renderImg.createImageTag(result.message)
+                uiCtrl.render.appendChild(helper.renderImg.imageBox(img))
+
+                uiCtrl.pageCounter.innerText = defaultData.getPage();
+            }
+            defaultData.cache[defaultData.imageIndex] = {
                 'imgSrc': defaultData.rootDir + result.message,
                 'section': form.group().section.value,
                 'text': form.group().text.value
             }
-
             uiCtrl.workingImg.src = formDom.querySelector('select[name=section]').value == 'front' ? dir + imageDefault.front() : (formDom.querySelector('select[name=section]').value == 'content' ? dir + imageDefault.content() : dir + imageDefault.back())
 
-            let img = helper.renderImg.imageTag(dPage, result.message)
-            uiCtrl.render.appendChild(helper.renderImg.imageBox(img))
-
-            uiCtrl.pageCounter.innerText = defaultData.getPage();
-
-            middleware.info(`Design ${defaultData.page} Successfuly saved`, 'success')
+            middleware.info(`Design ${defaultData.page} Successfully saved`, 'success')
 
             helper.waitFetch(false)
 
         }).catch(error => {
             defaultData.page -= 1
+            defaultData.imageDataIndex -= 1
             helper.waitFetch(false)
             middleware.info(error)
         })
+        // fetch(request).then(response => {
+
+        //     if (response.status !== 200)
+        //         throw new Error(result.message);
+
+        //     return response.json()
+        // }
+        // ).then(result => {
+
+        //     if (result.error)
+        //         throw new Error(result.message);
+
+        //     let dPage = defaultData.page
+
+        //     defaultData.cache[dPage] = {
+        //         'imgSrc': defaultData.rootDir + result.message,
+        //         'section': form.group().section.value,
+        //         'text': form.group().text.value
+        //     }
+
+        //     uiCtrl.workingImg.src = formDom.querySelector('select[name=section]').value == 'front' ? dir + imageDefault.front() : (formDom.querySelector('select[name=section]').value == 'content' ? dir + imageDefault.content() : dir + imageDefault.back())
+
+        //     let img = helper.renderImg.createImageTag(dPage, result.message)
+        //     uiCtrl.render.appendChild(helper.renderImg.imageBox(img))
+
+        //     uiCtrl.pageCounter.innerText = defaultData.getPage();
+
+        //     middleware.info(`Design ${defaultData.page} Successfuly saved`, 'success')
+
+        //     helper.waitFetch(false)
+
+        // }).catch(error => {
+        //     defaultData.page -= 1
+        //     helper.waitFetch(false)
+        //     middleware.info(error)
+        // })
     }
 }
 const section = {
@@ -191,10 +219,13 @@ const helper = {
             div.appendChild(this.createEditTool(img.src))
             return div
         },
-        imageTag: function (page, src) {
+        editImageTag: function (img, src) {
+            img.src = defaultData.rootDir + src
+        },
+        createImageTag: function (src) {
             let img = document.createElement('img');
-            img.dataset.page = page
-            img.classList.add('foodslide_rendered_img', `rendered_page_${page}`)
+            img.dataset.page = defaultData.imageDataIndex
+            img.classList.add('foodslide_rendered_img', `rendered_page_${defaultData.imageDataIndex}`)
             img.setAttribute('width', '100%');
             let imgSrc = defaultData.rootDir + src;
             img.src = imgSrc
@@ -203,13 +234,7 @@ const helper = {
     }
 }
 const frontSection = {
-    // select: (title = null) => {
-    //     uiCtrl.indicator.innerText = 'Front cover';
-    //     uiCtrl.workingImg.src = dir + imageDefault.front()
-    //     uiCtrl.textarea_label.innerText = "Front";
-    //     uiCtrl.textarea.name = "front";
-    //     uiCtrl.textarea.value = title ? title : "THIS WILL BE THE TITLE OF THE CAROUSEL";
-    // },
+
     formInput: (fd) => {
         fd.append('title', form.group().title.value)
         fd.append('newImagePath', form.group().newImagePath.value)
@@ -218,17 +243,7 @@ const frontSection = {
     }
 }
 const contentSection = {
-    // select: () => {
-    //     uiCtrl.indicator.innerText = 'Content section';
 
-    //     uiCtrl.workingImg.src = dir + imageDefault.content()
-
-    //     uiCtrl.textarea_label.innerText = "Content";
-    //     uiCtrl.textarea.name = "content";
-    //     uiCtrl.textarea.value = "This will be where the content will go. You can structure your content per page";
-
-
-    // },
     formInput: (fd, formDom, contentImg) => {
 
         let content = form.group().text.value;
@@ -245,16 +260,7 @@ const contentSection = {
     }
 }
 const backSection = {
-    // select: () => {
-    //     uiCtrl.indicator.innerText = `Back cover`;
-    //     // form.group().title.style.display = "none";
-    //     // form.group().content.style.display = "block";
-    //     uiCtrl.workingImg.src = dir + imageDefault.back()
 
-    //     uiCtrl.textarea_label.innerText = "Back";
-    //     uiCtrl.textarea.value = "Kindly save and share";
-    //     uiCtrl.textarea.name = "back";
-    // },
     formInput: (fd, formDom, backImg) => {
         // fd.append('backImg', backImg)
         fd.append('backImage', form.group().backImage.value)
@@ -267,37 +273,41 @@ const backSection = {
 uiCtrl.nextButton.addEventListener('click', (e) => {
 
     helper.waitFetch(true)
+    if (defaultData.formStatus == 'edit') {
+        form.processForm(form.group().body);
+        return
+    }
     defaultData.page += 1
-    form.process_form(form.group().body);
-
-
-    // if (form.group().section.value == 'front' && defaultData.getPage() == 2) {
-    //     contentSection.select();
-    //     form.group().section.value = 'content'
-    // }
+    defaultData.imageDataIndex += 1
+    form.processForm(form.group().body);
 });
 
 form.group().section.addEventListener('change', (e) => {
     section.changeContent(e.target)
 });
-form.group().body.addEventListener('submit', (e) => {
-    helper.waitFetch(true)
-    e.preventDefault();
-    form.process_form(e.target)
-})
+// form.group().body.addEventListener('submit', (e) => {
+//     helper.waitFetch(true)
+//     e.preventDefault();
+//     form.processForm(e.target)
+// })
 
 const crud = {
     edit: function (page) {
         defaultData.formStatus = 'edit'
         section.select(page)
     },
-    delete: async function (src) {
-        // fetch().then().then().catch()
-        let as = await fetch(`${dir}api/slide/delete.php?src=${src}`);
-        let res = await as
-
-        let result = res.json();
+    request: async (request) => {
+        let response = await fetch(request);
+        if (response.status !== 200)
+            throw new Error(result.message);
+        let result = response.json();
         return result;
+    },
+    delete: async function (request) {
+        return this.request(request)
+    },
+    store: async function (request) {
+        return this.request(request)
     }
 }
 
@@ -310,12 +320,22 @@ document.querySelector('.render').addEventListener('click', (e) => {
         section.select(e.target.dataset.page)
 
     if (e.target.classList.contains('delete_image')) {
+        if (confirm('This action cannot be undone')) {
+            let src = e.target.parentElement.querySelector('a').href
+            crud.delete(`${dir}api/slide/delete.php?src=${src}`).then(result => {
+                if (result.error)
+                    throw new Error(result.message)
 
-        crud.delete(e.target.parentElement.querySelector('a').href).then(result => {
-            if (result.error) return
-            if (confirm('This action is not undoable'))
+
                 e.target.parentElement.parentElement.remove(e.target)
-        })
+                middleware.info(result.message, 'success')
+                defaultData.page -= 1
+                uiCtrl.pageCounter.innerText = defaultData.page
+            }).catch(error => {
+                middleware.info(error.message)
+            })
+        }
+
     }
     // console.log(e.target)
     // console.log(e.target.dataset.page)
