@@ -191,62 +191,62 @@ $logo_link = $link . self::ROOT_IMG_PATH . '/' . $_SESSION['savedLogo'];
      * @return string $new_link
      */
 
-    public function add_data_on_blank_image($post): string
-    {
-        if (strlen($post['text']) < 1) {
-            $_SESSION['postmakerError'] = "Please put in a text";
-            return false;
-        }
+    // public function addDataOnBlankImage($post): string
+    // {
+    //     if (strlen($post['text']) < 1) {
+    //         $_SESSION['postmakerError'] = "Please put in a text";
+    //         return false;
+    //     }
 
-        $defaultImage = $post['defaultImage'];
+    //     $defaultImage = $post['defaultImage'];
 
-        //SET THE NEW DESIGN TO A NEW PATH
-        $newImagePath = $this->createImage()->createBlankImage($defaultImage, $post['newImagePath']);
-
-
-        //SORT IMAGE ARRAY     
-
-        $imageArray['newImagePath'] = $newImagePath;
-
-        //check if background colour is set
-        if (isset($post['background'])) {
-            $imageArray['background'] = $this->color->convertHexToRgb(preg_replace('|#|', '', $post['background']));
-        }
+    //     //SET THE NEW DESIGN TO A NEW PATH
+    //     $newImagePath = $this->createImage()->createBlankImage($defaultImage, $post['newImagePath']);
 
 
-        //check if image width is set
-        if (isset($post['width']))
-            $imageArray['width'] = $imageArray['width'];
+    //     //SORT IMAGE ARRAY     
 
-        //SORT FONT ARRAY
+    //     $imageArray['newImagePath'] = $newImagePath;
 
-        $font_array['px']    = isset($post['px']) ? (int)$post['px'] : 130;
-        if (isset($post['py']))
-            $font_array['py']     = $post['py'];
-        if (isset($post['color']))
-            $font_array['color']     = $this->color->convertHexToRgb(preg_replace('|#|', '', $post['color']));;
+    //     //check if background colour is set
+    //     if (isset($post['background'])) {
+    //         $imageArray['background'] = $this->color->convertHexToRgb(preg_replace('|#|', '', $post['background']));
+    //     }
 
-        if (isset($post['size']))
-            $font_array['size']     = $post['size'];
 
-        if (isset($post['angle']))
-            $font_array['angle']     = $post['angle'];
+    //     //check if image width is set
+    //     if (isset($post['width']))
+    //         $imageArray['width'] = $imageArray['width'];
 
-        if (isset($post['line_height']))
-            $font_array['line_height']     = $post['line_height'];
+    //     //SORT FONT ARRAY
 
-        $font_array['file'] = constant::rootDir().$post['font'];
+    //     $font_array['px']    = isset($post['px']) ? (int)$post['px'] : 130;
+    //     if (isset($post['py']))
+    //         $font_array['py']     = $post['py'];
+    //     if (isset($post['color']))
+    //         $font_array['color']     = $this->color->convertHexToRgb(preg_replace('|#|', '', $post['color']));;
 
-        //STRING  
-        $string = $post['text'];
+    //     if (isset($post['size']))
+    //         $font_array['size']     = $post['size'];
 
-        //IMAGE RESOURCE
-        // $im     = imagecreatefrompng($defaultImage);
-        $new_link = $this->text_to_image($defaultImage, $imageArray, $string, $font_array);
-        if ($post['footer'] != '') {
-            unset($font_array['px']);
-            $this->write_to_footer($new_link, $imageArray, $post['footer'], $font_array);
-        }
-        return $new_link;
-    }
+    //     if (isset($post['angle']))
+    //         $font_array['angle']     = $post['angle'];
+
+    //     if (isset($post['line_height']))
+    //         $font_array['line_height']     = $post['line_height'];
+
+    //     $font_array['file'] = constant::rootDir().$post['font'];
+
+    //     //STRING  
+    //     $string = $post['text'];
+
+    //     //IMAGE RESOURCE
+    //     // $im     = imagecreatefrompng($defaultImage);
+    //     $new_link = $this->text_to_image($defaultImage, $imageArray, $string, $font_array);
+    //     if ($post['footer'] != '') {
+    //         unset($font_array['px']);
+    //         $this->write_to_footer($new_link, $imageArray, $post['footer'], $font_array);
+    //     }
+    //     return $new_link;
+    // }
 }

@@ -27,3 +27,19 @@ const middleware = {
     
  
 }
+const crud = {
+
+    request: async (request) => {
+        let response = await fetch(request);
+        if (response.status !== 200)
+            throw new Error(result.message);
+        let result = response.json();
+        return result;
+    },
+    delete: async function (request) {
+        return this.request(request)
+    },
+    store: async function (request) {
+        return this.request(request)
+    }
+}

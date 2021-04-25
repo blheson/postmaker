@@ -16,12 +16,12 @@ if (!isset($_REQUEST['section'])) {
     die();
 }
 
-$image_link = $slide->process($_REQUEST);
-if (is_null($image_link)) {
+$imageLink = $slide->process($_REQUEST);
+if (is_null($imageLink)) {
     echo json_encode(['error' => true, 'message' => $_SESSION['postmakerError']]);
     unset($_SESSION['postmakerError']);
     die();
 }
-$image_link = helper::parseLink($image_link);
+$imageLink = helper::parseLink($imageLink);
 
-echo json_encode(['error' => false, 'message' => $image_link]);
+echo json_encode(['error' => false, 'message' => $imageLink]);

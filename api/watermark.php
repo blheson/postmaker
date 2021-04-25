@@ -16,13 +16,13 @@ if (!isset($_REQUEST['type'])) {
     echo json_encode(['error' => true, 'message' => 'Bad Request']);
     exit();
 }
-$image_link = $watermark->logoOnProduct($_FILES['file'], $_FILES['logo'], $_REQUEST['logoPosition'], 100);
+$imageLink = $watermark->logoOnProduct($_FILES['file'], $_FILES['logo'], $_REQUEST['logoPosition'], 100);
  
-if (is_null($image_link)) {
+if (is_null($imageLink)) {
     echo json_encode(['error' => true, 'message' => $_SESSION['postmakerError']]);
     unset($_SESSION['postmakerError']);
     exit();
 }
-$image_link = helper::parseLink($image_link);
+$imageLink = helper::parseLink($imageLink);
 
-echo json_encode(['error' => false, 'message' => $image_link]);
+echo json_encode(['error' => false, 'message' => $imageLink]);

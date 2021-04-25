@@ -1,25 +1,27 @@
 <?php
-
+// header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
-$dir = dirname(dirname(__DIR__));
- 
+
+$dir = '../../../';
 include $dir . "system/initiate.php";
 
-use Controller\Template\Slide\FoodSlide as foodslide;
 use Controller\Helper as helper;
+use Controller\Template\Square\SquareImage as square;
 
-$slide = new foodslide();
-if (!isset($_REQUEST['section'])) {
+$squareImage = new square();
+
+if (!isset($_REQUEST['text'])) {
     http_response_code('401');
     echo json_encode(['error' => true, 'message' => 'Bad Request']);
-    die();
+    exit();
 }
 
-$imageLink = $slide->process($_REQUEST);
+if (isset($_REQUEST['text']))
+    $imageLink = $squareImage->addDataOnBlankImage($_REQUEST);
 if (is_null($imageLink)) {
     echo json_encode(['error' => true, 'message' => $_SESSION['postmakerError']]);
     unset($_SESSION['postmakerError']);
-    die();
+    exit();
 }
 $imageLink = helper::parseLink($imageLink);
 

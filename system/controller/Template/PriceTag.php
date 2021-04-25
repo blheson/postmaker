@@ -10,13 +10,13 @@ class PriceTag extends Square
 {
   /**
    * Controller for price tag design
-   * @param array $post contains newImagePath, design_template, pos,logo_details,product_details
+   * @param array $post contains newImagePath, designTemplate, pos,logo_details,product_details
    * @param int $margin
-   * design_template
+   * designTemplate
    */
-  public function price_tag($post, $margin = 50)
+  public function priceTag($post, $margin = 50)
   {
-    $defaultImage = $post['design_template'];
+    $defaultImage = $post['designTemplate'];
     $newImagePath = $post['newImagePath'];
     $asset_link = '../assets/images/templates/circleprice/addon/circle.png';
 

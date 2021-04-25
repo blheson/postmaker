@@ -1,17 +1,18 @@
 <?php
 $dir = '../';
 include $dir . "system/initiate.php";
-// $square_image = $app->get_factory('SquareImage');
+// $squareImage = $app->get_factory('SquareImage');
 // $array = ['class' => 'SquareImage', 'namespace' => 'Controller\Template\Square\\'];
-// $square_image = $app->get_factory($array);
+// $squareImage = $app->get_factory($array);
 use Controller\Template\Square\SquareImage as square;
-$square_image = new square();
+
+$squareImage = new square();
 $newImagePath = "assets/images/render/";
 $defaultImage = "assets/images/blank_image.png";
-$design_template = "assets/images/templates/plain/plain_template.png";
+$designTemplate = "assets/images/templates/plain/plain_template.png";
 
 if (isset($_POST['text']))
-    $image_link = $square_image->add_data_on_blank_image($_POST);
+    $imageLink = $squareImage->addDataOnBlankImage($_POST);
 
 
 include $dir . "includes/header.php";
@@ -20,32 +21,37 @@ include $dir . "includes/header.php";
 <main class="container" style="padding: 2rem;box-shadow: 0 0 10px 1px #ececec;">
     <section class="header">
         <h1 class="text-center">Plain Template</h1>
-    </section>
-    <center>
+        <center>
         <div class="breadcrumb">
             <a href="<?= $dir ?>">home</a>
         </div>
     </center>
+    </section>
+
     <!-- show template type -->
     <section class="template">
         <div class="row">
-            <div class="col-md-4">
-                <h3 class="title template">Template <i class="fa fa-caret-down pull-right"></i></h3>
-                <div class="default_template" style="display: none;">
-                    <img src="<?= $dir . $design_template; ?>" alt="<?= basename($design_template); ?>" loading="lazy">
+            <!-- <div class="col-md-4">
+                <div class="title_box">
+                    <h3 class="title template">Template <i class="fa fa-caret-down pull-right"></i></h3>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <h3 class="title">Fill form to edit design</h3>
+                <div class="default_template" style="display: none;">
+                    <img src="<?= $dir . $designTemplate; ?>" alt="<?= basename($designTemplate); ?>" loading="lazy">
+                </div>
+            </div> -->
+            <div class="col-md-5">
+                <div class="title_box">
+                    <h3 class="title">Fill form to edit design</h3>
+                </div>
                 <div class="card">
 
-                    <form method="post" enctype="multipart">
+                    <form method="post" enctype="multipart" class="edit-form">
 
                         <div class="form-group">
                             <label for="">Choose Font</label>
                             <select name="font" class="form-control">
                                 <?php
-                                $fonts = $square_image->font->get_font();
+                                $fonts = $squareImage->font->get_font();
 
                                 foreach ($fonts as $key => $font) :
 
@@ -87,29 +93,29 @@ include $dir . "includes/header.php";
                                 <label for="">Check to see advance option</label>
                             </div>
                         </div>
-                        <input type="hidden" name="defaultImage" value="<?= $dir . $defaultImage ?>">
-                        <input type="hidden" name="newImagePath" value="<?= $dir . $newImagePath; ?>">
-                        <input type="hidden" name="design_template" value="<?= $dir . $design_template; ?>">
+                        <input type="hidden" name="defaultImage" value="<?= $defaultImage ?>">
+                        <input type="hidden" name="newImagePath" value="<?= $newImagePath; ?>">
+                        <input type="hidden" name="designTemplate" value="<?= $designTemplate; ?>">
                         <input type="submit" class="btn btn-submit">
                     </form>
                 </div>
             </div>
-
-            <div id="render" class="col-md-4">
+            <?php
+            include 'include/render.php';
+            ?>
+            <!-- <div id="render" class="col-md-4">
 
                 <h3 class="title">Final Render</h3>
-                <!-- render finished image -->
-                <?php
-                if (isset($_POST['text'])) :
-                ?>
+             
                     <div>
                         <div class="render">
-                            <img src="<?= $image_link; ?>" alt="rendered image" value="<?= $_POST['text'] ?>" width="100%" loading="lazy">
+                          
+                            <img src="<?= $dir . $designTemplate; ?>" alt="<?= basename($designTemplate); ?>" loading="lazy">
                         </div>
 
                         <div class="form-group">
                             <div>
-                                <a href="<?= $image_link; ?>" download><button class="btn btn-submit">
+                                <a class="" href="" download><button class="btn btn-submit">
                                         Download Image
                                     </button></a>
 
@@ -117,26 +123,30 @@ include $dir . "includes/header.php";
 
                         </div>
                     </div>
-                <?php
-                endif;
-                ?>
+            
 
-
-            </div>
+            </div> -->
         </div>
     </section>
 </main>
 
 <?php
 include $dir . "includes/footer.php";
+echo "<script>let  dir = '$dir'</script>";
 ?>
+<script src="<?= $dir ?>assets/js/helper.js">
+
+</script>
+<script src="<?= $dir ?>assets/js/plain.js">
+
+</script>
 <script>
     let text = document.querySelector("input[name=text]");
     text.addEventListener("input", () => {
         let submit = document.querySelector("input[type=submit]");
         let status = document.querySelector(".status_input");
         if (text.value.length > 60) {
-      
+
             status.innerText = 'Character should not be more than 60';
             status.style.color = 'red';
             submit.disabled = true;

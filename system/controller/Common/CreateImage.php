@@ -195,19 +195,19 @@ class CreateImage
     }
     /**
      * Add text on image
-     * @param string $base_image_path
-     * @param string $new_image_link folder to save new file
+     * @param string $baseImagePath
+     * @param string $newImageLink folder to save new file
      * @param string $ext
      * 
      * @return string $newImagePath
      */
-    public function createBlankImage($base_image_path, $new_image_link, $ext = 'png'): string
+    public function createBlankImage($baseImagePath, $newImageLink, $ext = 'png'): string
     {
        
         $new_name = "postmaker_" . sha1(time()) . "." . $ext;
     
-        $newImagePath = $new_image_link . $new_name;
-        copy($base_image_path, $newImagePath);
+        $newImagePath = $newImageLink . $new_name;
+        copy($baseImagePath, $newImagePath);
 
         return $newImagePath;
     }

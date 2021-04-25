@@ -36,17 +36,17 @@ class SquareImage extends square
      * @return string $new_link
      */
 
-    public function add_data_on_blank_image($post): string
+    public function addDataOnBlankImage($post): string
     {
         if (strlen($post['text']) < 1) {
             $_SESSION['postmakerError'] = "Please put in a text";
             return false;
         }
 
-        $defaultImage = $post['defaultImage'];
+        $defaultImage = constant::rootDir().DIRECTORY_SEPARATOR.$post['defaultImage'];
 
         //SET THE NEW DESIGN TO A NEW PATH
-        $newImagePath = $this->createImage()->createBlankImage($defaultImage, $post['newImagePath']);
+        $newImagePath = $this->createImage()->createBlankImage($defaultImage, constant::rootDir().DIRECTORY_SEPARATOR.$post['newImagePath']);
 
 
         //SORT IMAGE ARRAY     

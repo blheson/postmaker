@@ -1,4 +1,4 @@
-const UiCtrl = function () {
+const uiCtrl = function () {
     let render = document.querySelector('.render');
     let downloadBox = document.querySelector('.downloadBox')
     return {
@@ -46,21 +46,21 @@ const form = {
                 throw new Error(result.message)
 
 
-            if (!UiCtrl().downloadBtn ) {
+            if (!uiCtrl().downloadBtn ) {
                 let img = document.createElement('img')
-                UiCtrl().render.appendChild(img)
+                uiCtrl().render.appendChild(img)
  
                 let a = document.createElement('a');
               
                 a.innerText = 'download'
                 a.classList.add('btn', 'btn-primary')
-                UiCtrl().downloadBox.appendChild(a)
-                UiCtrl().renderBox = UiCtrl().render.querySelector('img')
-                UiCtrl().downloadBtn = UiCtrl().downloadBox.querySelector('a')
+                uiCtrl().downloadBox.appendChild(a)
+                uiCtrl().renderBox = uiCtrl().render.querySelector('img')
+                uiCtrl().downloadBtn = uiCtrl().downloadBox.querySelector('a')
             }
-            UiCtrl().downloadBtn.setAttribute('download', `blim-watermark_${(new Date()).getTime()}`)
-            UiCtrl().renderBox.src = dir + result.message
-            UiCtrl().downloadBtn.href = dir + result.message
+            uiCtrl().downloadBtn.setAttribute('download', `blim-watermark_${(new Date()).getTime()}`)
+            uiCtrl().renderBox.src = dir + result.message
+            uiCtrl().downloadBtn.href = dir + result.message
 
         }).catch(error => {
             middleware.info(error)

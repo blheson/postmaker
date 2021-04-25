@@ -7,11 +7,11 @@ use Controller\Template\Watermark as watermark;
 
 $watermark  = new watermark();
 $newImagePath = "assets/images/render/";
-$design_template = "assets/images/templates/watermark/product-watermark.png";
+$designTemplate = "assets/images/templates/watermark/product-watermark.png";
 
 if (isset($_POST['watermark'])) {
     $raw =  $watermark->logoOnProduct($_FILES['file'], $_FILES['logo'], $_POST['pos'], 100);
-    $image_link = $dir . helper::parseLink($raw);
+    $imageLink = $dir . helper::parseLink($raw);
 }
 include $dir . "includes/header.php";
 ?>
@@ -31,7 +31,7 @@ include $dir . "includes/header.php";
             <!-- <div class="col-md-4">
                 <h3 class="title template">Template <i class="fa fa-caret-down pull-right"></i></h3>
                 <div class="default_template" style="display: none;">
-                    <img src="<?= $dir . $design_template; ?>" alt="<?= basename($design_template); ?>" loading="lazy">
+                    <img src="<?= $dir . $designTemplate; ?>" alt="<?= basename($designTemplate); ?>" loading="lazy">
                 </div>
             </div>-->
             <div class="col-md-6">
@@ -68,15 +68,17 @@ include $dir . "includes/header.php";
                     </form>
                 </div>
             </div>
-
-            <div id="render" class="col-md-6">
+<?php
+    include 'include/render.php';
+?>
+            <!-- <div id="render" class="col-md-6">
 
                 <h3 class="title">Final Render</h3>
-                <!-- render finished image -->
+            
          
                     <div>
                         <div class="render">
-                        <img src="<?= $dir . $design_template; ?>" alt="<?= basename($design_template); ?>" loading="lazy">
+                        <img src="<?= $dir . $designTemplate; ?>" alt="<?= basename($designTemplate); ?>" loading="lazy">
                         </div>
 
                         <div class="form-group">
@@ -88,7 +90,7 @@ include $dir . "includes/header.php";
                         </div>
                     </div>
             
-            </div>
+            </div> -->
         </div>
     </section>
 </main>

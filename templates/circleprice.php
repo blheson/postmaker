@@ -3,17 +3,17 @@ $dir = '../';
 include $dir . "system/initiate.php";
 
 use Controller\Template\PriceTag as price;
-$square_image = new price();
+$squareImage = new price();
 $newImagePath = "assets/images/render/";
 $defaultImage = "assets/images/blank_image.png";
-$design_template = "assets/images/templates/circleprice/circle-price-tag.png";
+$designTemplate = "assets/images/templates/circleprice/circle-price-tag.png";
 
 if (isset($_POST['contact'])) {
     $post = $_POST;
 
     $post['logo_details'] = $_FILES['logo'];
     $post['product_details'] = $_FILES['product'];
-    $image_link = $square_image->price_tag($post, 30);
+    $imageLink = $squareImage->priceTag($post, 30);
 }
 
 include $dir . "includes/header.php";
@@ -34,7 +34,7 @@ include $dir . "includes/header.php";
             <div class="col-md-4">
                 <h3 class="title template">Template <i class="fa fa-caret-down pull-right"></i></h3>
                 <div class="default_template" style="display: none;">
-                    <img src="<?= $dir . $design_template; ?>" alt="<?= basename($design_template); ?>" loading="lazy">
+                    <img src="<?= $dir . $designTemplate; ?>" alt="<?= basename($designTemplate); ?>" loading="lazy">
                 </div>
             </div>
             <div class="col-md-4">
@@ -57,7 +57,7 @@ include $dir . "includes/header.php";
                             <label for="">Choose Font</label>
                             <select name="font" class="form-control">
                                 <?php
-                                $fonts = $square_image->font->get_font();
+                                $fonts = $squareImage->font->get_font();
 
                                 foreach ($fonts as $key => $font) :
 
@@ -95,7 +95,7 @@ include $dir . "includes/header.php";
                         </div>
                         <input type="hidden" name="defaultImage" value="<?= $dir . $defaultImage ?>">
                         <input type="hidden" name="newImagePath" value="<?= $dir . $newImagePath; ?>">
-                        <input type="hidden" name="design_template" value="<?= $dir . $design_template; ?>">
+                        <input type="hidden" name="designTemplate" value="<?= $dir . $designTemplate; ?>">
                         <input type="submit" class="btn btn-submit">
                     </form>
                 </div>
@@ -110,12 +110,12 @@ include $dir . "includes/header.php";
                 ?>
                     <div>
                         <div class="render">
-                            <img src="<?= $image_link; ?>" alt="rendered image" value="<?= $_POST['price'] ?>" width="100%" loading="lazy">
+                            <img src="<?= $imageLink; ?>" alt="rendered image" value="<?= $_POST['price'] ?>" width="100%" loading="lazy">
                         </div>
 
                         <div class="form-group">
                             <div>
-                                <a href="<?= $image_link; ?>" download><button class="btn btn-submit">
+                                <a href="<?= $imageLink; ?>" download><button class="btn btn-submit">
                                         Download Image
                                     </button></a>
 

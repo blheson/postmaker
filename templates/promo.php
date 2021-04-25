@@ -2,14 +2,14 @@
 // header('Content-type: image/png');
 $dir= '../';
     include $dir."system/initiate.php";
-    $square_image = $app->get_factory('SquareImage');
+    $squareImage = $app->get_factory('SquareImage');
    
     $newImagePath= "assets/images/render/";
     $defaultImage= "assets/images/blank_image.png";
-    $design_template="assets/images/plain_template.png";
+    $designTemplate="assets/images/plain_template.png";
 
 if(isset($_POST['text'])){
-    $image_link = $square_image->add_data_on_blank_image($_POST);
+    $imageLink = $squareImage->addDataOnBlankImage($_POST);
 }   
 
     include $dir."includes/header.php";
@@ -29,7 +29,7 @@ if(isset($_POST['text'])){
             <div class="col-md-4">
                 <h3 class="title template">Template <i class="fa fa-caret-down pull-right"></i></h3>
                 <div class="default_template">
-                    <img src="<?=$dir.$design_template;?>" alt="<?=basename($design_template);?>" loading="lazy">
+                    <img src="<?=$dir.$designTemplate;?>" alt="<?=basename($designTemplate);?>" loading="lazy">
                 </div>
             </div>
             <div class="col-md-4"> <h3 class="title">Fill form to edit design</h3>
@@ -41,7 +41,7 @@ if(isset($_POST['text'])){
                         <label for="">Choose Font</label>
                         <select name="font" class="form-control"> 
                              <?php
-                                $fonts = $square_image->font->get_font();
+                                $fonts = $squareImage->font->get_font();
                      
                                 foreach($fonts as $key => $font):
                                 
@@ -81,7 +81,7 @@ if(isset($_POST['text'])){
                      </div>
                     <input type="hidden" name="defaultImage" value="<?=$dir.$defaultImage?>">
                     <input type="hidden" name="newImagePath" value="<?=$dir.$newImagePath;?>">
-                    <input type="hidden" name="design_template" value="<?=$dir.$design_template;?>">
+                    <input type="hidden" name="designTemplate" value="<?=$dir.$designTemplate;?>">
                     <input type="submit" class="btn btn-submit">
                 </form>
                 </div>
@@ -96,12 +96,12 @@ if(isset($_POST['text'])){
                 ?>
                 <div>
                     <div class="render">
-                         <img src="<?=$image_link;?>" alt="rendered image" value="<?=$_POST['text']?>" width="100%" loading="lazy">
+                         <img src="<?=$imageLink;?>" alt="rendered image" value="<?=$_POST['text']?>" width="100%" loading="lazy">
                     </div>
                    
                     <div class="form-group">
                         <div>
-                            <a href="<?=$image_link;?>" download><button class="btn btn-submit" >
+                            <a href="<?=$imageLink;?>" download><button class="btn btn-submit" >
                                    Download Image
                             </button></a>
                          

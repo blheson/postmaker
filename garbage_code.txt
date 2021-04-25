@@ -25,9 +25,9 @@ text to image method
 
 END OF METHOD
 
-      // public function add_data_on_blank_image($post): string{
-    //     $design_template = $post['design_template'];
-    //     $newImagePath = $this->createBlankImage($design_template, $post['newImagePath']);
+      // public function addDataOnBlankImage($post): string{
+    //     $designTemplate = $post['designTemplate'];
+    //     $newImagePath = $this->createBlankImage($designTemplate, $post['newImagePath']);
     //     $string = $post['text']; //check
     //     $defaultImage = $post['defaultImage'];
 

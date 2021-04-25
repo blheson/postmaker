@@ -39,6 +39,10 @@ const uiCtrl = {
 }
 
 const form = {
+    edit: function (page) {
+        defaultData.formStatus = 'edit'
+        section.select(page)
+    },
     group: () => {
         let body = document.querySelector(".edit-form")
         return {
@@ -291,25 +295,7 @@ form.group().section.addEventListener('change', (e) => {
 //     form.processForm(e.target)
 // })
 
-const crud = {
-    edit: function (page) {
-        defaultData.formStatus = 'edit'
-        section.select(page)
-    },
-    request: async (request) => {
-        let response = await fetch(request);
-        if (response.status !== 200)
-            throw new Error(result.message);
-        let result = response.json();
-        return result;
-    },
-    delete: async function (request) {
-        return this.request(request)
-    },
-    store: async function (request) {
-        return this.request(request)
-    }
-}
+
 
 
 //if start, page 1 should be page 2 **
