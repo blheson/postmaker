@@ -52,7 +52,7 @@ class Assets
         $createImage = self::createImage();
         $im = $createImage->createImageResource($path);
         $col = Color::get_color($im, $color);
-        imagefilledrectangle($im, $x1, $y1, $x2, $y2, $col);
+        imagefilledrectangle($im, $x1, $y1, $x2, $y2, $col['black']);
         imagepng($im, $path);
         imagedestroy($im);
         unset($createImage);

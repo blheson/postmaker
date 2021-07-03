@@ -9,3 +9,4 @@ vendor
 *.deact
 composer.json
 note.txt
+test.*
