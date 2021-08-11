@@ -1,1 +1,1 @@
-This is the source for post maker
+A simple image manipulation app. You choose from the various templates and create your design

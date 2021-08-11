@@ -26,8 +26,8 @@ include "includes/header.php";
 
 </section>
 <main class="container" style="padding:2rem">
-<div class="text-center" style="    font-size: 2rem;
-    color: crimson;">Not completed yet. However, many features work though. You can explore</div>
+<!-- <div class="text-center" style="    font-size: 2rem;
+    color: crimson;">Not completed yet. However, many features work though. You can explore</div> -->
 
     <!-- show template type -->
     <section class="template">
