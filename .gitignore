@@ -10,4 +10,4 @@ vendor
 composer.json
 note.txt
 test.*
-garbage_code.txt
+*.txt
