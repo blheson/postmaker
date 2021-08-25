@@ -6,8 +6,10 @@ use Controller\Helper as helper;
 use Controller\Template\Watermark as watermark;
 
 $watermark  = new watermark();
-$newImagePath = "assets/images/render/";
-$designTemplate = "assets/images/templates/watermark/product-watermark.png";
+$defaultImages = Helper::getDefaultImages();
+$newImagePath = $defaultImages['newImagePath'];
+$designTemplate =  $defaultImages['designTemplate'];
+
 
 if (isset($_POST['watermark'])) {
     $raw =  $watermark->logoOnProduct($_FILES['file'], $_FILES['logo'], $_POST['pos'], 100);

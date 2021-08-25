@@ -19,7 +19,6 @@ include $dir . "includes/header.php";
 ?>
 <style>
     .swiper-container {
-        /* width: 600px; */
         height: 300px;
     }
 </style>
@@ -167,14 +166,7 @@ include $dir . "includes/header.php";
                 </div>
 
                 <div>
-                    <!--  <div class="swiper-container">
-                    <div class="swiper-wrapper render">
-                      <div class="swiper-slide">Slide 1</div>
-                        <div class="swiper-slide">Slide 2</div>
-                        <div class="swiper-slide">Slide 3</div> 
-                    </div>
-                </div>-->
-
+            
 
                     <div class="form-group">
                         <div class="download_box">

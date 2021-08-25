@@ -8,40 +8,22 @@ include "includes/header.php";
 ?>
 <section class="hero bg-color">
     <div class="container">
-
-
         <div class="row">
             <div class="col-md-6">
                 <!-- mouldA -->
                 <h2 class="hero-title mt-5">Mould Content Designs
                 </h2>
                 <span class="d-block mb-5">Create content designs from predefined templates</span>
-                
-                <!-- <button class="btn btn-lg btn-warning">
-                        Get started
-                </button> -->
             </div>
         </div>
     </div>
 
 </section>
 <main class="container" style="padding:2rem">
-<!-- <div class="text-center" style="    font-size: 2rem;
-    color: crimson;">Not completed yet. However, many features work though. You can explore</div> -->
 
     <!-- show template type -->
     <section class="template">
-        <!-- <div class="card">
-            <form action="" class="form inline-form row">
-                <div class="form-group col-md-10">
-                    <input type="text" class="form-control " name="q" placeholder="search template">
 
-                </div>
-                <div class="form-group col-md-2">
-                    <button type="submit" class="btn btn-submit"><i class="fa fa-search"></i></button>
-                </div>
-            </form>
-        </div> -->
         <div class="mt-5">
             <h3 class="text-center mb-3">Single Templates</h3>
             <div class="row">

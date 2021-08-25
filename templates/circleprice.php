@@ -2,8 +2,8 @@
 $dir = '../';
 include $dir . "system/initiate.php";
 
-use Controller\Template\PriceTag as price;
-$squareImage = new price();
+use Controller\Template\PriceTag as Price;
+$squareImage = new Price();
 $newImagePath = "assets/images/render/";
 $defaultImage = "assets/images/blank_image.png";
 $designTemplate = "assets/images/templates/circleprice/circle-price-tag.png";

@@ -4,7 +4,7 @@ namespace Controller\Template\Square;
 use Controller\Template\Square as square;
 use Controller\Constant as constant;
 
-class SquareImage extends square
+class SquareImage extends Square
 {
     /**
      * Get image

@@ -20,6 +20,14 @@ class Helper
       </div>';
         unset($_SESSION['success']);
     }
+    public static function getDefaultImages()
+    {
+        return [
+            'newImagePath' => "assets/images/render/",
+            'defaultImage' => "assets/images/blank_image.png",
+            'designTemplate' => "assets/images/plain_template.png"
+        ];
+    }
     /**
      * 
      */
@@ -45,7 +53,7 @@ class Helper
      * @param string $src File URL e.g https://domain.com/path_to_file.png
      * @return bool
      */
-    public static function deleteImage(string $src)
+    public static function deleteImage(string $src): bool
     {
 
         if (is_bool(strpos($src, 'http')))

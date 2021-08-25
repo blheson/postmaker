@@ -15,7 +15,6 @@ class Font {
      */
     public function get_font()
     {
-        // $link = 'C:/xampp/htdocs/postmaker/assets/fonts/';
         $link = '/assets/fonts/';
         $font = [
             'montserrat' => $link.'montserrat.ttf',

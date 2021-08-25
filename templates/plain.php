@@ -1,15 +1,16 @@
 <?php
 $dir = '../';
 include $dir . "system/initiate.php";
-// $squareImage = $app->get_factory('SquareImage');
-// $array = ['class' => 'SquareImage', 'namespace' => 'Controller\Template\Square\\'];
-// $squareImage = $app->get_factory($array);
-use Controller\Template\Square\SquareImage as square;
 
-$squareImage = new square();
-$newImagePath = "assets/images/render/";
-$defaultImage = "assets/images/blank_image.png";
-$designTemplate = "assets/images/templates/plain/plain_template.png";
+use Controller\Helper;
+use Controller\Template\Square\SquareImage as Square;
+
+$squareImage = new Square();
+
+$defaultImages = Helper::getDefaultImages();
+$newImagePath = $defaultImages['newImagePath'];
+$defaultImage = $defaultImages['defaultImage'];
+$designTemplate =  $defaultImages['designTemplate'];
 
 if (isset($_POST['text']))
     $imageLink = $squareImage->addDataOnBlankImage($_POST);

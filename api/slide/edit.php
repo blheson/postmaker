@@ -12,14 +12,14 @@ $slide = new foodslide();
 if (!isset($_REQUEST['section'])) {
     http_response_code('401');
     echo json_encode(['error' => true, 'message' => 'Bad Request']);
-    die();
+    exit();
 }
 
 $imageLink = $slide->process($_REQUEST);
 if (is_null($imageLink)) {
     echo json_encode(['error' => true, 'message' => $_SESSION['postmakerError']]);
     unset($_SESSION['postmakerError']);
-    die();
+    exit();
 }
 $imageLink = helper::parseLink($imageLink);
 

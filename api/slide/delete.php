@@ -11,14 +11,13 @@ use Controller\Helper as helper;
 if (!isset($_REQUEST['src'])) {
     http_response_code('401');
     echo json_encode(['error' => true, 'message' => 'Bad Request']);
-    die();
+    exit();
 }
 
 $result = helper::deleteImage($_REQUEST['src']);
 if ($result) {
     echo json_encode(['error' => false, 'message' => 'Image was deleted successfully']);
- 
-    die();
+    exit();
 }
  
 echo json_encode(['error' => true, 'message' => 'Image was not deleted']);
